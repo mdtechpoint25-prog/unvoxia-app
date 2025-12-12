@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import PostCard from '@/components/PostCard';
 import ProfileSettings from '@/components/ProfileSettings';
 
@@ -38,7 +38,8 @@ const BADGE_ICONS: Record<string, string> = {
   'Inspiration': '?'
 };
 
-export default function ProfilePage({ params }: { params: { username: string } }) {
+export default function ProfilePage({ params }: { params: Promise<{ username: string }> }) {
+  const { username } = use(params);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [stats, setStats] = useState<UserStats>({ posts: 0, comments: 0, reactions: 0 });
   const [posts, setPosts] = useState<Post[]>([]);
@@ -49,7 +50,7 @@ export default function ProfilePage({ params }: { params: { username: string } }
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await fetch(`/api/users/${params.username}`);
+        const res = await fetch(`/api/users/${username}`);
         const data = await res.json();
         if (res.ok) {
           setProfile({
@@ -68,7 +69,7 @@ export default function ProfilePage({ params }: { params: { username: string } }
           const sessionCookie = cookies.find(c => c.trim().startsWith('session='));
           if (sessionCookie) {
             const session = JSON.parse(atob(sessionCookie.split('=')[1]));
-            if (session.username === params.username) {
+            if (session.username === username) {
               setIsOwnProfile(true);
             }
           }
@@ -81,10 +82,10 @@ export default function ProfilePage({ params }: { params: { username: string } }
     };
 
     fetchProfile();
-  }, [params.username]);
+  }, [username]);
 
   const handleSaveSettings = async (settings: { avatar_url?: string; password?: string }) => {
-    const res = await fetch(`/api/users/${params.username}`, {
+    const res = await fetch(`/api/users/${username}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(settings)
@@ -118,7 +119,7 @@ export default function ProfilePage({ params }: { params: { username: string } }
     return (
       <main style={{ maxWidth: '700px', margin: '0 auto', padding: '2rem 1rem' }}>
         <h2 style={{ color: '#2C3E50' }}>User Not Found</h2>
-        <p style={{ color: '#888' }}>The user @{params.username} does not exist.</p>
+        <p style={{ color: '#888' }}>The user @{username} does not exist.</p>
       </main>
     );
   }

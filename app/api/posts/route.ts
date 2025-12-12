@@ -2,9 +2,9 @@ import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { cookies } from 'next/headers';
 
-function getUserFromSession() {
+async function getUserFromSession() {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const session = cookieStore.get('session')?.value;
     if (!session) return null;
     const decoded = JSON.parse(Buffer.from(session, 'base64').toString());
@@ -52,7 +52,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const user = getUserFromSession();
+    const user = await getUserFromSession();
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }

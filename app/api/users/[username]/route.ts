@@ -3,9 +3,9 @@ import { supabase } from '@/lib/supabase';
 import { cookies } from 'next/headers';
 import bcrypt from 'bcryptjs';
 
-function getUserFromSession() {
+async function getUserFromSession() {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const session = cookieStore.get('session')?.value;
     if (!session) return null;
     const decoded = JSON.parse(Buffer.from(session, 'base64').toString());
@@ -16,13 +16,14 @@ function getUserFromSession() {
   }
 }
 
-export async function GET(_req: Request, { params }: { params: { username: string } }) {
+export async function GET(_req: Request, { params }: { params: Promise<{ username: string }> }) {
   try {
+    const { username } = await params;
     // Get user profile with ID
     const { data: user, error: userError } = await supabase
       .from('users')
       .select('id, username, avatar_url, badges, created_at')
-      .eq('username', params.username)
+      .eq('username', username)
       .single();
 
     if (userError || !user) {
@@ -78,15 +79,16 @@ export async function GET(_req: Request, { params }: { params: { username: strin
   }
 }
 
-export async function PATCH(request: Request, { params }: { params: { username: string } }) {
+export async function PATCH(request: Request, { params }: { params: Promise<{ username: string }> }) {
   try {
-    const sessionUser = getUserFromSession();
+    const { username } = await params;
+    const sessionUser = await getUserFromSession();
     if (!sessionUser) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Verify user is updating their own profile
-    if (sessionUser.username !== params.username) {
+    if (sessionUser.username !== username) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 

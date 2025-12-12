@@ -2,15 +2,20 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
-// Use service role for storage operations
-const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+// Use service role for storage operations - lazy initialization
+function getSupabaseAdmin() {
+  if (!supabaseUrl || !supabaseServiceKey) {
+    throw new Error('Supabase configuration missing');
+  }
+  return createClient(supabaseUrl, supabaseServiceKey);
+}
 
-function getUserFromSession() {
+async function getUserFromSession() {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const session = cookieStore.get('session')?.value;
     if (!session) return null;
     const decoded = JSON.parse(Buffer.from(session, 'base64').toString());
@@ -34,7 +39,7 @@ const ALLOWED_TYPES = [
 
 export async function POST(request: Request) {
   try {
-    const user = getUserFromSession();
+    const user = await getUserFromSession();
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -69,6 +74,7 @@ export async function POST(request: Request) {
     const buffer = Buffer.from(arrayBuffer);
 
     // Upload to Supabase Storage
+    const supabaseAdmin = getSupabaseAdmin();
     const { data, error } = await supabaseAdmin.storage
       .from('media')
       .upload(filename, buffer, {

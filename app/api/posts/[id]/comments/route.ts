@@ -2,9 +2,9 @@ import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { cookies } from 'next/headers';
 
-function getUserFromSession() {
+async function getUserFromSession() {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const session = cookieStore.get('session')?.value;
     if (!session) return null;
     const decoded = JSON.parse(Buffer.from(session, 'base64').toString());
@@ -17,16 +17,17 @@ function getUserFromSession() {
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { data: comments, error } = await supabase
       .from('comments')
       .select(`
         *,
         users:user_id (username, avatar_url)
       `)
-      .eq('post_id', params.id)
+      .eq('post_id', id)
       .order('created_at', { ascending: true });
 
     if (error) {
@@ -42,10 +43,11 @@ export async function GET(
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = getUserFromSession();
+    const { id } = await params;
+    const user = await getUserFromSession();
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -59,7 +61,7 @@ export async function POST(
     const { data: comment, error } = await supabase
       .from('comments')
       .insert({
-        post_id: params.id,
+        post_id: id,
         user_id: user.userId,
         content: content.trim()
       })
@@ -78,14 +80,14 @@ export async function POST(
     const { data: post } = await supabase
       .from('posts')
       .select('comments_count')
-      .eq('id', params.id)
+      .eq('id', id)
       .single();
 
     if (post) {
       await supabase
         .from('posts')
         .update({ comments_count: (post.comments_count || 0) + 1 } as any)
-        .eq('id', params.id);
+        .eq('id', id);
     }
 
     return NextResponse.json({ ok: true, comment });

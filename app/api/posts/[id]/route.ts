@@ -2,9 +2,9 @@ import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { cookies } from 'next/headers';
 
-function getUserFromSession() {
+async function getUserFromSession() {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const session = cookieStore.get('session')?.value;
     if (!session) return null;
     const decoded = JSON.parse(Buffer.from(session, 'base64').toString());
@@ -17,16 +17,17 @@ function getUserFromSession() {
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { data: post, error } = await supabase
       .from('posts')
       .select(`
         *,
         users:user_id (username, avatar_url)
       `)
-      .eq('id', params.id)
+      .eq('id', id)
       .single();
 
     if (error || !post) {
@@ -40,7 +41,7 @@ export async function GET(
         *,
         users:user_id (username, avatar_url)
       `)
-      .eq('post_id', params.id)
+      .eq('post_id', id)
       .order('created_at', { ascending: true });
 
     // Get reactions for this post
@@ -48,7 +49,7 @@ export async function GET(
       .from('reactions')
       .select('emoji, user_id')
       .eq('target_type', 'post')
-      .eq('target_id', params.id);
+      .eq('target_id', id);
 
     return NextResponse.json({
       post,
@@ -63,10 +64,11 @@ export async function GET(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = getUserFromSession();
+    const { id } = await params;
+    const user = await getUserFromSession();
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -75,7 +77,7 @@ export async function DELETE(
     const { data: post } = await supabase
       .from('posts')
       .select('user_id')
-      .eq('id', params.id)
+      .eq('id', id)
       .single();
 
     if (!post || post.user_id !== user.userId) {
@@ -85,7 +87,7 @@ export async function DELETE(
     const { error } = await supabase
       .from('posts')
       .delete()
-      .eq('id', params.id);
+      .eq('id', id);
 
     if (error) {
       return NextResponse.json({ error: 'Failed to delete post' }, { status: 500 });
