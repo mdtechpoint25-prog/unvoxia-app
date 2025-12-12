@@ -2,8 +2,29 @@ import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { SITE } from '@/lib/constants';
 
+type HealthStatus = {
+  status: 'ok' | 'degraded';
+  timestamp: string;
+  app: {
+    name: string;
+    shortName: string;
+    domain: string;
+  };
+  checks: {
+    database: {
+      status: 'ok' | 'error' | 'unknown';
+      latency: number;
+      error?: string;
+    };
+    environment: {
+      status: 'ok' | 'warning' | 'unknown';
+      missing?: string[];
+    };
+  };
+};
+
 export async function GET() {
-  const health = {
+  const health: HealthStatus = {
     status: 'ok',
     timestamp: new Date().toISOString(),
     app: {
