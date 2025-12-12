@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { SITE } from '@/lib/constants';
 
 export default function HeroSection() {
@@ -14,7 +15,7 @@ export default function HeroSection() {
       overflow: 'hidden',
       paddingTop: '5rem'
     }}>
-      {/* Background Elements */}
+      {/* Animated Background Elements */}
       <div style={{
         position: 'absolute',
         top: 0,
@@ -24,26 +25,28 @@ export default function HeroSection() {
         overflow: 'hidden',
         pointerEvents: 'none'
       }}>
-        {/* Gradient Orbs */}
-        <div style={{
+        {/* Glowing Orbs */}
+        <div className="orb orb-1" style={{
           position: 'absolute',
           width: '600px',
           height: '600px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(26, 188, 156, 0.3) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(26, 188, 156, 0.4) 0%, transparent 70%)',
           top: '-200px',
           right: '-100px',
-          filter: 'blur(60px)'
+          filter: 'blur(60px)',
+          animation: 'pulse-slow 4s ease-in-out infinite'
         }} />
-        <div style={{
+        <div className="orb orb-2" style={{
           position: 'absolute',
           width: '400px',
           height: '400px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(155, 89, 182, 0.3) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(155, 89, 182, 0.4) 0%, transparent 70%)',
           bottom: '-100px',
           left: '-100px',
-          filter: 'blur(60px)'
+          filter: 'blur(60px)',
+          animation: 'pulse-slow 4s ease-in-out infinite 2s'
         }} />
         
         {/* Grid Pattern */}
@@ -59,6 +62,38 @@ export default function HeroSection() {
           `,
           backgroundSize: '50px 50px'
         }} />
+
+        {/* Floating Particles */}
+        <div className="particle" style={{
+          position: 'absolute',
+          width: '6px',
+          height: '6px',
+          borderRadius: '50%',
+          background: '#1ABC9C',
+          top: '20%',
+          left: '10%',
+          animation: 'float 6s ease-in-out infinite'
+        }} />
+        <div className="particle" style={{
+          position: 'absolute',
+          width: '8px',
+          height: '8px',
+          borderRadius: '50%',
+          background: '#9B59B6',
+          top: '60%',
+          left: '20%',
+          animation: 'float 8s ease-in-out infinite 1s'
+        }} />
+        <div className="particle" style={{
+          position: 'absolute',
+          width: '4px',
+          height: '4px',
+          borderRadius: '50%',
+          background: '#fff',
+          top: '30%',
+          right: '15%',
+          animation: 'float 5s ease-in-out infinite 0.5s'
+        }} />
       </div>
 
       <div style={{
@@ -71,9 +106,10 @@ export default function HeroSection() {
         alignItems: 'center',
         position: 'relative',
         zIndex: 1
-      }}>
+      }} className="hero-grid">
         {/* Left Content */}
-        <div>
+        <div className="hero-content">
+          {/* Badge */}
           <div style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -90,13 +126,14 @@ export default function HeroSection() {
               height: '8px',
               borderRadius: '50%',
               background: '#1ABC9C',
-              animation: 'pulse 2s infinite'
-            }} />
-            <span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.875rem' }}>
+              boxShadow: '0 0 10px #1ABC9C'
+            }} className="pulse-dot" />
+            <span style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.875rem', fontWeight: 500 }}>
               Productivity Reimagined
             </span>
           </div>
 
+          {/* Headline */}
           <h1 style={{
             fontSize: 'clamp(2.5rem, 5vw, 4rem)',
             fontWeight: 800,
@@ -115,6 +152,7 @@ export default function HeroSection() {
             </span>
           </h1>
 
+          {/* Description */}
           <p style={{
             fontSize: '1.25rem',
             color: 'rgba(255, 255, 255, 0.7)',
@@ -126,9 +164,11 @@ export default function HeroSection() {
             and manage your daily tasks. Real productivity. Real results.
           </p>
 
+          {/* CTA Buttons */}
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
             <Link
               href="/signup"
+              className="btn-primary-hero"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -140,7 +180,7 @@ export default function HeroSection() {
                 padding: '1rem 2rem',
                 borderRadius: '12px',
                 textDecoration: 'none',
-                boxShadow: '0 10px 30px rgba(26, 188, 156, 0.3)',
+                boxShadow: '0 10px 30px rgba(26, 188, 156, 0.4)',
                 transition: 'all 0.3s ease'
               }}
             >
@@ -151,11 +191,13 @@ export default function HeroSection() {
             </Link>
             <Link
               href="/about"
+              className="btn-secondary-hero"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                background: 'transparent',
+                background: 'rgba(255, 255, 255, 0.1)',
+                backdropFilter: 'blur(10px)',
                 color: '#fff',
                 fontWeight: 600,
                 fontSize: '1.1rem',
@@ -166,7 +208,11 @@ export default function HeroSection() {
                 transition: 'all 0.3s ease'
               }}
             >
-              Learn More
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10" />
+                <polygon points="10,8 16,12 10,16" fill="currentColor" />
+              </svg>
+              Watch Demo
             </Link>
           </div>
 
@@ -177,118 +223,115 @@ export default function HeroSection() {
             marginTop: '3rem',
             paddingTop: '2rem',
             borderTop: '1px solid rgba(255, 255, 255, 0.1)'
-          }}>
-            {/*
-              '10K+' | '50K+' | '99%' could be values coming from props or state in a real app
-              For this example, they are hardcoded as per the original request
-              Similarly, Active Users, Tasks Completed, Uptime are labels that could also be dynamic
-            */}
-            {/*
-              - Using `key` prop in map function to help React identify which items have changed
-              - Using `value` and `label` fields to dynamically display stats
-            */}
-            { [
-                { value: '10K+', label: 'Active Users' },
-                { value: '50K+', label: 'Tasks Completed' },
-                { value: '99%', label: 'Uptime' }
-              ].map((stat, i) => (
-                <div key={i}>
-                  <div style={{
-                    fontSize: '2rem',
-                    fontWeight: 700,
-                    color: '#fff',
-                    lineHeight: 1
-                  }}>
-                    {stat.value}
-                  </div>
-                  <div style={{
-                    fontSize: '0.875rem',
-                    color: 'rgba(255, 255, 255, 0.5)',
-                    marginTop: '0.25rem'
-                  }}>
-                    {stat.label}
-                  </div>
+          }} className="hero-stats">
+            {[
+              { value: '10K+', label: 'Active Users' },
+              { value: '50K+', label: 'Tasks Completed' },
+              { value: '99.9%', label: 'Uptime' }
+            ].map((stat, i) => (
+              <div key={i}>
+                <div style={{
+                  fontSize: '2rem',
+                  fontWeight: 700,
+                  color: '#fff',
+                  lineHeight: 1,
+                  background: 'linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text'
+                }}>
+                  {stat.value}
                 </div>
-              )) }
+                <div style={{
+                  fontSize: '0.875rem',
+                  color: 'rgba(255, 255, 255, 0.5)',
+                  marginTop: '0.25rem'
+                }}>
+                  {stat.label}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Right Visual */}
+        {/* Right Visual - Dashboard Image */}
         <div style={{
           position: 'relative',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center'
-        }}>
-          {/* Main Dashboard Preview */}
+        }} className="hero-image">
+          {/* Main Dashboard Image */}
           <div style={{
+            position: 'relative',
             width: '100%',
-            maxWidth: '500px',
-            aspectRatio: '4/3',
-            background: 'rgba(255, 255, 255, 0.05)',
-            backdropFilter: 'blur(20px)',
+            maxWidth: '550px',
             borderRadius: '24px',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            padding: '1.5rem',
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+            overflow: 'hidden',
+            boxShadow: '0 25px 80px -12px rgba(0, 0, 0, 0.5)',
+            border: '1px solid rgba(255, 255, 255, 0.1)'
           }}>
-            {/* Mock Header */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              marginBottom: '1rem'
-            }}>
-              <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#FF6B6B' }} />
-              <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#FFE66D' }} />
-              <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#4ECB71' }} />
-            </div>
-            
-            {/* Mock Content */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: '1rem'
-            }}>
-              {/*
-                - Items array contains icons (as paths), labels, and values for mock data
-                - Each item is mapped to a grid item showing an icon, label, and value
-              */}
-              { [
-                  { icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2', label: 'Tasks', value: '24' },
-                  { icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', label: 'Messages', value: '12' },
-                  { icon: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9', label: 'Alerts', value: '5' },
-                  { icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z', label: 'Team', value: '8' }
-                ].map((item, i) => (
-                  <div key={i} style={{
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    borderRadius: '12px',
-                    padding: '1rem',
-                    border: '1px solid rgba(255, 255, 255, 0.05)'
-                  }}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1ABC9C" strokeWidth="2" style={{ marginBottom: '0.5rem' }}>
-                      <path d={item.icon} strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                    <div style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.75rem' }}>{item.label}</div>
-                    <div style={{ color: '#fff', fontSize: '1.5rem', fontWeight: 700 }}>{item.value}</div>
-                  </div>
-                )) }
-            </div>
+            <img 
+              src="/images/hero-dashboard.svg" 
+              alt="NOMA Dashboard Preview"
+              style={{
+                width: '100%',
+                height: 'auto',
+                display: 'block'
+              }}
+            />
           </div>
 
-          {/* Floating Elements */}
+          {/* Floating Badge - Top Right */}
           <div style={{
             position: 'absolute',
-            top: '-20px',
-            right: '-20px',
+            top: '-10px',
+            right: '-10px',
             background: 'linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%)',
             borderRadius: '16px',
             padding: '1rem 1.5rem',
             boxShadow: '0 10px 40px rgba(26, 188, 156, 0.4)',
             animation: 'float 3s ease-in-out infinite'
-          }}>
-            <div style={{ color: '#fff', fontSize: '0.75rem', opacity: 0.8 }}>Productivity</div>
-            <div style={{ color: '#fff', fontSize: '1.25rem', fontWeight: 700 }}>+45%</div>
+          }} className="floating-badge">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+              </svg>
+              <span style={{ color: '#fff', fontSize: '0.875rem', fontWeight: 600 }}>+45% Productivity</span>
+            </div>
+          </div>
+
+          {/* Floating Badge - Bottom Left */}
+          <div style={{
+            position: 'absolute',
+            bottom: '20px',
+            left: '-20px',
+            background: 'rgba(255, 255, 255, 0.95)',
+            borderRadius: '12px',
+            padding: '0.75rem 1rem',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)',
+            animation: 'float 4s ease-in-out infinite 1s'
+          }} className="floating-badge-2">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <div style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                  <polyline points="22,4 12,14.01 9,11.01" />
+                </svg>
+              </div>
+              <div>
+                <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>Task Completed</div>
+                <div style={{ fontSize: '0.95rem', fontWeight: 600, color: '#1a1a2e' }}>Project Launch</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -314,37 +357,67 @@ export default function HeroSection() {
           justifyContent: 'center',
           paddingTop: '8px'
         }}>
-          <div style={{
+          <div className="scroll-dot" style={{
             width: '4px',
             height: '8px',
             background: '#1ABC9C',
-            borderRadius: '2px',
-            animation: 'scroll 1.5s ease-in-out infinite'
+            borderRadius: '2px'
           }} />
         </div>
       </div>
 
       <style jsx>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
+        @keyframes pulse-slow {
+          0%, 100% { opacity: 0.4; transform: scale(1); }
+          50% { opacity: 0.6; transform: scale(1.05); }
         }
         @keyframes float {
           0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
+          50% { transform: translateY(-15px); }
         }
-        @keyframes scroll {
-          0% { transform: translateY(0); opacity: 1; }
-          50% { transform: translateY(8px); opacity: 0.5; }
-          100% { transform: translateY(0); opacity: 1; }
+        .pulse-dot {
+          animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+          0%, 100% { opacity: 1; box-shadow: 0 0 10px #1ABC9C; }
+          50% { opacity: 0.7; box-shadow: 0 0 20px #1ABC9C; }
+        }
+        .scroll-dot {
+          animation: scroll-bounce 1.5s ease-in-out infinite;
+        }
+        @keyframes scroll-bounce {
+          0%, 100% { transform: translateY(0); opacity: 1; }
+          50% { transform: translateY(10px); opacity: 0.5; }
+        }
+        .btn-primary-hero:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 15px 40px rgba(26, 188, 156, 0.5);
+        }
+        .btn-secondary-hero:hover {
+          background: rgba(255, 255, 255, 0.15);
+          border-color: rgba(255, 255, 255, 0.4);
         }
         @media (max-width: 968px) {
-          section > div > div:first-child > div {
+          .hero-grid {
             grid-template-columns: 1fr !important;
             text-align: center;
+          }
+          .hero-content {
+            order: 1;
+          }
+          .hero-image {
+            order: 2;
+            margin-top: 2rem;
+          }
+          .hero-stats {
+            justify-content: center;
+          }
+          .floating-badge, .floating-badge-2 {
+            display: none !important;
           }
         }
       `}</style>
     </section>
   );
 }
+

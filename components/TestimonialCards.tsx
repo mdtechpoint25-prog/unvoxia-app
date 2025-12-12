@@ -1,9 +1,11 @@
+'use client';
+
 const testimonials = [
   {
     quote: 'NOMA simplified my entire workflow. I no longer switch between apps - everything lives in one place now. The productivity boost has been incredible.',
     name: 'Grace Wanjiku',
     role: 'Freelance Designer',
-    avatar: 'GW',
+    avatar: '/images/avatar-1.svg',
     color: '#1ABC9C',
     rating: 5
   },
@@ -11,7 +13,7 @@ const testimonials = [
     quote: 'The project system is a lifesaver for academic work. Clean, simple, and reliable. I managed to complete my thesis on time thanks to NOMA.',
     name: 'Daniel Ochieng',
     role: 'Graduate Student',
-    avatar: 'DO',
+    avatar: '/images/avatar-2.svg',
     color: '#9B59B6',
     rating: 5
   },
@@ -19,7 +21,7 @@ const testimonials = [
     quote: 'Authentic interactions, meaningful tools, and real productivity. NOMA is different from anything else I have tried. Highly recommended!',
     name: 'Lydia Muthoni',
     role: 'Business Owner',
-    avatar: 'LM',
+    avatar: '/images/avatar-3.svg',
     color: '#4DA8DA',
     rating: 5
   },
@@ -27,7 +29,7 @@ const testimonials = [
     quote: 'The messaging feature with consent flow is exactly what we needed for our team. Professional and secure communication made easy.',
     name: 'James Kariuki',
     role: 'Team Lead',
-    avatar: 'JK',
+    avatar: '/images/avatar-4.svg',
     color: '#FF6B35',
     rating: 5
   }
@@ -48,7 +50,7 @@ export default function TestimonialCards() {
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundImage: `radial-gradient(circle at 1px 1px, rgba(26, 188, 156, 0.1) 1px, transparent 0)`,
+        backgroundImage: `radial-gradient(circle at 1px 1px, rgba(26, 188, 156, 0.08) 1px, transparent 0)`,
         backgroundSize: '40px 40px',
         pointerEvents: 'none'
       }} />
@@ -62,12 +64,17 @@ export default function TestimonialCards() {
         {/* Section Header */}
         <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
           <div style={{
-            display: 'inline-block',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.5rem',
             background: 'linear-gradient(135deg, rgba(26, 188, 156, 0.1) 0%, rgba(155, 89, 182, 0.1) 100%)',
             padding: '0.5rem 1.25rem',
             borderRadius: '50px',
             marginBottom: '1rem'
           }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1ABC9C" strokeWidth="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
             <span style={{
               background: 'linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%)',
               WebkitBackgroundClip: 'text',
@@ -115,30 +122,35 @@ export default function TestimonialCards() {
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
+              className="testimonial-card"
               style={{
                 background: '#fff',
                 borderRadius: '20px',
                 padding: '2rem',
                 boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)',
                 border: '1px solid #e5e7eb',
-                transition: 'all 0.3s ease',
-                position: 'relative'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-4px)';
-                e.currentTarget.style.boxShadow = '0 12px 30px rgba(0, 0, 0, 0.1)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.06)';
+                transition: 'all 0.4s ease',
+                position: 'relative',
+                overflow: 'hidden'
               }}
             >
+              {/* Decorative corner gradient */}
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                width: '100px',
+                height: '100px',
+                background: `linear-gradient(135deg, ${testimonial.color}10 0%, transparent 100%)`,
+                borderRadius: '0 20px 0 100px'
+              }} />
+
               {/* Quote Icon */}
               <div style={{
                 position: 'absolute',
                 top: '1.5rem',
                 right: '1.5rem',
-                opacity: 0.1
+                opacity: 0.15
               }}>
                 <svg width="40" height="40" viewBox="0 0 24 24" fill={testimonial.color}>
                   <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
@@ -146,9 +158,9 @@ export default function TestimonialCards() {
               </div>
 
               {/* Stars */}
-              <div style={{ display: 'flex', gap: '0.25rem', marginBottom: '1rem' }}>
+              <div style={{ display: 'flex', gap: '0.25rem', marginBottom: '1.25rem' }}>
                 {[...Array(testimonial.rating)].map((_, i) => (
-                  <svg key={i} width="18" height="18" viewBox="0 0 24 24" fill="#FFD700">
+                  <svg key={i} width="20" height="20" viewBox="0 0 24 24" fill="#FFD700">
                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                   </svg>
                 ))}
@@ -158,9 +170,11 @@ export default function TestimonialCards() {
               <p style={{
                 color: '#4b5563',
                 fontSize: '1rem',
-                lineHeight: 1.7,
+                lineHeight: 1.8,
                 marginBottom: '1.5rem',
-                fontStyle: 'italic'
+                fontStyle: 'italic',
+                position: 'relative',
+                zIndex: 1
               }}>
                 &ldquo;{testimonial.quote}&rdquo;
               </p>
@@ -173,20 +187,23 @@ export default function TestimonialCards() {
                 paddingTop: '1rem',
                 borderTop: '1px solid #e5e7eb'
               }}>
-                {/* Avatar */}
+                {/* Avatar Image */}
                 <div style={{
-                  width: '48px',
-                  height: '48px',
+                  width: '52px',
+                  height: '52px',
                   borderRadius: '50%',
-                  background: `linear-gradient(135deg, ${testimonial.color} 0%, ${testimonial.color}cc 100%)`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#fff',
-                  fontWeight: 700,
-                  fontSize: '1rem'
+                  overflow: 'hidden',
+                  boxShadow: `0 4px 15px ${testimonial.color}30`
                 }}>
-                  {testimonial.avatar}
+                  <img 
+                    src={testimonial.avatar} 
+                    alt={testimonial.name}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover'
+                    }}
+                  />
                 </div>
                 <div>
                   <div style={{
@@ -197,8 +214,9 @@ export default function TestimonialCards() {
                     {testimonial.name}
                   </div>
                   <div style={{
-                    color: '#9ca3af',
-                    fontSize: '0.875rem'
+                    color: testimonial.color,
+                    fontSize: '0.875rem',
+                    fontWeight: 500
                   }}>
                     {testimonial.role}
                   </div>
@@ -208,6 +226,13 @@ export default function TestimonialCards() {
           ))}
         </div>
       </div>
+
+      <style jsx>{`
+        .testimonial-card:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+      `}</style>
     </section>
   );
 }
