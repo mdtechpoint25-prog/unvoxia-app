@@ -2,28 +2,43 @@ import PostCard from './PostCard';
 
 const samplePosts = [
   {
+    id: 'sample-1',
     username: 'HopefulSoul',
-    timestamp: '2 hours ago',
+    timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
     category: 'Motivation',
     content: 'Today I decided to take one small step forward. It felt scary, but I did it.',
-    reactions: 24,
-    comments: 5
+    commentsCount: 5,
+    initialReactions: [
+      { emoji: 'heart', user_id: '1' },
+      { emoji: 'heart', user_id: '2' },
+      { emoji: 'strength', user_id: '3' }
+    ]
   },
   {
+    id: 'sample-2',
     username: 'SilentWarrior',
-    timestamp: '5 hours ago',
+    timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
     category: 'Mental Health',
     content: 'Some days are harder than others. Grateful for this safe space to share.',
-    reactions: 42,
-    comments: 12
+    commentsCount: 12,
+    initialReactions: [
+      { emoji: 'hug', user_id: '1' },
+      { emoji: 'heart', user_id: '2' },
+      { emoji: 'hope', user_id: '3' },
+      { emoji: 'heart', user_id: '4' }
+    ]
   },
   {
+    id: 'sample-3',
     username: 'GentleBreeze',
-    timestamp: '1 day ago',
+    timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
     category: 'Reflection',
     content: 'Writing down my fears helped me realize they are not as big as I thought.',
-    reactions: 31,
-    comments: 8
+    commentsCount: 8,
+    initialReactions: [
+      { emoji: 'peace', user_id: '1' },
+      { emoji: 'heart', user_id: '2' }
+    ]
   }
 ];
 
@@ -34,8 +49,8 @@ export default function FeedPreview() {
         See What Others Are Sharing
       </h2>
       <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-        {samplePosts.map((post, i) => (
-          <PostCard key={i} {...post} />
+        {samplePosts.map((post) => (
+          <PostCard key={post.id} {...post} interactive={false} />
         ))}
       </div>
     </section>

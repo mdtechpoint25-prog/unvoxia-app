@@ -14,8 +14,26 @@ export interface Database {
           badges: Json | null;
           created_at: string;
           last_login: string | null;
+          email_verified: boolean;
+          otp_code: string | null;
+          otp_expiry: string | null;
+          reset_token: string | null;
+          reset_expiry: string | null;
         };
-        Insert: Omit<Database['public']['Tables']['users']['Row'], 'id' | 'created_at'>;
+        Insert: {
+          username: string;
+          email: string;
+          phone: string;
+          password_hash: string;
+          avatar_url?: string | null;
+          badges?: Json | null;
+          last_login?: string | null;
+          email_verified?: boolean;
+          otp_code?: string | null;
+          otp_expiry?: string | null;
+          reset_token?: string | null;
+          reset_expiry?: string | null;
+        };
         Update: Partial<Database['public']['Tables']['users']['Insert']>;
       };
       posts: {
@@ -29,7 +47,13 @@ export interface Database {
           reactions: Json | null;
           comments_count: number;
         };
-        Insert: Omit<Database['public']['Tables']['posts']['Row'], 'id' | 'created_at' | 'comments_count'>;
+        Insert: {
+          user_id: string;
+          content: string;
+          media_url?: string | null;
+          category?: string | null;
+          reactions?: Json | null;
+        };
         Update: Partial<Database['public']['Tables']['posts']['Insert']>;
       };
       comments: {
@@ -41,7 +65,12 @@ export interface Database {
           created_at: string;
           reactions: Json | null;
         };
-        Insert: Omit<Database['public']['Tables']['comments']['Row'], 'id' | 'created_at'>;
+        Insert: {
+          post_id: string;
+          user_id: string;
+          content: string;
+          reactions?: Json | null;
+        };
         Update: Partial<Database['public']['Tables']['comments']['Insert']>;
       };
       messages: {

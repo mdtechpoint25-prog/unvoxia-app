@@ -1,11 +1,87 @@
 import { NextResponse } from 'next/server';
+import { supabase } from '@/lib/supabase';
+import { cookies } from 'next/headers';
 
-export async function GET() {
-  // Placeholder: list posts
-  return NextResponse.json({ posts: [] });
+function getUserFromSession() {
+  try {
+    const cookieStore = cookies();
+    const session = cookieStore.get('session')?.value;
+    if (!session) return null;
+    const decoded = JSON.parse(Buffer.from(session, 'base64').toString());
+    if (decoded.exp < Date.now()) return null;
+    return decoded;
+  } catch {
+    return null;
+  }
 }
 
-export async function POST() {
-  // Placeholder: create post
-  return NextResponse.json({ ok: true });
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const category = searchParams.get('category');
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '10');
+    const offset = (page - 1) * limit;
+
+    let query = supabase
+      .from('posts')
+      .select(`
+        *,
+        users:user_id (username, avatar_url)
+      `)
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1);
+
+    if (category && category !== 'all') {
+      query = query.eq('category', category);
+    }
+
+    const { data: posts, error } = await query;
+
+    if (error) {
+      console.error('Fetch posts error:', error);
+      return NextResponse.json({ error: 'Failed to fetch posts' }, { status: 500 });
+    }
+
+    return NextResponse.json({ posts: posts || [] });
+  } catch (error) {
+    console.error('Posts GET error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const user = getUserFromSession();
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { content, category, media_url } = await request.json();
+
+    if ((!content || content.trim().length === 0) && !media_url) {
+      return NextResponse.json({ error: 'Content or media is required' }, { status: 400 });
+    }
+
+    const { data: post, error } = await supabase
+      .from('posts')
+      .insert({
+        user_id: user.userId,
+        content: content.trim(),
+        category: category || 'Reflection',
+        media_url: media_url || null
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Create post error:', error);
+      return NextResponse.json({ error: 'Failed to create post' }, { status: 500 });
+    }
+
+    return NextResponse.json({ ok: true, post });
+  } catch (error) {
+    console.error('Posts POST error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
 }
