@@ -59,16 +59,21 @@ CREATE TABLE posts (
 );
 
 -- ============================================
--- COMMENTS TABLE
+-- COMMENTS TABLE (with threading support)
 -- ============================================
 CREATE TABLE comments (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   post_id UUID REFERENCES posts(id) ON DELETE CASCADE,
   user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  parent_id UUID REFERENCES comments(id) ON DELETE CASCADE,
   content TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   reactions JSONB DEFAULT '{}'
 );
+
+-- Index for faster threaded comment queries
+CREATE INDEX idx_comments_parent ON comments(parent_id);
+CREATE INDEX idx_comments_post ON comments(post_id);
 
 -- ============================================
 -- MESSAGES TABLE

@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import ReactionButton from './ReactionButton';
 import CommentSection from './CommentSection';
+import ReportButton from './ReportButton';
 
 export interface PostCardProps {
   id: string;
@@ -16,6 +17,7 @@ export interface PostCardProps {
   commentsCount: number;
   currentUserId?: string;
   interactive?: boolean;
+  isAnonymous?: boolean;
 }
 
 interface Comment {
@@ -39,11 +41,16 @@ export default function PostCard({
   initialReactions = [],
   commentsCount,
   currentUserId,
-  interactive = true
+  interactive = true,
+  isAnonymous = false
 }: PostCardProps) {
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState<Comment[]>([]);
   const [loadingComments, setLoadingComments] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+
+  const displayName = isAnonymous ? 'Anonymous' : username;
+  const displayAvatar = isAnonymous ? '?' : (avatar || username.charAt(0).toUpperCase());
 
   const formatTime = (dateString: string) => {
     const date = new Date(dateString);
@@ -83,41 +90,112 @@ export default function PostCard({
   return (
     <div style={{
       background: '#fff',
-      borderRadius: '12px',
-      padding: '1rem',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+      borderRadius: '16px',
+      padding: '1.25rem',
+      boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
+      border: '1px solid #e5e7eb',
       marginBottom: '1rem'
     }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-        <span style={{
-          width: '36px',
-          height: '36px',
-          borderRadius: '50%',
-          background: '#9B59B6',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: '#fff',
-          fontWeight: 600
-        }}>
-          {avatar || username.charAt(0).toUpperCase()}
-        </span>
-        <div>
-          <strong style={{ color: '#2C3E50' }}>{username}</strong>
-          <div style={{ fontSize: '0.75rem', color: '#888' }}>
-            {formatTime(timestamp)} - <span style={{ color: '#1ABC9C' }}>{category}</span>
+      {/* Header */}
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'space-between',
+        marginBottom: '0.75rem' 
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <span style={{
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            background: isAnonymous 
+              ? 'linear-gradient(135deg, #7f8c8d 0%, #95a5a6 100%)' 
+              : 'linear-gradient(135deg, #9B59B6 0%, #1ABC9C 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#fff',
+            fontWeight: 600,
+            fontSize: '1rem'
+          }}>
+            {displayAvatar}
+          </span>
+          <div>
+            <strong style={{ color: '#1a1a2e' }}>
+              {isAnonymous ? 'Anonymous' : `@${displayName}`}
+            </strong>
+            <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>
+              {formatTime(timestamp)} - <span style={{ color: '#1ABC9C' }}>{category}</span>
+            </div>
           </div>
         </div>
+        
+        {/* More Menu */}
+        {interactive && (
+          <div style={{ position: 'relative' }}>
+            <button
+              onClick={() => setShowMenu(!showMenu)}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#9ca3af',
+                cursor: 'pointer',
+                padding: '0.5rem',
+                fontSize: '1.25rem'
+              }}
+            >
+              ...
+            </button>
+            {showMenu && (
+              <div style={{
+                position: 'absolute',
+                top: '100%',
+                right: 0,
+                background: '#fff',
+                borderRadius: '8px',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+                border: '1px solid #e5e7eb',
+                overflow: 'hidden',
+                zIndex: 10
+              }}>
+                <ReportButton postId={id} />
+              </div>
+            )}
+          </div>
+        )}
       </div>
-      <p style={{ color: '#2C3E50', marginBottom: '0.75rem', whiteSpace: 'pre-wrap' }}>{content}</p>
+
+      {/* Content */}
+      <p style={{ 
+        color: '#4a5568', 
+        marginBottom: '0.75rem', 
+        whiteSpace: 'pre-wrap',
+        lineHeight: 1.6 
+      }}>
+        {content}
+      </p>
+
+      {/* Media */}
       {mediaUrl && (
         <div style={{ marginBottom: '0.75rem' }}>
-          <img src={mediaUrl} alt="post media" style={{ width: '100%', borderRadius: '8px' }} />
+          <img 
+            src={mediaUrl} 
+            alt="post media" 
+            style={{ width: '100%', borderRadius: '12px' }} 
+          />
         </div>
       )}
       
+      {/* Actions */}
       {interactive && (
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+        <div style={{ 
+          display: 'flex', 
+          gap: '1rem', 
+          alignItems: 'center', 
+          flexWrap: 'wrap',
+          paddingTop: '0.75rem',
+          borderTop: '1px solid #f3f4f6'
+        }}>
           <ReactionButton
             postId={id}
             reactions={initialReactions}
@@ -130,7 +208,8 @@ export default function PostCard({
               border: 'none',
               color: '#1ABC9C',
               cursor: 'pointer',
-              fontSize: '0.9rem'
+              fontSize: '0.9rem',
+              fontWeight: 500
             }}
           >
             {commentsCount + comments.length} comments
@@ -139,7 +218,14 @@ export default function PostCard({
       )}
 
       {!interactive && (
-        <div style={{ display: 'flex', gap: '1rem', fontSize: '0.9rem', color: '#1ABC9C' }}>
+        <div style={{ 
+          display: 'flex', 
+          gap: '1rem', 
+          fontSize: '0.9rem', 
+          color: '#1ABC9C',
+          paddingTop: '0.75rem',
+          borderTop: '1px solid #f3f4f6'
+        }}>
           <span>{initialReactions.length} reactions</span>
           <span>{commentsCount} comments</span>
         </div>
@@ -147,7 +233,7 @@ export default function PostCard({
 
       {showComments && interactive && (
         loadingComments ? (
-          <p style={{ color: '#888', marginTop: '1rem' }}>Loading comments...</p>
+          <p style={{ color: '#9ca3af', marginTop: '1rem' }}>Loading comments...</p>
         ) : (
           <CommentSection
             postId={id}
@@ -159,3 +245,4 @@ export default function PostCard({
     </div>
   );
 }
+

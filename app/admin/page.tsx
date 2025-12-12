@@ -1,8 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { REPORT_REASONS } from '@/lib/constants';
 
 interface Stats {
   users: number;
@@ -38,17 +36,28 @@ interface User {
   created_at: string;
 }
 
+interface Prompt {
+  id: string;
+  prompt: string;
+  created_at: string;
+}
+
 export default function AdminPage() {
   const [stats, setStats] = useState<Stats>({ users: 0, posts: 0, comments: 0, messages: 0 });
   const [categoryStats, setCategoryStats] = useState<Record<string, number>>({});
   const [recentPosts, setRecentPosts] = useState<RecentPost[]>([]);
   const [flaggedPosts, setFlaggedPosts] = useState<FlaggedPost[]>([]);
   const [users, setUsers] = useState<User[]>([]);
+  const [prompts, setPrompts] = useState<Prompt[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'overview' | 'flagged' | 'users'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'flagged' | 'users' | 'prompts'>('overview');
+  const [newPrompt, setNewPrompt] = useState('');
+  const [editingPrompt, setEditingPrompt] = useState<string | null>(null);
+  const [editPromptText, setEditPromptText] = useState('');
 
   useEffect(() => {
     fetchStats();
+    fetchPrompts();
   }, []);
 
   const fetchStats = async () => {
@@ -66,6 +75,65 @@ export default function AdminPage() {
       console.error('Fetch admin stats error:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchPrompts = async () => {
+    try {
+      const res = await fetch('/api/admin/prompts');
+      const data = await res.json();
+      if (res.ok) {
+        setPrompts(data.prompts || []);
+      }
+    } catch (err) {
+      console.error('Fetch prompts error:', err);
+    }
+  };
+
+  const handleAddPrompt = async () => {
+    if (!newPrompt.trim()) return;
+    try {
+      const res = await fetch('/api/admin/prompts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: newPrompt })
+      });
+      if (res.ok) {
+        setNewPrompt('');
+        fetchPrompts();
+      }
+    } catch (err) {
+      console.error('Add prompt error:', err);
+    }
+  };
+
+  const handleUpdatePrompt = async (id: string) => {
+    if (!editPromptText.trim()) return;
+    try {
+      const res = await fetch(`/api/admin/prompts/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: editPromptText })
+      });
+      if (res.ok) {
+        setEditingPrompt(null);
+        setEditPromptText('');
+        fetchPrompts();
+      }
+    } catch (err) {
+      console.error('Update prompt error:', err);
+    }
+  };
+
+  const handleDeletePrompt = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this prompt?')) return;
+    try {
+      const res = await fetch(`/api/admin/prompts/${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        fetchPrompts();
+      }
+    } catch (err) {
+      console.error('Delete prompt error:', err);
     }
   };
 
@@ -129,18 +197,21 @@ export default function AdminPage() {
           background: '#fff',
           padding: '0.5rem',
           borderRadius: '12px',
-          border: '1px solid #e5e7eb'
+          border: '1px solid #e5e7eb',
+          flexWrap: 'wrap'
         }}>
           {[
-            { id: 'overview', label: 'Overview', icon: '??' },
-            { id: 'flagged', label: `Flagged Posts ${pendingFlags > 0 ? `(${pendingFlags})` : ''}`, icon: '??' },
-            { id: 'users', label: 'Users', icon: '??' }
+            { id: 'overview', label: 'Overview', icon: 'Chart' },
+            { id: 'flagged', label: `Flagged ${pendingFlags > 0 ? `(${pendingFlags})` : ''}`, icon: 'Flag' },
+            { id: 'users', label: 'Users', icon: 'Users' },
+            { id: 'prompts', label: 'Prompts', icon: 'Edit' }
           ].map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
               style={{
                 flex: 1,
+                minWidth: '100px',
                 padding: '0.75rem 1rem',
                 background: activeTab === tab.id 
                   ? 'linear-gradient(135deg, #1ABC9C 0%, #16a085 100%)' 
@@ -198,10 +269,10 @@ export default function AdminPage() {
                   marginBottom: '1.5rem'
                 }}>
                   {[
-                    { label: 'Total Users', value: stats.users, color: '#1ABC9C', icon: '??' },
-                    { label: 'Total Posts', value: stats.posts, color: '#FF6B35', icon: '??' },
-                    { label: 'Comments', value: stats.comments, color: '#9B59B6', icon: '??' },
-                    { label: 'Messages', value: stats.messages, color: '#4DA8DA', icon: '??' }
+                    { label: 'Total Users', value: stats.users, color: '#1ABC9C' },
+                    { label: 'Total Posts', value: stats.posts, color: '#FF6B35' },
+                    { label: 'Comments', value: stats.comments, color: '#9B59B6' },
+                    { label: 'Messages', value: stats.messages, color: '#4DA8DA' }
                   ].map((stat, i) => (
                     <div key={i} style={{
                       background: `linear-gradient(135deg, ${stat.color} 0%, ${stat.color}dd 100%)`,
@@ -209,19 +280,17 @@ export default function AdminPage() {
                       padding: '1.5rem',
                       color: '#fff'
                     }}>
-                      <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>{stat.icon}</div>
                       <div style={{ fontSize: '2rem', fontWeight: 700 }}>{stat.value}</div>
                       <div style={{ opacity: 0.9 }}>{stat.label}</div>
                     </div>
                   ))}
                 </div>
 
-                {/* Category Distribution */}
+                {/* Category Stats */}
                 <div style={{
                   background: '#fff',
                   borderRadius: '16px',
                   padding: '1.5rem',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
                   border: '1px solid #e5e7eb',
                   marginBottom: '1.5rem'
                 }}>
@@ -249,7 +318,6 @@ export default function AdminPage() {
                   background: '#fff',
                   borderRadius: '16px',
                   padding: '1.5rem',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
                   border: '1px solid #e5e7eb'
                 }}>
                   <h3 style={{ color: '#1a1a2e', marginBottom: '1rem', fontWeight: 600 }}>
@@ -259,38 +327,21 @@ export default function AdminPage() {
                     <p style={{ color: '#6b7280' }}>No posts yet.</p>
                   ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                      {recentPosts.map((post) => (
+                      {recentPosts.slice(0, 5).map((post) => (
                         <div key={post.id} style={{
                           padding: '1rem',
                           background: '#f8f9fa',
-                          borderRadius: '12px',
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'flex-start',
-                          gap: '1rem'
+                          borderRadius: '12px'
                         }}>
-                          <div style={{ flex: 1 }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
-                              <strong style={{ color: '#1a1a2e' }}>
-                                {post.is_anonymous ? '?? Anonymous' : `@${post.users?.username || 'Unknown'}`}
-                              </strong>
-                              <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>{formatDate(post.created_at)}</span>
-                            </div>
-                            <p style={{ margin: 0, color: '#4a5568', fontSize: '0.9rem', lineHeight: 1.5 }}>
-                              {post.content.length > 120 ? `${post.content.substring(0, 120)}...` : post.content}
-                            </p>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                            <strong style={{ color: '#1a1a2e' }}>
+                              {post.is_anonymous ? 'Anonymous' : `@${post.users?.username || 'Unknown'}`}
+                            </strong>
+                            <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>{formatDate(post.created_at)}</span>
                           </div>
-                          <span style={{
-                            padding: '0.35rem 0.75rem',
-                            background: 'linear-gradient(135deg, #1ABC9C 0%, #16a085 100%)',
-                            color: '#fff',
-                            borderRadius: '20px',
-                            fontSize: '0.75rem',
-                            fontWeight: 500,
-                            whiteSpace: 'nowrap'
-                          }}>
-                            {post.category}
-                          </span>
+                          <p style={{ margin: 0, color: '#4a5568', fontSize: '0.9rem' }}>
+                            {post.content.length > 100 ? `${post.content.substring(0, 100)}...` : post.content}
+                          </p>
                         </div>
                       ))}
                     </div>
@@ -305,30 +356,26 @@ export default function AdminPage() {
                 background: '#fff',
                 borderRadius: '16px',
                 padding: '1.5rem',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
                 border: '1px solid #e5e7eb'
               }}>
                 <h3 style={{ color: '#1a1a2e', marginBottom: '1rem', fontWeight: 600 }}>
-                  ?? Flagged Posts
+                  Flagged Posts
                 </h3>
                 {flaggedPosts.length === 0 ? (
                   <div style={{ textAlign: 'center', padding: '2rem' }}>
-                    <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>?</div>
-                    <p style={{ color: '#6b7280' }}>No flagged posts. The community is behaving well!</p>
+                    <p style={{ color: '#6b7280' }}>No flagged posts. Community is behaving well!</p>
                   </div>
                 ) : (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     {flaggedPosts.map((flag) => (
                       <div key={flag.id} style={{
                         padding: '1rem',
-                        background: flag.status === 'pending' 
-                          ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(239, 68, 68, 0.1) 100%)'
-                          : '#f8f9fa',
-                        border: flag.status === 'pending' ? '1px solid rgba(239, 68, 68, 0.2)' : '1px solid #e5e7eb',
+                        background: flag.status === 'pending' ? '#fef2f2' : '#f8f9fa',
+                        border: flag.status === 'pending' ? '1px solid #fecaca' : '1px solid #e5e7eb',
                         borderRadius: '12px'
                       }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                          <span style={{ 
+                          <span style={{
                             padding: '0.25rem 0.5rem',
                             background: flag.status === 'pending' ? '#fef2f2' : '#f0fdf4',
                             color: flag.status === 'pending' ? '#dc2626' : '#16a34a',
@@ -338,66 +385,46 @@ export default function AdminPage() {
                           }}>
                             {flag.status.toUpperCase()}
                           </span>
-                          <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>
-                            {formatDate(flag.created_at)}
-                          </span>
+                          <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>{formatDate(flag.created_at)}</span>
                         </div>
-                        <p style={{ 
-                          margin: '0.5rem 0', 
-                          color: '#4a5568',
-                          fontSize: '0.9rem',
-                          padding: '0.75rem',
-                          background: '#fff',
-                          borderRadius: '8px',
-                          border: '1px solid #e5e7eb'
-                        }}>
+                        <p style={{ margin: '0.5rem 0', color: '#4a5568', fontSize: '0.9rem' }}>
                           {flag.posts?.content || 'Post content unavailable'}
                         </p>
-                        <div style={{ 
-                          display: 'flex', 
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          marginTop: '0.75rem'
-                        }}>
-                          <div style={{ fontSize: '0.85rem', color: '#6b7280' }}>
-                            <strong>Reason:</strong> {flag.reason}
-                            <br />
-                            <strong>Reported by:</strong> @{flag.reporter?.username || 'Unknown'}
+                        <p style={{ margin: '0.5rem 0', color: '#6b7280', fontSize: '0.85rem' }}>
+                          <strong>Reason:</strong> {flag.reason}
+                        </p>
+                        {flag.status === 'pending' && (
+                          <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem' }}>
+                            <button
+                              onClick={() => handleFlagAction(flag.id, 'dismiss')}
+                              style={{
+                                padding: '0.5rem 1rem',
+                                background: '#f5f5f5',
+                                border: '1px solid #e5e7eb',
+                                borderRadius: '8px',
+                                cursor: 'pointer',
+                                fontSize: '0.85rem'
+                              }}
+                            >
+                              Dismiss
+                            </button>
+                            <button
+                              onClick={() => handleFlagAction(flag.id, 'action')}
+                              style={{
+                                padding: '0.5rem 1rem',
+                                background: '#dc2626',
+                                color: '#fff',
+                                border: 'none',
+                                borderRadius: '8px',
+                                cursor: 'pointer',
+                                fontSize: '0.85rem',
+                                fontWeight: 600
+                              }}
+                            >
+                              Remove Post
+                            </button>
                           </div>
-                          {flag.status === 'pending' && (
-                            <div style={{ display: 'flex', gap: '0.5rem' }}>
-                              <button
-                                onClick={() => handleFlagAction(flag.id, 'dismiss')}
-                                style={{
-                                  padding: '0.5rem 1rem',
-                                  background: '#f5f5f5',
-                                  color: '#4a5568',
-                                  border: '1px solid #e5e7eb',
-                                  borderRadius: '8px',
-                                  cursor: 'pointer',
-                                  fontSize: '0.85rem'
-                                }}
-                              >
-                                Dismiss
-                              </button>
-                              <button
-                                onClick={() => handleFlagAction(flag.id, 'action')}
-                                style={{
-                                  padding: '0.5rem 1rem',
-                                  background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
-                                  color: '#fff',
-                                  border: 'none',
-                                  borderRadius: '8px',
-                                  cursor: 'pointer',
-                                  fontSize: '0.85rem',
-                                  fontWeight: 600
-                                }}
-                              >
-                                Take Action
-                              </button>
-                            </div>
-                          )}
-                        </div>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -411,11 +438,10 @@ export default function AdminPage() {
                 background: '#fff',
                 borderRadius: '16px',
                 padding: '1.5rem',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
                 border: '1px solid #e5e7eb'
               }}>
                 <h3 style={{ color: '#1a1a2e', marginBottom: '1rem', fontWeight: 600 }}>
-                  ?? User Management
+                  User Management
                 </h3>
                 {users.length === 0 ? (
                   <p style={{ color: '#6b7280' }}>No users found.</p>
@@ -424,10 +450,10 @@ export default function AdminPage() {
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                       <thead>
                         <tr style={{ borderBottom: '2px solid #e5e7eb' }}>
-                          <th style={{ padding: '0.75rem', textAlign: 'left', color: '#4a5568', fontWeight: 600 }}>User</th>
-                          <th style={{ padding: '0.75rem', textAlign: 'left', color: '#4a5568', fontWeight: 600 }}>Status</th>
-                          <th style={{ padding: '0.75rem', textAlign: 'left', color: '#4a5568', fontWeight: 600 }}>Joined</th>
-                          <th style={{ padding: '0.75rem', textAlign: 'right', color: '#4a5568', fontWeight: 600 }}>Actions</th>
+                          <th style={{ padding: '0.75rem', textAlign: 'left', color: '#4a5568' }}>User</th>
+                          <th style={{ padding: '0.75rem', textAlign: 'left', color: '#4a5568' }}>Status</th>
+                          <th style={{ padding: '0.75rem', textAlign: 'left', color: '#4a5568' }}>Joined</th>
+                          <th style={{ padding: '0.75rem', textAlign: 'right', color: '#4a5568' }}>Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -455,55 +481,22 @@ export default function AdminPage() {
                             <td style={{ padding: '0.75rem', textAlign: 'right' }}>
                               <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
                                 {user.status !== 'active' && (
-                                  <button
-                                    onClick={() => handleUserAction(user.id, 'activate')}
-                                    style={{
-                                      padding: '0.35rem 0.75rem',
-                                      background: '#d1fae5',
-                                      color: '#059669',
-                                      border: 'none',
-                                      borderRadius: '6px',
-                                      cursor: 'pointer',
-                                      fontSize: '0.8rem',
-                                      fontWeight: 500
-                                    }}
-                                  >
-                                    Activate
-                                  </button>
+                                  <button onClick={() => handleUserAction(user.id, 'activate')} style={{
+                                    padding: '0.35rem 0.75rem', background: '#d1fae5', color: '#059669',
+                                    border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem'
+                                  }}>Activate</button>
                                 )}
                                 {user.status !== 'muted' && (
-                                  <button
-                                    onClick={() => handleUserAction(user.id, 'mute')}
-                                    style={{
-                                      padding: '0.35rem 0.75rem',
-                                      background: '#fef3c7',
-                                      color: '#d97706',
-                                      border: 'none',
-                                      borderRadius: '6px',
-                                      cursor: 'pointer',
-                                      fontSize: '0.8rem',
-                                      fontWeight: 500
-                                    }}
-                                  >
-                                    Mute
-                                  </button>
+                                  <button onClick={() => handleUserAction(user.id, 'mute')} style={{
+                                    padding: '0.35rem 0.75rem', background: '#fef3c7', color: '#d97706',
+                                    border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem'
+                                  }}>Mute</button>
                                 )}
                                 {user.status !== 'banned' && (
-                                  <button
-                                    onClick={() => handleUserAction(user.id, 'ban')}
-                                    style={{
-                                      padding: '0.35rem 0.75rem',
-                                      background: '#fee2e2',
-                                      color: '#dc2626',
-                                      border: 'none',
-                                      borderRadius: '6px',
-                                      cursor: 'pointer',
-                                      fontSize: '0.8rem',
-                                      fontWeight: 500
-                                    }}
-                                  >
-                                    Ban
-                                  </button>
+                                  <button onClick={() => handleUserAction(user.id, 'ban')} style={{
+                                    padding: '0.35rem 0.75rem', background: '#fee2e2', color: '#dc2626',
+                                    border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem'
+                                  }}>Ban</button>
                                 )}
                               </div>
                             </td>
@@ -511,6 +504,148 @@ export default function AdminPage() {
                         ))}
                       </tbody>
                     </table>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Prompts Tab */}
+            {activeTab === 'prompts' && (
+              <div style={{
+                background: '#fff',
+                borderRadius: '16px',
+                padding: '1.5rem',
+                border: '1px solid #e5e7eb'
+              }}>
+                <h3 style={{ color: '#1a1a2e', marginBottom: '1rem', fontWeight: 600 }}>
+                  Daily Prompts Management
+                </h3>
+                
+                {/* Add New Prompt */}
+                <div style={{ marginBottom: '1.5rem', padding: '1rem', background: '#f8f9fa', borderRadius: '12px' }}>
+                  <h4 style={{ color: '#4a5568', marginBottom: '0.75rem', fontSize: '0.95rem' }}>Add New Prompt</h4>
+                  <div style={{ display: 'flex', gap: '0.75rem' }}>
+                    <input
+                      type="text"
+                      placeholder="Enter a new daily prompt..."
+                      value={newPrompt}
+                      onChange={(e) => setNewPrompt(e.target.value)}
+                      style={{
+                        flex: 1,
+                        padding: '0.75rem',
+                        border: '1px solid #e5e7eb',
+                        borderRadius: '8px',
+                        fontSize: '0.95rem'
+                      }}
+                    />
+                    <button
+                      onClick={handleAddPrompt}
+                      disabled={!newPrompt.trim()}
+                      style={{
+                        padding: '0.75rem 1.5rem',
+                        background: newPrompt.trim() ? 'linear-gradient(135deg, #1ABC9C 0%, #16a085 100%)' : '#e5e7eb',
+                        color: newPrompt.trim() ? '#fff' : '#9ca3af',
+                        border: 'none',
+                        borderRadius: '8px',
+                        cursor: newPrompt.trim() ? 'pointer' : 'not-allowed',
+                        fontWeight: 600
+                      }}
+                    >
+                      Add
+                    </button>
+                  </div>
+                </div>
+
+                {/* Prompts List */}
+                {prompts.length === 0 ? (
+                  <p style={{ color: '#6b7280', textAlign: 'center', padding: '2rem' }}>
+                    No prompts yet. Add your first daily prompt above.
+                  </p>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                    {prompts.map((prompt) => (
+                      <div key={prompt.id} style={{
+                        padding: '1rem',
+                        background: '#f8f9fa',
+                        borderRadius: '12px',
+                        border: '1px solid #e5e7eb'
+                      }}>
+                        {editingPrompt === prompt.id ? (
+                          <div style={{ display: 'flex', gap: '0.75rem' }}>
+                            <input
+                              type="text"
+                              value={editPromptText}
+                              onChange={(e) => setEditPromptText(e.target.value)}
+                              style={{
+                                flex: 1,
+                                padding: '0.5rem',
+                                border: '1px solid #e5e7eb',
+                                borderRadius: '6px'
+                              }}
+                            />
+                            <button
+                              onClick={() => handleUpdatePrompt(prompt.id)}
+                              style={{
+                                padding: '0.5rem 1rem',
+                                background: '#1ABC9C',
+                                color: '#fff',
+                                border: 'none',
+                                borderRadius: '6px',
+                                cursor: 'pointer'
+                              }}
+                            >
+                              Save
+                            </button>
+                            <button
+                              onClick={() => { setEditingPrompt(null); setEditPromptText(''); }}
+                              style={{
+                                padding: '0.5rem 1rem',
+                                background: '#f5f5f5',
+                                border: '1px solid #e5e7eb',
+                                borderRadius: '6px',
+                                cursor: 'pointer'
+                              }}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <p style={{ margin: 0, color: '#4a5568', flex: 1 }}>{prompt.prompt}</p>
+                            <div style={{ display: 'flex', gap: '0.5rem', marginLeft: '1rem' }}>
+                              <button
+                                onClick={() => { setEditingPrompt(prompt.id); setEditPromptText(prompt.prompt); }}
+                                style={{
+                                  padding: '0.35rem 0.75rem',
+                                  background: '#e0f2fe',
+                                  color: '#0284c7',
+                                  border: 'none',
+                                  borderRadius: '6px',
+                                  cursor: 'pointer',
+                                  fontSize: '0.8rem'
+                                }}
+                              >
+                                Edit
+                              </button>
+                              <button
+                                onClick={() => handleDeletePrompt(prompt.id)}
+                                style={{
+                                  padding: '0.35rem 0.75rem',
+                                  background: '#fee2e2',
+                                  color: '#dc2626',
+                                  border: 'none',
+                                  borderRadius: '6px',
+                                  cursor: 'pointer',
+                                  fontSize: '0.8rem'
+                                }}
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>

@@ -15,12 +15,38 @@ async function getUserFromSession() {
   }
 }
 
+// Helper to build threaded comment tree
+function buildCommentTree(comments: any[]) {
+  const commentMap = new Map();
+  const rootComments: any[] = [];
+
+  // First pass: create map of all comments
+  comments.forEach(comment => {
+    commentMap.set(comment.id, { ...comment, replies: [] });
+  });
+
+  // Second pass: build tree structure
+  comments.forEach(comment => {
+    const node = commentMap.get(comment.id);
+    if (comment.parent_id && commentMap.has(comment.parent_id)) {
+      commentMap.get(comment.parent_id).replies.push(node);
+    } else {
+      rootComments.push(node);
+    }
+  });
+
+  return rootComments;
+}
+
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
+    const { searchParams } = new URL(request.url);
+    const threaded = searchParams.get('threaded') === 'true';
+
     const { data: comments, error } = await supabase
       .from('comments')
       .select(`
@@ -32,6 +58,12 @@ export async function GET(
 
     if (error) {
       return NextResponse.json({ error: 'Failed to fetch comments' }, { status: 500 });
+    }
+
+    // Return threaded or flat based on query param
+    if (threaded) {
+      const threadedComments = buildCommentTree(comments || []);
+      return NextResponse.json({ comments: threadedComments });
     }
 
     return NextResponse.json({ comments: comments || [] });
@@ -52,10 +84,23 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { content } = await request.json();
+    const { content, parent_id } = await request.json();
 
     if (!content || content.trim().length === 0) {
       return NextResponse.json({ error: 'Content is required' }, { status: 400 });
+    }
+
+    // If parent_id provided, verify it exists and belongs to this post
+    if (parent_id) {
+      const { data: parentComment } = await supabase
+        .from('comments')
+        .select('id, post_id')
+        .eq('id', parent_id)
+        .single();
+
+      if (!parentComment || parentComment.post_id !== id) {
+        return NextResponse.json({ error: 'Invalid parent comment' }, { status: 400 });
+      }
     }
 
     const { data: comment, error } = await supabase
@@ -63,6 +108,7 @@ export async function POST(
       .insert({
         post_id: id,
         user_id: user.userId,
+        parent_id: parent_id || null,
         content: content.trim()
       })
       .select(`
@@ -96,3 +142,4 @@ export async function POST(
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+
