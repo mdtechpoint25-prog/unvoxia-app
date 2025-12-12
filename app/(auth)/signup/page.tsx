@@ -1,3 +1,5 @@
+'use client';
+
 import SignupForm from '@/components/SignupForm';
 import Logo from '@/components/Logo';
 import Link from 'next/link';
