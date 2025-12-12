@@ -2,6 +2,13 @@
 
 import { useState, useRef } from 'react';
 
+interface Comment {
+  id: string;
+  content: string;
+  users: { username: string };
+  created_at: string;
+}
+
 interface ReelCardProps {
   id: string;
   username: string;
@@ -24,6 +31,12 @@ export default function ReelCard({
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+  const [showComments, setShowComments] = useState(false);
+  const [commentsList, setCommentsList] = useState<Comment[]>([]);
+  const [newComment, setNewComment] = useState('');
+  const [loadingComments, setLoadingComments] = useState(false);
+  const [reactionsCount, setReactionsCount] = useState(reactions);
+  const [hasReacted, setHasReacted] = useState(false);
 
   const togglePlay = () => {
     if (videoRef.current) {
@@ -40,6 +53,66 @@ export default function ReelCard({
     if (videoRef.current) {
       videoRef.current.muted = !isMuted;
       setIsMuted(!isMuted);
+    }
+  };
+
+  const handleReaction = async () => {
+    try {
+      const res = await fetch(`/api/posts/${id}/reactions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ emoji: '??' })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.action === 'added') {
+          setReactionsCount(r => r + 1);
+          setHasReacted(true);
+        } else {
+          setReactionsCount(r => Math.max(0, r - 1));
+          setHasReacted(false);
+        }
+      }
+    } catch (err) {
+      console.error('Reaction error:', err);
+    }
+  };
+
+  const openComments = async () => {
+    setShowComments(true);
+    setLoadingComments(true);
+    try {
+      const res = await fetch(`/api/posts/${id}/comments`);
+      const data = await res.json();
+      if (res.ok) {
+        setCommentsList(data.comments || []);
+      }
+    } catch (err) {
+      console.error('Fetch comments error:', err);
+    } finally {
+      setLoadingComments(false);
+    }
+  };
+
+  const submitComment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newComment.trim()) return;
+
+    try {
+      const res = await fetch(`/api/posts/${id}/comments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: newComment })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setCommentsList([...commentsList, data.comment]);
+        setNewComment('');
+      }
+    } catch (err) {
+      console.error('Submit comment error:', err);
     }
   };
 
@@ -144,15 +217,124 @@ export default function ReelCard({
         >
           {isMuted ? '??' : '??'}
         </button>
-        <div style={{ textAlign: 'center', color: '#fff' }}>
-          <div style={{ fontSize: '1.25rem' }}>??</div>
-          <div style={{ fontSize: '0.8rem' }}>{reactions}</div>
-        </div>
-        <div style={{ textAlign: 'center', color: '#fff' }}>
+        <button
+          onClick={handleReaction}
+          style={{
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            textAlign: 'center',
+            color: '#fff'
+          }}
+        >
+          <div style={{ fontSize: '1.25rem' }}>{hasReacted ? '??' : '??'}</div>
+          <div style={{ fontSize: '0.8rem' }}>{reactionsCount}</div>
+        </button>
+        <button
+          onClick={openComments}
+          style={{
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            textAlign: 'center',
+            color: '#fff'
+          }}
+        >
           <div style={{ fontSize: '1.25rem' }}>??</div>
           <div style={{ fontSize: '0.8rem' }}>{comments}</div>
-        </div>
+        </button>
       </div>
+
+      {/* Comments Overlay */}
+      {showComments && (
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0,0,0,0.9)',
+          display: 'flex',
+          flexDirection: 'column',
+          zIndex: 10
+        }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '1rem',
+            borderBottom: '1px solid rgba(255,255,255,0.2)'
+          }}>
+            <h3 style={{ color: '#fff', margin: 0 }}>Comments</h3>
+            <button
+              onClick={() => setShowComments(false)}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#fff',
+                fontSize: '1.5rem',
+                cursor: 'pointer'
+              }}
+            >
+              &times;
+            </button>
+          </div>
+
+          <div style={{
+            flex: 1,
+            overflowY: 'auto',
+            padding: '1rem'
+          }}>
+            {loadingComments ? (
+              <p style={{ color: '#888', textAlign: 'center' }}>Loading...</p>
+            ) : commentsList.length === 0 ? (
+              <p style={{ color: '#888', textAlign: 'center' }}>No comments yet. Be the first!</p>
+            ) : (
+              commentsList.map((c) => (
+                <div key={c.id} style={{ marginBottom: '1rem' }}>
+                  <strong style={{ color: '#1ABC9C' }}>@{c.users?.username || 'Anonymous'}</strong>
+                  <p style={{ color: '#fff', margin: '0.25rem 0', fontSize: '0.9rem' }}>{c.content}</p>
+                </div>
+              ))
+            )}
+          </div>
+
+          <form onSubmit={submitComment} style={{
+            display: 'flex',
+            gap: '0.5rem',
+            padding: '1rem',
+            borderTop: '1px solid rgba(255,255,255,0.2)'
+          }}>
+            <input
+              type="text"
+              placeholder="Add a comment..."
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              style={{
+                flex: 1,
+                padding: '0.75rem',
+                border: 'none',
+                borderRadius: '20px',
+                background: 'rgba(255,255,255,0.1)',
+                color: '#fff'
+              }}
+            />
+            <button
+              type="submit"
+              style={{
+                padding: '0.75rem 1rem',
+                background: '#1ABC9C',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '20px',
+                cursor: 'pointer'
+              }}
+            >
+              Post
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, use } from 'react';
+import { useRouter } from 'next/navigation';
 import PostCard from '@/components/PostCard';
 import ProfileSettings from '@/components/ProfileSettings';
 
@@ -40,12 +41,15 @@ const BADGE_ICONS: Record<string, string> = {
 
 export default function ProfilePage({ params }: { params: Promise<{ username: string }> }) {
   const { username } = use(params);
+  const router = useRouter();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [stats, setStats] = useState<UserStats>({ posts: 0, comments: 0, reactions: 0 });
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [isOwnProfile, setIsOwnProfile] = useState(false);
   const [activeTab, setActiveTab] = useState<'posts' | 'settings'>('posts');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [startingChat, setStartingChat] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -68,6 +72,7 @@ export default function ProfilePage({ params }: { params: Promise<{ username: st
           const cookies = document.cookie.split(';');
           const sessionCookie = cookies.find(c => c.trim().startsWith('session='));
           if (sessionCookie) {
+            setIsLoggedIn(true);
             const session = JSON.parse(atob(sessionCookie.split('=')[1]));
             if (session.username === username) {
               setIsOwnProfile(true);
@@ -83,6 +88,36 @@ export default function ProfilePage({ params }: { params: Promise<{ username: st
 
     fetchProfile();
   }, [username]);
+
+  const handleStartChat = async () => {
+    if (!isLoggedIn) {
+      router.push('/login');
+      return;
+    }
+
+    setStartingChat(true);
+    try {
+      const res = await fetch('/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          receiverUsername: username,
+          content: `Hi! I'd like to connect with you.`
+        })
+      });
+
+      if (res.ok) {
+        router.push('/messages');
+      } else {
+        const data = await res.json();
+        alert(data.error || 'Failed to start chat');
+      }
+    } catch (err) {
+      console.error('Start chat error:', err);
+    } finally {
+      setStartingChat(false);
+    }
+  };
 
   const handleSaveSettings = async (settings: { avatar_url?: string; password?: string }) => {
     const res = await fetch(`/api/users/${username}`, {
@@ -160,6 +195,25 @@ export default function ProfilePage({ params }: { params: Promise<{ username: st
         <p style={{ opacity: 0.9, fontSize: '0.9rem' }}>
           Member since {profile.created_at ? formatDate(profile.created_at) : 'recently'}
         </p>
+
+        {!isOwnProfile && (
+          <button
+            onClick={handleStartChat}
+            disabled={startingChat}
+            style={{
+              marginTop: '1rem',
+              padding: '0.5rem 1.5rem',
+              background: 'rgba(255,255,255,0.2)',
+              color: '#fff',
+              border: '1px solid rgba(255,255,255,0.4)',
+              borderRadius: '20px',
+              cursor: 'pointer',
+              fontWeight: 600
+            }}
+          >
+            {startingChat ? 'Starting...' : '?? Message'}
+          </button>
+        )}
 
         {profile.badges && profile.badges.length > 0 && (
           <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', marginTop: '1rem', flexWrap: 'wrap' }}>
