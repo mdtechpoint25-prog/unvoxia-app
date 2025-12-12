@@ -1,74 +1,230 @@
 import Link from 'next/link';
+import Logo from './Logo';
 import { SITE, CONTACT } from '@/lib/constants';
+
+const footerLinks = {
+  platform: [
+    { href: '/feed', label: 'Feed' },
+    { href: '/reels', label: 'Reels' },
+    { href: '/daily-prompts', label: 'Daily Prompts' },
+    { href: '/messages', label: 'Messages' },
+    { href: '/notifications', label: 'Notifications' },
+  ],
+  company: [
+    { href: '/about', label: 'About Us' },
+    { href: '/billing', label: 'Pricing' },
+    { href: '/contact', label: 'Contact' },
+    { href: '/privacy', label: 'Privacy Policy' },
+    { href: '/terms', label: 'Terms of Service' },
+  ],
+};
+
+const socialLinks = [
+  { name: 'Twitter', href: '#', icon: 'M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z' },
+  { name: 'Instagram', href: '#', icon: 'M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z' },
+  { name: 'LinkedIn', href: '#', icon: 'M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z' },
+  { name: 'Facebook', href: '#', icon: 'M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z' },
+];
 
 export default function Footer() {
   return (
     <footer style={{
-      padding: '3rem 2rem',
-      background: '#2C3E50',
+      background: 'linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%)',
       color: '#fff',
-      marginTop: '0'
+      paddingTop: '5rem',
+      paddingBottom: '2rem'
     }}>
       <div style={{
-        maxWidth: '1000px',
+        maxWidth: '1200px',
         margin: '0 auto',
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
-        gap: '2rem'
+        padding: '0 1.5rem'
       }}>
-        <div>
-          <h4 style={{ marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span style={{
-              width: '28px',
-              height: '28px',
-              background: 'linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%)',
-              borderRadius: '6px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#fff',
-              fontWeight: 700,
-              fontSize: '0.8rem'
-            }}>N</span>
-            {SITE.name}
-          </h4>
-          <p style={{ fontSize: '0.9rem', color: '#ccc', maxWidth: '250px' }}>
-            {SITE.tagline}
+        {/* Top Section */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: '3rem',
+          paddingBottom: '3rem',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+        }}>
+          {/* Brand Column */}
+          <div style={{ gridColumn: 'span 1' }}>
+            <div style={{ marginBottom: '1.5rem' }}>
+              <Logo size={48} showText={false} variant="icon" />
+            </div>
+            <h3 style={{ 
+              fontSize: '1.5rem', 
+              fontWeight: 700, 
+              marginBottom: '0.5rem',
+              color: '#fff'
+            }}>
+              {SITE.name}
+            </h3>
+            <p style={{ 
+              color: 'rgba(255, 255, 255, 0.6)', 
+              fontSize: '0.95rem',
+              lineHeight: 1.7,
+              marginBottom: '1.5rem'
+            }}>
+              {SITE.tagline}
+            </p>
+            {/* Social Links */}
+            <div style={{ display: 'flex', gap: '0.75rem' }}>
+              {socialLinks.map((social) => (
+                <a
+                  key={social.name}
+                  href={social.href}
+                  className="social-link"
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '10px',
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'all 0.3s ease'
+                  }}
+                  aria-label={social.name}
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff">
+                    <path d={social.icon} />
+                  </svg>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Platform Links */}
+          <div>
+            <h4 style={{ 
+              fontSize: '0.875rem', 
+              fontWeight: 600, 
+              textTransform: 'uppercase', 
+              letterSpacing: '0.1em',
+              color: 'rgba(255, 255, 255, 0.4)',
+              marginBottom: '1.25rem'
+            }}>
+              Platform
+            </h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              {footerLinks.platform.map((link) => (
+                <li key={link.href} style={{ marginBottom: '0.75rem' }}>
+                  <Link
+                    href={link.href}
+                    className="footer-link"
+                    style={{
+                      color: 'rgba(255, 255, 255, 0.7)',
+                      textDecoration: 'none',
+                      fontSize: '0.95rem',
+                      transition: 'color 0.2s ease'
+                    }}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Company Links */}
+          <div>
+            <h4 style={{ 
+              fontSize: '0.875rem', 
+              fontWeight: 600, 
+              textTransform: 'uppercase', 
+              letterSpacing: '0.1em',
+              color: 'rgba(255, 255, 255, 0.4)',
+              marginBottom: '1.25rem'
+            }}>
+              Company
+            </h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              {footerLinks.company.map((link) => (
+                <li key={link.href} style={{ marginBottom: '0.75rem' }}>
+                  <Link
+                    href={link.href}
+                    className="footer-link"
+                    style={{
+                      color: 'rgba(255, 255, 255, 0.7)',
+                      textDecoration: 'none',
+                      fontSize: '0.95rem',
+                      transition: 'color 0.2s ease'
+                    }}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h4 style={{ 
+              fontSize: '0.875rem', 
+              fontWeight: 600, 
+              textTransform: 'uppercase', 
+              letterSpacing: '0.1em',
+              color: 'rgba(255, 255, 255, 0.4)',
+              marginBottom: '1.25rem'
+            }}>
+              Contact
+            </h4>
+            <div style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.95rem' }}>
+              {CONTACT.emails.map((email, i) => (
+                <a
+                  key={i}
+                  href={`mailto:${email}`}
+                  className="footer-link"
+                  style={{
+                    display: 'block',
+                    color: 'rgba(255, 255, 255, 0.7)',
+                    textDecoration: 'none',
+                    marginBottom: '0.5rem',
+                    transition: 'color 0.2s ease'
+                  }}
+                >
+                  {email}
+                </a>
+              ))}
+              <div style={{ marginTop: '1rem', color: 'rgba(255, 255, 255, 0.5)' }}>
+                {CONTACT.phones.join(' | ')}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Section */}
+        <div style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: '1rem',
+          paddingTop: '2rem'
+        }}>
+          <p style={{ 
+            color: 'rgba(255, 255, 255, 0.4)', 
+            fontSize: '0.875rem',
+            margin: 0
+          }}>
+            2024 {SITE.name} ({SITE.shortName}). All rights reserved.
           </p>
-          <p style={{ fontSize: '0.85rem', color: '#888', marginTop: '0.5rem' }}>
+          <p style={{ 
+            color: 'rgba(255, 255, 255, 0.4)', 
+            fontSize: '0.875rem',
+            margin: 0
+          }}>
             {SITE.domain}
           </p>
         </div>
-        <div>
-          <h4 style={{ marginBottom: '0.5rem' }}>Platform</h4>
-          <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-            <Link href="/feed" style={{ color: '#1ABC9C', textDecoration: 'none', fontSize: '0.9rem' }}>Feed</Link>
-            <Link href="/reels" style={{ color: '#1ABC9C', textDecoration: 'none', fontSize: '0.9rem' }}>Reels</Link>
-            <Link href="/daily-prompts" style={{ color: '#1ABC9C', textDecoration: 'none', fontSize: '0.9rem' }}>Daily Prompts</Link>
-            <Link href="/messages" style={{ color: '#1ABC9C', textDecoration: 'none', fontSize: '0.9rem' }}>Messages</Link>
-          </nav>
-        </div>
-        <div>
-          <h4 style={{ marginBottom: '0.5rem' }}>Company</h4>
-          <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-            <Link href="/about" style={{ color: '#1ABC9C', textDecoration: 'none', fontSize: '0.9rem' }}>About</Link>
-            <Link href="/privacy" style={{ color: '#1ABC9C', textDecoration: 'none', fontSize: '0.9rem' }}>Privacy Policy</Link>
-            <Link href="/terms" style={{ color: '#1ABC9C', textDecoration: 'none', fontSize: '0.9rem' }}>Terms of Service</Link>
-            <Link href="/contact" style={{ color: '#1ABC9C', textDecoration: 'none', fontSize: '0.9rem' }}>Contact</Link>
-          </nav>
-        </div>
-        <div>
-          <h4 style={{ marginBottom: '0.5rem' }}>Contact Us</h4>
-          <div style={{ fontSize: '0.85rem', color: '#ccc' }}>
-            {CONTACT.emails.map((e, i) => <div key={i}>{e}</div>)}
-            <div style={{ marginTop: '0.5rem' }}>{CONTACT.phones.join(' / ')}</div>
-          </div>
-        </div>
       </div>
-      <div style={{ textAlign: 'center', marginTop: '2rem', fontSize: '0.8rem', color: '#888', borderTop: '1px solid #3d5a73', paddingTop: '1.5rem' }}>
-        2024 {SITE.name} ({SITE.shortName}). All rights reserved.
-      </div>
+
+      <style jsx global>{`
+        .footer-link:hover { color: #1ABC9C !important; }
+        .social-link:hover { background: linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%) !important; }
+      `}</style>
     </footer>
   );
 }

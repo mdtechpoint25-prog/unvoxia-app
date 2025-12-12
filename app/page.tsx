@@ -1,15 +1,15 @@
 import HeroSection from '@/components/HeroSection';
 import FeaturesBlocks from '@/components/FeaturesBlocks';
-import FeedPreview from '@/components/FeedPreview';
+import HowItWorks from '@/components/HowItWorks';
 import TestimonialCards from '@/components/TestimonialCards';
 import CTASection from '@/components/CTASection';
 
 export default function HomePage() {
   return (
-    <main>
+    <main style={{ paddingTop: 0 }}>
       <HeroSection />
       <FeaturesBlocks />
-      <FeedPreview />
+      <HowItWorks />
       <TestimonialCards />
       <CTASection />
     </main>
