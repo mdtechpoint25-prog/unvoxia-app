@@ -20,3 +20,4 @@ export const supabaseAdmin = supabaseUrl && supabaseServiceKey
       }
     })
   : supabase; // Fallback to regular client if service key not available
+

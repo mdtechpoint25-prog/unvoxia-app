@@ -12,7 +12,7 @@ interface Conversation {
 interface ConversationListProps {
   conversations: Conversation[];
   onSelect: (conversation: Conversation) => void;
-  onNewChat: () => void;
+  onNewChat?: () => void;
 }
 
 export default function ConversationList({

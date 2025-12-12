@@ -54,6 +54,7 @@ export async function GET() {
         content,
         category,
         created_at,
+        is_anonymous,
         users:user_id (username)
       `)
       .order('created_at', { ascending: false })
@@ -70,6 +71,28 @@ export async function GET() {
       categoryStats[cat] = (categoryStats[cat] || 0) + 1;
     });
 
+    // Get flagged posts
+    const { data: flaggedPosts } = await supabase
+      .from('flagged_posts')
+      .select(`
+        id,
+        post_id,
+        reason,
+        status,
+        created_at,
+        posts:post_id (content, users:user_id (username)),
+        reporter:reporter_id (username)
+      `)
+      .order('created_at', { ascending: false })
+      .limit(20);
+
+    // Get users list
+    const { data: users } = await supabase
+      .from('users')
+      .select('id, username, email, status, created_at')
+      .order('created_at', { ascending: false })
+      .limit(50);
+
     return NextResponse.json({
       stats: {
         users: usersCount || 0,
@@ -78,7 +101,9 @@ export async function GET() {
         messages: messagesCount || 0
       },
       categoryStats,
-      recentPosts: recentPosts || []
+      recentPosts: recentPosts || [],
+      flaggedPosts: flaggedPosts || [],
+      users: users || []
     });
   } catch (error) {
     console.error('Admin stats error:', error);

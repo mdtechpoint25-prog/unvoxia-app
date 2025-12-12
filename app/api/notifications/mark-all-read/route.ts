@@ -15,29 +15,28 @@ async function getUserFromSession() {
   }
 }
 
-export async function GET() {
+// Mark all notifications as read
+export async function POST() {
   try {
     const user = await getUserFromSession();
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get notifications from the notifications table
-    const { data: notifications, error } = await supabase
+    const { error } = await supabase
       .from('notifications')
-      .select('*')
+      .update({ read: true })
       .eq('user_id', user.userId)
-      .order('created_at', { ascending: false })
-      .limit(50);
+      .eq('read', false);
 
     if (error) {
-      console.error('Fetch notifications error:', error);
-      return NextResponse.json({ error: 'Failed to fetch notifications' }, { status: 500 });
+      console.error('Mark all read error:', error);
+      return NextResponse.json({ error: 'Failed to mark notifications as read' }, { status: 500 });
     }
 
-    return NextResponse.json({ notifications: notifications || [] });
+    return NextResponse.json({ ok: true });
   } catch (error) {
-    console.error('Notifications GET error:', error);
+    console.error('Mark all read error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

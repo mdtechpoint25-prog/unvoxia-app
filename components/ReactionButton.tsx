@@ -1,15 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-
-const SUPPORTIVE_EMOJIS = ['heart', 'hug', 'strength', 'hope', 'peace'];
-const EMOJI_MAP: Record<string, string> = {
-  heart: '??',
-  hug: '??',
-  strength: '??',
-  hope: '??',
-  peace: '???'
-};
+import { REACTIONS } from '@/lib/constants';
 
 interface ReactionButtonProps {
   postId: string;
@@ -61,9 +53,16 @@ export default function ReactionButton({ postId, reactions, currentUserId }: Rea
 
   const totalReactions = localReactions.length;
 
+  // Get emoji display for a reaction type
+  const getReactionDisplay = (type: string) => {
+    const reaction = REACTIONS[type as keyof typeof REACTIONS];
+    return reaction ? reaction.emoji : type;
+  };
+
   return (
     <div style={{ position: 'relative', display: 'inline-block' }}>
       <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+        {/* Show existing reactions */}
         {Object.entries(reactionCounts).map(([emoji, count]) => (
           <button
             key={emoji}
@@ -73,66 +72,86 @@ export default function ReactionButton({ postId, reactions, currentUserId }: Rea
               display: 'flex',
               alignItems: 'center',
               gap: '0.25rem',
-              padding: '0.25rem 0.5rem',
-              background: userReactions.has(emoji) ? '#e8f8f5' : '#f5f5f5',
-              border: userReactions.has(emoji) ? '1px solid #1ABC9C' : '1px solid #ddd',
-              borderRadius: '16px',
+              padding: '0.35rem 0.65rem',
+              background: userReactions.has(emoji) 
+                ? 'linear-gradient(135deg, rgba(26, 188, 156, 0.15) 0%, rgba(155, 89, 182, 0.15) 100%)' 
+                : '#f5f5f5',
+              border: userReactions.has(emoji) ? '1px solid #1ABC9C' : '1px solid #e5e7eb',
+              borderRadius: '20px',
               cursor: 'pointer',
-              fontSize: '0.85rem'
+              fontSize: '0.9rem',
+              transition: 'all 0.2s ease'
             }}
           >
-            <span>{EMOJI_MAP[emoji] || emoji}</span>
-            <span style={{ color: '#2C3E50' }}>{count}</span>
+            <span>{getReactionDisplay(emoji)}</span>
+            <span style={{ color: '#2C3E50', fontWeight: 500 }}>{count}</span>
           </button>
         ))}
+        
+        {/* Add reaction button */}
         <button
           onClick={() => setShowPicker(!showPicker)}
           disabled={loading}
           style={{
-            padding: '0.25rem 0.5rem',
-            background: '#f5f5f5',
-            border: '1px solid #ddd',
-            borderRadius: '16px',
+            padding: '0.35rem 0.65rem',
+            background: showPicker ? 'linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%)' : '#f5f5f5',
+            color: showPicker ? '#fff' : '#666',
+            border: '1px solid #e5e7eb',
+            borderRadius: '20px',
             cursor: 'pointer',
-            fontSize: '0.85rem'
+            fontSize: '0.9rem',
+            transition: 'all 0.2s ease'
           }}
         >
-          +
+          {totalReactions === 0 ? '+ React' : '+'}
         </button>
-        {totalReactions > 0 && (
-          <span style={{ color: '#888', fontSize: '0.85rem' }}>
-            {totalReactions} reaction{totalReactions !== 1 ? 's' : ''}
-          </span>
-        )}
       </div>
 
+      {/* NOMA Reaction Picker */}
       {showPicker && (
         <div style={{
           position: 'absolute',
-          top: '100%',
+          bottom: '100%',
           left: 0,
-          marginTop: '0.5rem',
+          marginBottom: '0.5rem',
           background: '#fff',
-          borderRadius: '8px',
-          boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
-          padding: '0.5rem',
+          borderRadius: '16px',
+          padding: '0.75rem',
+          boxShadow: '0 10px 40px rgba(0,0,0,0.15)',
+          border: '1px solid #e5e7eb',
           display: 'flex',
           gap: '0.25rem',
           zIndex: 10
         }}>
-          {SUPPORTIVE_EMOJIS.map((emoji) => (
+          {Object.entries(REACTIONS).map(([key, { emoji, label }]) => (
             <button
-              key={emoji}
-              onClick={() => handleReaction(emoji)}
+              key={key}
+              onClick={() => handleReaction(key)}
+              disabled={loading}
+              title={label}
               style={{
-                background: 'none',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '0.25rem',
+                padding: '0.5rem 0.75rem',
+                background: userReactions.has(key) 
+                  ? 'linear-gradient(135deg, rgba(26, 188, 156, 0.2) 0%, rgba(155, 89, 182, 0.2) 100%)' 
+                  : 'transparent',
                 border: 'none',
+                borderRadius: '12px',
                 cursor: 'pointer',
-                fontSize: '1.25rem',
-                padding: '0.25rem'
+                transition: 'all 0.2s ease'
               }}
             >
-              {EMOJI_MAP[emoji]}
+              <span style={{ fontSize: '1.5rem' }}>{emoji}</span>
+              <span style={{ 
+                fontSize: '0.65rem', 
+                color: '#666',
+                fontWeight: 500
+              }}>
+                {label}
+              </span>
             </button>
           ))}
         </div>

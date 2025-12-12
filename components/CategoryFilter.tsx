@@ -7,6 +7,17 @@ interface CategoryFilterProps {
   onSelect: (category: string) => void;
 }
 
+// Category icons/emojis for NOMA categories
+const CATEGORY_ICONS: Record<string, string> = {
+  all: '??',
+  Feelings: '??',
+  Thoughts: '??',
+  Creativity: '??',
+  Life: '??',
+  Anonymous: '??',
+  Support: '??'
+};
+
 export default function CategoryFilter({ selected, onSelect }: CategoryFilterProps) {
   const allCategories = ['all', ...CATEGORIES];
 
@@ -14,8 +25,7 @@ export default function CategoryFilter({ selected, onSelect }: CategoryFilterPro
     <div style={{
       display: 'flex',
       gap: '0.5rem',
-      flexWrap: 'wrap',
-      marginBottom: '1.5rem'
+      flexWrap: 'wrap'
     }}>
       {allCategories.map((cat) => (
         <button
@@ -23,17 +33,24 @@ export default function CategoryFilter({ selected, onSelect }: CategoryFilterPro
           onClick={() => onSelect(cat)}
           style={{
             padding: '0.5rem 1rem',
-            background: selected === cat ? '#1ABC9C' : '#f5f5f5',
-            color: selected === cat ? '#fff' : '#2C3E50',
-            border: 'none',
+            background: selected === cat 
+              ? 'linear-gradient(135deg, #1ABC9C 0%, #16a085 100%)' 
+              : '#f8f9fa',
+            color: selected === cat ? '#fff' : '#4a5568',
+            border: selected === cat ? 'none' : '1px solid #e2e8f0',
             borderRadius: '20px',
             cursor: 'pointer',
-            fontSize: '0.9rem',
-            fontWeight: selected === cat ? 600 : 400,
-            transition: 'all 0.2s'
+            fontSize: '0.875rem',
+            fontWeight: selected === cat ? 600 : 500,
+            transition: 'all 0.2s ease',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.35rem',
+            boxShadow: selected === cat ? '0 4px 12px rgba(26, 188, 156, 0.3)' : 'none'
           }}
         >
-          {cat === 'all' ? 'All' : cat}
+          <span>{CATEGORY_ICONS[cat] || '??'}</span>
+          <span>{cat === 'all' ? 'All' : cat}</span>
         </button>
       ))}
     </div>

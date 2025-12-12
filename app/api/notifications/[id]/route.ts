@@ -15,29 +15,34 @@ async function getUserFromSession() {
   }
 }
 
-export async function GET() {
+// Mark a single notification as read
+export async function PATCH(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
+    const { id } = await params;
     const user = await getUserFromSession();
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get notifications from the notifications table
-    const { data: notifications, error } = await supabase
+    const { read } = await request.json();
+
+    const { error } = await supabase
       .from('notifications')
-      .select('*')
-      .eq('user_id', user.userId)
-      .order('created_at', { ascending: false })
-      .limit(50);
+      .update({ read })
+      .eq('id', id)
+      .eq('user_id', user.userId);
 
     if (error) {
-      console.error('Fetch notifications error:', error);
-      return NextResponse.json({ error: 'Failed to fetch notifications' }, { status: 500 });
+      console.error('Update notification error:', error);
+      return NextResponse.json({ error: 'Failed to update notification' }, { status: 500 });
     }
 
-    return NextResponse.json({ notifications: notifications || [] });
+    return NextResponse.json({ ok: true });
   } catch (error) {
-    console.error('Notifications GET error:', error);
+    console.error('Notification PATCH error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

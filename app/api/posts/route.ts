@@ -43,7 +43,21 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Failed to fetch posts' }, { status: 500 });
     }
 
-    return NextResponse.json({ posts: posts || [] });
+    // Hide user info for anonymous posts
+    const processedPosts = (posts || []).map(post => {
+      if (post.is_anonymous) {
+        return {
+          ...post,
+          users: {
+            username: 'Anonymous',
+            avatar_url: null
+          }
+        };
+      }
+      return post;
+    });
+
+    return NextResponse.json({ posts: processedPosts });
   } catch (error) {
     console.error('Posts GET error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
@@ -57,7 +71,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { content, category, media_url } = await request.json();
+    const { content, category, media_url, is_anonymous } = await request.json();
 
     if ((!content || content.trim().length === 0) && !media_url) {
       return NextResponse.json({ error: 'Content or media is required' }, { status: 400 });
@@ -68,8 +82,9 @@ export async function POST(request: Request) {
       .insert({
         user_id: user.userId,
         content: content.trim(),
-        category: category || 'Reflection',
-        media_url: media_url || null
+        category: category || 'Thoughts',
+        media_url: media_url || null,
+        is_anonymous: is_anonymous || false
       })
       .select()
       .single();

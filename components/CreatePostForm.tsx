@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { CATEGORIES } from '@/lib/constants';
 
 interface CreatePostFormProps {
@@ -9,221 +9,225 @@ interface CreatePostFormProps {
 
 export default function CreatePostForm({ onPostCreated }: CreatePostFormProps) {
   const [content, setContent] = useState('');
-  const [category, setCategory] = useState('Reflection');
-  const [mediaFile, setMediaFile] = useState<File | null>(null);
-  const [mediaPreview, setMediaPreview] = useState<string | null>(null);
+  const [category, setCategory] = useState('Thoughts');
+  const [isAnonymous, setIsAnonymous] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState('');
   const [error, setError] = useState('');
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    // Validate file size (50MB)
-    if (file.size > 50 * 1024 * 1024) {
-      setError('File too large. Maximum size is 50MB');
-      return;
-    }
-
-    setMediaFile(file);
-    setError('');
-
-    // Create preview
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      setMediaPreview(e.target?.result as string);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const removeMedia = () => {
-    setMediaFile(null);
-    setMediaPreview(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  };
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!content.trim()) return;
+    
+    setLoading(true);
     setError('');
 
-    if (!content.trim() && !mediaFile) {
-      setError('Please write something or add media to share');
-      return;
-    }
-
-    setLoading(true);
-    let mediaUrl = null;
-
     try {
-      // Upload media if present
-      if (mediaFile) {
-        setUploadProgress('Uploading media...');
-        const formData = new FormData();
-        formData.append('file', mediaFile);
-
-        const uploadRes = await fetch('/api/media/upload', {
-          method: 'POST',
-          body: formData
-        });
-
-        const uploadData = await uploadRes.json();
-        if (!uploadRes.ok) throw new Error(uploadData.error || 'Failed to upload media');
-
-        mediaUrl = uploadData.url;
-        setUploadProgress('');
-      }
-
-      // Create post
       const res = await fetch('/api/posts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content, category, media_url: mediaUrl })
+        body: JSON.stringify({
+          content: content.trim(),
+          category,
+          is_anonymous: isAnonymous
+        })
       });
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to create post');
 
       setContent('');
-      setCategory('Reflection');
-      removeMedia();
+      setCategory('Thoughts');
+      setIsAnonymous(false);
+      setIsExpanded(false);
       onPostCreated?.();
     } catch (err: any) {
       setError(err.message);
     } finally {
       setLoading(false);
-      setUploadProgress('');
     }
   };
-
-  const isVideo = mediaFile?.type.startsWith('video/');
 
   return (
     <div style={{
       background: '#fff',
-      borderRadius: '12px',
-      padding: '1.5rem',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-      marginBottom: '1.5rem'
+      borderRadius: '16px',
+      boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
+      border: '1px solid #e5e7eb',
+      marginBottom: '1.5rem',
+      overflow: 'hidden'
     }}>
-      <h3 style={{ color: '#2C3E50', marginBottom: '1rem', fontSize: '1rem' }}>
-        Share Your Thoughts
-      </h3>
       <form onSubmit={handleSubmit}>
-        <textarea
-          placeholder="What's on your mind? Share anonymously..."
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          style={{
-            width: '100%',
-            minHeight: '100px',
-            padding: '0.75rem',
-            border: '1px solid #ddd',
-            borderRadius: '8px',
-            resize: 'vertical',
-            fontFamily: 'inherit',
-            fontSize: '1rem',
-            marginBottom: '1rem'
-          }}
-        />
+        <div style={{ padding: '1.25rem' }}>
+          <textarea
+            placeholder="What's on your mind? Share your authentic thoughts..."
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            onFocus={() => setIsExpanded(true)}
+            style={{
+              width: '100%',
+              minHeight: isExpanded ? '120px' : '60px',
+              padding: '0',
+              border: 'none',
+              outline: 'none',
+              resize: 'none',
+              fontSize: '1rem',
+              lineHeight: 1.6,
+              fontFamily: 'inherit',
+              color: '#1a1a2e',
+              transition: 'min-height 0.3s ease'
+            }}
+          />
+        </div>
 
-        {mediaPreview && (
-          <div style={{ marginBottom: '1rem', position: 'relative' }}>
-            {isVideo ? (
-              <video
-                src={mediaPreview}
-                controls
-                style={{ width: '100%', maxHeight: '300px', borderRadius: '8px' }}
-              />
-            ) : (
-              <img
-                src={mediaPreview}
-                alt="Preview"
-                style={{ width: '100%', maxHeight: '300px', objectFit: 'cover', borderRadius: '8px' }}
-              />
+        {isExpanded && (
+          <div style={{
+            padding: '1rem 1.25rem',
+            borderTop: '1px solid #f3f4f6',
+            background: '#fafafa'
+          }}>
+            {/* Category Selection */}
+            <div style={{ marginBottom: '1rem' }}>
+              <label style={{ 
+                display: 'block', 
+                fontSize: '0.85rem', 
+                color: '#6b7280',
+                marginBottom: '0.5rem',
+                fontWeight: 500
+              }}>
+                Category
+              </label>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                {CATEGORIES.map((cat) => (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => setCategory(cat)}
+                    style={{
+                      padding: '0.5rem 1rem',
+                      borderRadius: '20px',
+                      border: 'none',
+                      background: category === cat
+                        ? 'linear-gradient(135deg, #1ABC9C 0%, #16a085 100%)'
+                        : '#e5e7eb',
+                      color: category === cat ? '#fff' : '#4a5568',
+                      fontSize: '0.85rem',
+                      fontWeight: 500,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Anonymous Toggle */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '1rem'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <button
+                  type="button"
+                  onClick={() => setIsAnonymous(!isAnonymous)}
+                  style={{
+                    width: '44px',
+                    height: '24px',
+                    borderRadius: '12px',
+                    border: 'none',
+                    background: isAnonymous
+                      ? 'linear-gradient(135deg, #9B59B6 0%, #8e44ad 100%)'
+                      : '#ddd',
+                    cursor: 'pointer',
+                    position: 'relative',
+                    transition: 'background 0.3s ease'
+                  }}
+                >
+                  <span style={{
+                    position: 'absolute',
+                    top: '2px',
+                    left: isAnonymous ? '22px' : '2px',
+                    width: '20px',
+                    height: '20px',
+                    borderRadius: '50%',
+                    background: '#fff',
+                    transition: 'left 0.3s ease',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                  }} />
+                </button>
+                <span style={{
+                  fontSize: '0.9rem',
+                  color: isAnonymous ? '#9B59B6' : '#6b7280',
+                  fontWeight: 500
+                }}>
+                  {isAnonymous ? 'Anonymous Mode' : 'Show Identity'}
+                </span>
+              </div>
+            </div>
+
+            {error && (
+              <div style={{
+                padding: '0.75rem',
+                background: '#fee2e2',
+                borderRadius: '8px',
+                color: '#dc2626',
+                fontSize: '0.9rem',
+                marginBottom: '1rem'
+              }}>
+                {error}
+              </div>
             )}
-            <button
-              type="button"
-              onClick={removeMedia}
-              style={{
-                position: 'absolute',
-                top: '8px',
-                right: '8px',
-                width: '28px',
-                height: '28px',
-                borderRadius: '50%',
-                background: 'rgba(0,0,0,0.6)',
-                color: '#fff',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '1rem'
-              }}
-            >
-              &times;
-            </button>
+
+            {/* Submit Button */}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsExpanded(false);
+                  setContent('');
+                  setError('');
+                }}
+                style={{
+                  padding: '0.75rem 1.5rem',
+                  background: '#f5f5f5',
+                  color: '#6b7280',
+                  border: 'none',
+                  borderRadius: '10px',
+                  fontWeight: 500,
+                  cursor: 'pointer'
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={loading || !content.trim()}
+                style={{
+                  padding: '0.75rem 1.5rem',
+                  background: (loading || !content.trim())
+                    ? '#9ca3af'
+                    : 'linear-gradient(135deg, #1ABC9C 0%, #16a085 100%)',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '10px',
+                  fontWeight: 600,
+                  cursor: (loading || !content.trim()) ? 'not-allowed' : 'pointer',
+                  boxShadow: (loading || !content.trim())
+                    ? 'none'
+                    : '0 4px 15px rgba(26, 188, 156, 0.3)'
+                }}
+              >
+                {loading ? 'Posting...' : 'Share'}
+              </button>
+            </div>
           </div>
         )}
-
-        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*,video/*"
-            onChange={handleFileChange}
-            style={{ display: 'none' }}
-            id="media-upload"
-          />
-          <label
-            htmlFor="media-upload"
-            style={{
-              padding: '0.5rem 1rem',
-              background: '#f5f5f5',
-              border: '1px solid #ddd',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontSize: '0.9rem'
-            }}
-          >
-            ?? Add Media
-          </label>
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            style={{
-              padding: '0.5rem',
-              border: '1px solid #ddd',
-              borderRadius: '8px',
-              background: '#fff'
-            }}
-          >
-            {CATEGORIES.map((cat) => (
-              <option key={cat} value={cat}>{cat}</option>
-            ))}
-          </select>
-          <button
-            type="submit"
-            disabled={loading}
-            style={{
-              padding: '0.5rem 1.5rem',
-              background: '#1ABC9C',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '8px',
-              fontWeight: 600,
-              cursor: 'pointer'
-            }}
-          >
-            {loading ? (uploadProgress || 'Posting...') : 'Post'}
-          </button>
-        </div>
-        {error && <p style={{ color: '#FF6F91', marginTop: '0.5rem' }}>{error}</p>}
-        <p style={{ color: '#888', fontSize: '0.8rem', marginTop: '0.5rem' }}>
-          Max file size: 50MB. Supported: Images and videos up to 10 minutes.
-        </p>
       </form>
     </div>
   );
 }
+

@@ -19,10 +19,10 @@ async function getUserFromSession() {
 export async function GET(_req: Request, { params }: { params: Promise<{ username: string }> }) {
   try {
     const { username } = await params;
-    // Get user profile with ID
+    // Get user profile with ID, including bio and streak
     const { data: user, error: userError } = await supabase
       .from('users')
-      .select('id, username, avatar_url, badges, created_at')
+      .select('id, username, avatar_url, bio, badges, streak_count, created_at')
       .eq('username', username)
       .single();
 
@@ -32,8 +32,11 @@ export async function GET(_req: Request, { params }: { params: Promise<{ usernam
 
     const userId = user.id;
 
-    // Get user's posts
-    const { data: posts } = await supabase
+    // Get user's posts (excluding anonymous posts for other viewers)
+    const sessionUser = await getUserFromSession();
+    const isOwnProfile = sessionUser?.username === username;
+    
+    let postsQuery = supabase
       .from('posts')
       .select(`
         *,
@@ -42,6 +45,13 @@ export async function GET(_req: Request, { params }: { params: Promise<{ usernam
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
       .limit(20);
+    
+    // If not own profile, exclude anonymous posts
+    if (!isOwnProfile) {
+      postsQuery = postsQuery.eq('is_anonymous', false);
+    }
+    
+    const { data: posts } = await postsQuery;
 
     // Get post count
     const { count: postsCount } = await supabase
@@ -64,7 +74,9 @@ export async function GET(_req: Request, { params }: { params: Promise<{ usernam
     return NextResponse.json({
       username: user.username,
       avatar_url: user.avatar_url,
+      bio: user.bio,
       badges: user.badges,
+      streak_count: user.streak_count || 0,
       created_at: user.created_at,
       stats: {
         posts: postsCount || 0,
@@ -93,13 +105,19 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ us
     }
 
     const body = await request.json();
-    const { avatar_url, password, notification_settings } = body;
+    const { avatar_url, bio, password, notification_settings } = body;
 
     const updates: Record<string, any> = {};
 
     // Update avatar
     if (avatar_url !== undefined) {
       updates.avatar_url = avatar_url;
+    }
+
+    // Update bio
+    if (bio !== undefined) {
+      // Limit bio to 200 characters
+      updates.bio = bio.slice(0, 200);
     }
 
     // Update password
