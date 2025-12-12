@@ -1,180 +1,159 @@
--- No Mask World (NOMA) - Complete Database Schema
+-- ============================================
+-- No Mask World (NOMA) - Database Schema
 -- Run this in Supabase SQL Editor
+-- ============================================
 
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- Users Table
-CREATE TABLE IF NOT EXISTS users (
+-- ============================================
+-- DROP EXISTING TABLES (if re-running)
+-- ============================================
+DROP TABLE IF EXISTS reactions CASCADE;
+DROP TABLE IF EXISTS daily_prompts CASCADE;
+DROP TABLE IF EXISTS messages CASCADE;
+DROP TABLE IF EXISTS comments CASCADE;
+DROP TABLE IF EXISTS posts CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+
+-- ============================================
+-- USERS TABLE
+-- ============================================
+CREATE TABLE users (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   username TEXT UNIQUE NOT NULL,
   email TEXT UNIQUE NOT NULL,
-  phone TEXT UNIQUE NOT NULL,
+  phone TEXT NOT NULL,
   password_hash TEXT NOT NULL,
   avatar_url TEXT,
   badges JSONB DEFAULT '[]',
   notification_settings JSONB DEFAULT '{"email": true, "push": true}',
   email_verified BOOLEAN DEFAULT FALSE,
   otp_code TEXT,
-  otp_expiry TIMESTAMP,
+  otp_expiry TIMESTAMPTZ,
   reset_token TEXT,
-  reset_expiry TIMESTAMP,
-  created_at TIMESTAMP DEFAULT NOW(),
-  last_login TIMESTAMP
+  reset_expiry TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  last_login TIMESTAMPTZ
 );
 
--- Posts Table
-CREATE TABLE IF NOT EXISTS posts (
+-- ============================================
+-- POSTS TABLE
+-- ============================================
+CREATE TABLE posts (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID REFERENCES users(id) ON DELETE CASCADE,
   content TEXT NOT NULL,
   media_url TEXT,
   category TEXT DEFAULT 'Productivity',
-  created_at TIMESTAMP DEFAULT NOW(),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
   reactions JSONB DEFAULT '{}',
   comments_count INT DEFAULT 0
 );
 
--- Comments Table
-CREATE TABLE IF NOT EXISTS comments (
+-- ============================================
+-- COMMENTS TABLE
+-- ============================================
+CREATE TABLE comments (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   post_id UUID REFERENCES posts(id) ON DELETE CASCADE,
   user_id UUID REFERENCES users(id) ON DELETE CASCADE,
   content TEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW(),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
   reactions JSONB DEFAULT '{}'
 );
 
--- Messages Table
-CREATE TABLE IF NOT EXISTS messages (
+-- ============================================
+-- MESSAGES TABLE
+-- ============================================
+CREATE TABLE messages (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   sender_id UUID REFERENCES users(id) ON DELETE CASCADE,
   receiver_id UUID REFERENCES users(id) ON DELETE CASCADE,
   content TEXT NOT NULL,
   media_url TEXT,
-  created_at TIMESTAMP DEFAULT NOW(),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
   read BOOLEAN DEFAULT FALSE
 );
 
--- Daily Prompts Table
-CREATE TABLE IF NOT EXISTS daily_prompts (
+-- ============================================
+-- DAILY PROMPTS TABLE
+-- ============================================
+CREATE TABLE daily_prompts (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   prompt TEXT,
   user_id UUID REFERENCES users(id) ON DELETE CASCADE,
   response TEXT,
-  created_at TIMESTAMP DEFAULT NOW()
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Reactions Table
-CREATE TABLE IF NOT EXISTS reactions (
+-- ============================================
+-- REACTIONS TABLE
+-- ============================================
+CREATE TABLE reactions (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  target_type TEXT NOT NULL, -- 'post' or 'comment'
+  target_type TEXT NOT NULL,
   target_id UUID NOT NULL,
   user_id UUID REFERENCES users(id) ON DELETE CASCADE,
   emoji TEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW(),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
   UNIQUE(target_type, target_id, user_id, emoji)
 );
 
--- Indexes for better performance
-CREATE INDEX IF NOT EXISTS idx_posts_user_id ON posts(user_id);
-CREATE INDEX IF NOT EXISTS idx_posts_category ON posts(category);
-CREATE INDEX IF NOT EXISTS idx_posts_created_at ON posts(created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_comments_post_id ON comments(post_id);
-CREATE INDEX IF NOT EXISTS idx_messages_sender_id ON messages(sender_id);
-CREATE INDEX IF NOT EXISTS idx_messages_receiver_id ON messages(receiver_id);
-CREATE INDEX IF NOT EXISTS idx_messages_created_at ON messages(created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_reactions_target ON reactions(target_type, target_id);
-CREATE INDEX IF NOT EXISTS idx_daily_prompts_user_id ON daily_prompts(user_id);
-CREATE INDEX IF NOT EXISTS idx_daily_prompts_created_at ON daily_prompts(created_at DESC);
+-- ============================================
+-- INDEXES
+-- ============================================
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_username ON users(username);
+CREATE INDEX idx_posts_user_id ON posts(user_id);
+CREATE INDEX idx_posts_category ON posts(category);
+CREATE INDEX idx_posts_created_at ON posts(created_at DESC);
+CREATE INDEX idx_comments_post_id ON comments(post_id);
+CREATE INDEX idx_comments_user_id ON comments(user_id);
+CREATE INDEX idx_messages_sender_id ON messages(sender_id);
+CREATE INDEX idx_messages_receiver_id ON messages(receiver_id);
+CREATE INDEX idx_messages_created_at ON messages(created_at DESC);
+CREATE INDEX idx_reactions_target ON reactions(target_type, target_id);
+CREATE INDEX idx_daily_prompts_user_id ON daily_prompts(user_id);
 
--- Row Level Security (RLS) Policies
-ALTER TABLE users ENABLE ROW LEVEL SECURITY;
-ALTER TABLE posts ENABLE ROW LEVEL SECURITY;
-ALTER TABLE comments ENABLE ROW LEVEL SECURITY;
-ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
-ALTER TABLE daily_prompts ENABLE ROW LEVEL SECURITY;
-ALTER TABLE reactions ENABLE ROW LEVEL SECURITY;
+-- ============================================
+-- DISABLE RLS FOR CUSTOM AUTH
+-- (Using service_role key bypasses RLS anyway)
+-- ============================================
+ALTER TABLE users DISABLE ROW LEVEL SECURITY;
+ALTER TABLE posts DISABLE ROW LEVEL SECURITY;
+ALTER TABLE comments DISABLE ROW LEVEL SECURITY;
+ALTER TABLE messages DISABLE ROW LEVEL SECURITY;
+ALTER TABLE daily_prompts DISABLE ROW LEVEL SECURITY;
+ALTER TABLE reactions DISABLE ROW LEVEL SECURITY;
 
--- Users: Anyone can read public profile data
-CREATE POLICY "Public profiles are viewable by everyone" ON users
-  FOR SELECT USING (true);
-
--- Users: Users can update their own profile
-CREATE POLICY "Users can update own profile" ON users
-  FOR UPDATE USING (auth.uid()::text = id::text);
-
--- Posts: Anyone can read posts
-CREATE POLICY "Posts are viewable by everyone" ON posts
-  FOR SELECT USING (true);
-
--- Posts: Authenticated users can create posts
-CREATE POLICY "Authenticated users can create posts" ON posts
-  FOR INSERT WITH CHECK (true);
-
--- Posts: Users can update their own posts
-CREATE POLICY "Users can update own posts" ON posts
-  FOR UPDATE USING (auth.uid()::text = user_id::text);
-
--- Posts: Users can delete their own posts
-CREATE POLICY "Users can delete own posts" ON posts
-  FOR DELETE USING (auth.uid()::text = user_id::text);
-
--- Comments: Anyone can read comments
-CREATE POLICY "Comments are viewable by everyone" ON comments
-  FOR SELECT USING (true);
-
--- Comments: Authenticated users can create comments
-CREATE POLICY "Authenticated users can create comments" ON comments
-  FOR INSERT WITH CHECK (true);
-
--- Messages: Users can read their own messages
-CREATE POLICY "Users can read own messages" ON messages
-  FOR SELECT USING (
-    auth.uid()::text = sender_id::text OR 
-    auth.uid()::text = receiver_id::text
-  );
-
--- Messages: Authenticated users can send messages
-CREATE POLICY "Authenticated users can send messages" ON messages
-  FOR INSERT WITH CHECK (true);
-
--- Daily Prompts: Users can read their own prompts
-CREATE POLICY "Users can read own prompts" ON daily_prompts
-  FOR SELECT USING (auth.uid()::text = user_id::text);
-
--- Daily Prompts: Authenticated users can create prompts
-CREATE POLICY "Authenticated users can create prompts" ON daily_prompts
-  FOR INSERT WITH CHECK (true);
-
--- Reactions: Anyone can read reactions
-CREATE POLICY "Reactions are viewable by everyone" ON reactions
-  FOR SELECT USING (true);
-
--- Reactions: Authenticated users can manage reactions
-CREATE POLICY "Authenticated users can manage reactions" ON reactions
-  FOR ALL USING (true);
-
--- Function to update comments_count on posts
+-- ============================================
+-- FUNCTION: Update comments count
+-- ============================================
 CREATE OR REPLACE FUNCTION update_comments_count()
 RETURNS TRIGGER AS $$
 BEGIN
   IF TG_OP = 'INSERT' THEN
     UPDATE posts SET comments_count = comments_count + 1 WHERE id = NEW.post_id;
   ELSIF TG_OP = 'DELETE' THEN
-    UPDATE posts SET comments_count = comments_count - 1 WHERE id = OLD.post_id;
+    UPDATE posts SET comments_count = GREATEST(comments_count - 1, 0) WHERE id = OLD.post_id;
   END IF;
   RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
 
--- Trigger for comments count
+-- ============================================
+-- TRIGGER: Auto-update comments count
+-- ============================================
 DROP TRIGGER IF EXISTS trigger_update_comments_count ON comments;
 CREATE TRIGGER trigger_update_comments_count
   AFTER INSERT OR DELETE ON comments
   FOR EACH ROW EXECUTE FUNCTION update_comments_count();
 
--- Sample daily prompts (optional)
+-- ============================================
+-- SAMPLE DATA (Optional)
+-- ============================================
+-- Sample prompts
 INSERT INTO daily_prompts (prompt, user_id, response) VALUES
   ('What is one thing you want to accomplish today?', NULL, NULL),
   ('Describe a challenge you overcame recently.', NULL, NULL),
@@ -182,3 +161,15 @@ INSERT INTO daily_prompts (prompt, user_id, response) VALUES
   ('What skill would you like to develop this month?', NULL, NULL),
   ('How do you stay focused during difficult tasks?', NULL, NULL)
 ON CONFLICT DO NOTHING;
+
+-- ============================================
+-- VERIFICATION: Check tables exist
+-- ============================================
+SELECT 
+  table_name,
+  (SELECT COUNT(*) FROM information_schema.columns WHERE table_name = t.table_name) as column_count
+FROM information_schema.tables t
+WHERE table_schema = 'public' 
+  AND table_type = 'BASE TABLE'
+  AND table_name IN ('users', 'posts', 'comments', 'messages', 'daily_prompts', 'reactions')
+ORDER BY table_name;

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
 import bcrypt from 'bcryptjs';
 import { cookies } from 'next/headers';
 
@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     }
 
     // Find user by email or username
-    const { data: user, error: fetchError } = await supabase
+    const { data: user, error: fetchError } = await supabaseAdmin
       .from('users')
       .select('id, username, email, password_hash, email_verified')
       .or(`email.eq.${emailOrUsername},username.eq.${emailOrUsername}`)
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     }
 
     // Update last login
-    await supabase
+    await supabaseAdmin
       .from('users')
       .update({ last_login: new Date().toISOString() })
       .eq('id', user.id);
