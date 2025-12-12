@@ -1,5 +1,20 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import { cookies } from 'next/headers';
+import bcrypt from 'bcryptjs';
+
+function getUserFromSession() {
+  try {
+    const cookieStore = cookies();
+    const session = cookieStore.get('session')?.value;
+    if (!session) return null;
+    const decoded = JSON.parse(Buffer.from(session, 'base64').toString());
+    if (decoded.exp < Date.now()) return null;
+    return decoded;
+  } catch {
+    return null;
+  }
+}
 
 export async function GET(_req: Request, { params }: { params: { username: string } }) {
   try {
@@ -63,7 +78,58 @@ export async function GET(_req: Request, { params }: { params: { username: strin
   }
 }
 
-export async function PATCH() {
-  // Placeholder: update user
-  return NextResponse.json({ ok: true });
+export async function PATCH(request: Request, { params }: { params: { username: string } }) {
+  try {
+    const sessionUser = getUserFromSession();
+    if (!sessionUser) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Verify user is updating their own profile
+    if (sessionUser.username !== params.username) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    const body = await request.json();
+    const { avatar_url, password, notification_settings } = body;
+
+    const updates: Record<string, any> = {};
+
+    // Update avatar
+    if (avatar_url !== undefined) {
+      updates.avatar_url = avatar_url;
+    }
+
+    // Update password
+    if (password) {
+      if (password.length < 8) {
+        return NextResponse.json({ error: 'Password must be at least 8 characters' }, { status: 400 });
+      }
+      updates.password_hash = await bcrypt.hash(password, 12);
+    }
+
+    // Update notification settings (stored as JSON)
+    if (notification_settings) {
+      updates.notification_settings = notification_settings;
+    }
+
+    if (Object.keys(updates).length === 0) {
+      return NextResponse.json({ error: 'No updates provided' }, { status: 400 });
+    }
+
+    const { error } = await supabase
+      .from('users')
+      .update(updates)
+      .eq('id', sessionUser.userId);
+
+    if (error) {
+      console.error('Update user error:', error);
+      return NextResponse.json({ error: 'Failed to update profile' }, { status: 500 });
+    }
+
+    return NextResponse.json({ ok: true, message: 'Profile updated successfully' });
+  } catch (error) {
+    console.error('PATCH user error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
 }

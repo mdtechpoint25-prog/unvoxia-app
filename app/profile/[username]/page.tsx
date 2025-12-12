@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import PostCard from '@/components/PostCard';
+import ProfileSettings from '@/components/ProfileSettings';
 
 interface UserProfile {
   username: string;
@@ -42,6 +43,8 @@ export default function ProfilePage({ params }: { params: { username: string } }
   const [stats, setStats] = useState<UserStats>({ posts: 0, comments: 0, reactions: 0 });
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isOwnProfile, setIsOwnProfile] = useState(false);
+  const [activeTab, setActiveTab] = useState<'posts' | 'settings'>('posts');
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -58,6 +61,18 @@ export default function ProfilePage({ params }: { params: { username: string } }
           setStats(data.stats || { posts: 0, comments: 0, reactions: 0 });
           setPosts(data.posts || []);
         }
+
+        // Check if this is the current user's profile
+        try {
+          const cookies = document.cookie.split(';');
+          const sessionCookie = cookies.find(c => c.trim().startsWith('session='));
+          if (sessionCookie) {
+            const session = JSON.parse(atob(sessionCookie.split('=')[1]));
+            if (session.username === params.username) {
+              setIsOwnProfile(true);
+            }
+          }
+        } catch {}
       } catch (err) {
         console.error('Fetch profile error:', err);
       } finally {
@@ -67,6 +82,24 @@ export default function ProfilePage({ params }: { params: { username: string } }
 
     fetchProfile();
   }, [params.username]);
+
+  const handleSaveSettings = async (settings: { avatar_url?: string; password?: string }) => {
+    const res = await fetch(`/api/users/${params.username}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(settings)
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.error || 'Failed to save settings');
+    }
+
+    // Update local profile if avatar changed
+    if (settings.avatar_url && profile) {
+      setProfile({ ...profile, avatar_url: settings.avatar_url });
+    }
+  };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -113,7 +146,11 @@ export default function ProfilePage({ params }: { params: { username: string } }
           color: '#9B59B6'
         }}>
           {profile.avatar_url ? (
-            <img src={profile.avatar_url} alt="avatar" style={{ width: '100%', height: '100%', borderRadius: '50%' }} />
+            profile.avatar_url.length <= 4 ? (
+              <span style={{ fontSize: '2.5rem' }}>{profile.avatar_url}</span>
+            ) : (
+              <img src={profile.avatar_url} alt="avatar" style={{ width: '100%', height: '100%', borderRadius: '50%' }} />
+            )
           ) : (
             profile.username.charAt(0).toUpperCase()
           )}
@@ -174,25 +211,72 @@ export default function ProfilePage({ params }: { params: { username: string } }
         </div>
       </div>
 
-      <h3 style={{ color: '#2C3E50', marginBottom: '1rem' }}>Posts</h3>
-      {posts.length === 0 ? (
-        <p style={{ color: '#888' }}>No posts yet.</p>
+      {isOwnProfile && (
+        <div style={{
+          display: 'flex',
+          gap: '0.5rem',
+          marginBottom: '1.5rem'
+        }}>
+          <button
+            onClick={() => setActiveTab('posts')}
+            style={{
+              padding: '0.5rem 1.5rem',
+              background: activeTab === 'posts' ? '#1ABC9C' : '#f5f5f5',
+              color: activeTab === 'posts' ? '#fff' : '#2C3E50',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: 600
+            }}
+          >
+            Posts
+          </button>
+          <button
+            onClick={() => setActiveTab('settings')}
+            style={{
+              padding: '0.5rem 1.5rem',
+              background: activeTab === 'settings' ? '#1ABC9C' : '#f5f5f5',
+              color: activeTab === 'settings' ? '#fff' : '#2C3E50',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: 600
+            }}
+          >
+            Settings
+          </button>
+        </div>
+      )}
+
+      {activeTab === 'posts' ? (
+        <>
+          <h3 style={{ color: '#2C3E50', marginBottom: '1rem' }}>Posts</h3>
+          {posts.length === 0 ? (
+            <p style={{ color: '#888' }}>No posts yet.</p>
+          ) : (
+            posts.map((post) => (
+              <PostCard
+                key={post.id}
+                id={post.id}
+                username={post.users?.username || profile.username}
+                avatar={post.users?.avatar_url}
+                timestamp={post.created_at}
+                category={post.category || 'Reflection'}
+                content={post.content}
+                mediaUrl={post.media_url}
+                commentsCount={post.comments_count || 0}
+                initialReactions={[]}
+                interactive={true}
+              />
+            ))
+          )}
+        </>
       ) : (
-        posts.map((post) => (
-          <PostCard
-            key={post.id}
-            id={post.id}
-            username={post.users?.username || profile.username}
-            avatar={post.users?.avatar_url}
-            timestamp={post.created_at}
-            category={post.category || 'Reflection'}
-            content={post.content}
-            mediaUrl={post.media_url}
-            commentsCount={post.comments_count || 0}
-            initialReactions={[]}
-            interactive={true}
-          />
-        ))
+        <ProfileSettings
+          username={profile.username}
+          avatarUrl={profile.avatar_url}
+          onSave={handleSaveSettings}
+        />
       )}
     </main>
   );
