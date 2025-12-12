@@ -1,12 +1,13 @@
 {
-  "name": "unvoxia-app",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  },
+"name": "noma-app",
+"version": "0.1.0",
+"description": "No Mask World (NOMA) - Real Work. Real Results.",
+"private": true,
+"scripts": {
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start"
+},
   "dependencies": {
     "@supabase/supabase-js": "2.45.0",
     "bcryptjs": "^3.0.3",

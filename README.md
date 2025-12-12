@@ -1,33 +1,56 @@
-# Unvoxia Web App
+# No Mask World (NOMA)
 
-Next.js scaffold based on specification.
+A modern digital productivity platform that helps you work smarter, collaborate faster, and manage tasks effortlessly.
 
-Domain: www.unvoxia.co.ke
-Emails: info@unvoxia.co.ke, support@unvoxia.co.ke, admin@unvoxia.co.ke
+**Real Work. Real Results. No Mask.**
+
+Domain: nomaworld.co.ke
+Emails: info@nomaworld.co.ke, support@nomaworld.co.ke, admin@nomaworld.co.ke
 Phones: 0701066845 / 0702794172
 
-Routes:
+## Features
+- ?? Smart Feed for Work & Creativity
+- ?? Task & Project Management
+- ?? Private Messaging with Confidentiality
+- ?? Media Reels & Creative Content
+- ?? Daily Prompts for Growth
+- ?? Notifications System
+- ?? User Profiles & Stats
+- ??? Admin Moderation Dashboard
+
+## Routes
 - `/` Landing
 - `/signup`, `/login`
 - `/feed`, `/reels`, `/daily-prompts`
 - `/profile/[username]`
-- `/messages`
+- `/messages`, `/notifications`
 - `/about`, `/contact`, `/privacy`, `/terms`
-- `/billing` (placeholder)
+- `/billing` (coming soon)
+- `/admin` (moderation dashboard)
 
-API stubs:
+## API Endpoints
 - `POST /api/register`, `POST /api/login`
 - `GET/POST /api/posts`
+- `GET/POST /api/posts/:id/comments`
+- `POST /api/posts/:id/reactions`
 - `POST /api/media/upload`
 - `GET/PATCH /api/users/:username`
+- `GET/POST /api/messages`
+- `GET/POST /api/messages/:partnerId`
 - `GET /api/notifications`
+- `GET /api/admin/stats`
 
-Setup:
+## Setup
 1. npm install
 2. Create `.env.local` with:
    ```
    NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+   SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+   SMTP_HOST=your-smtp-host
+   SMTP_PORT=587
+   SMTP_USER=your-smtp-user
+   SMTP_PASS=your-smtp-password
    ```
 3. Run the following SQL in Supabase SQL Editor:
    ```sql
@@ -39,6 +62,11 @@ Setup:
      password_hash text not null,
      avatar_url text,
      badges json,
+     notification_settings json,
+     email_verified boolean default false,
+     verification_token text,
+     reset_token text,
+     reset_expiry timestamp,
      created_at timestamp default now(),
      last_login timestamp
    );
@@ -92,4 +120,7 @@ Setup:
    ```
 4. npm run dev
 5. Open http://localhost:3000
+
+## License
+© 2024 No Mask World (NOMA). All rights reserved.
 

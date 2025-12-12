@@ -129,11 +129,11 @@ export default function SignupForm() {
   }
 
   return (
-    <div style={{ maxWidth: '400px', margin: '0 auto', padding: '2rem' }}>
-      <h2 style={{ color: '#2C3E50', marginBottom: '1rem' }}>Create Your Account</h2>
-      <p style={{ color: '#888', marginBottom: '1.5rem' }}>
-        Join Unvoxia anonymously
-      </p>
+  <div style={{ maxWidth: '400px', margin: '0 auto', padding: '2rem' }}>
+    <h2 style={{ color: '#2C3E50', marginBottom: '1rem' }}>Create Your Account</h2>
+    <p style={{ color: '#888', marginBottom: '1.5rem' }}>
+      Join NOMA and start your productivity journey
+    </p>
       <form onSubmit={handleSubmit}>
         <input
           type="text"

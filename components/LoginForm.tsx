@@ -39,11 +39,11 @@ export default function LoginForm() {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '0 auto', padding: '2rem' }}>
-      <h2 style={{ color: '#2C3E50', marginBottom: '1rem' }}>Welcome Back</h2>
-      <p style={{ color: '#888', marginBottom: '1.5rem' }}>
-        Login to your anonymous account
-      </p>
+  <div style={{ maxWidth: '400px', margin: '0 auto', padding: '2rem' }}>
+    <h2 style={{ color: '#2C3E50', marginBottom: '1rem' }}>Welcome Back</h2>
+    <p style={{ color: '#888', marginBottom: '1.5rem' }}>
+      Login to your NOMA account
+    </p>
       <form onSubmit={handleSubmit}>
         <input
           type="text"

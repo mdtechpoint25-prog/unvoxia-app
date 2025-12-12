@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { SITE, CONTACT } from '@/lib/constants';
 
 const PLANS = [
   {
@@ -8,37 +9,46 @@ const PLANS = [
     price: 'KES 0',
     period: 'forever',
     features: [
-      'Unlimited anonymous posts',
-      'React and comment on posts',
-      'Daily reflection prompts',
-      'Community support'
+      'Basic profile',
+      'Access to the feed',
+      'Create posts',
+      'Daily prompts',
+      'Private messaging',
+      'Project creation (limited)',
+      'Basic storage',
+      'Standard support'
     ],
     current: true
   },
   {
-    name: 'Premium',
-    price: 'KES 299',
+    name: 'Pro',
+    price: 'KES 499',
     period: '/month',
     features: [
       'Everything in Free',
-      'Ad-free experience',
-      'Exclusive motivational content',
-      'Custom avatar options',
+      'Unlimited task & project management',
+      'Increased storage',
+      'Professional delivery tools',
       'Priority support',
-      'Special badges'
+      'Advanced profile customization',
+      'Analytics & insights',
+      'Higher upload limits'
     ],
     current: false
   },
   {
-    name: 'Supporter',
-    price: 'KES 999',
+    name: 'Business',
+    price: 'KES 1,999',
     period: '/month',
     features: [
-      'Everything in Premium',
-      'Support platform development',
-      'Early access to features',
-      'Founder badge',
-      'Direct feedback channel'
+      'Everything in Pro',
+      'Team workspaces',
+      'Admin controls',
+      'Shared billing',
+      'Group project boards',
+      'Hiring & HR tools',
+      'Extended storage',
+      'Dedicated success manager'
     ],
     current: false
   }
@@ -46,48 +56,48 @@ const PLANS = [
 
 export default function BillingPage() {
   return (
-    <main style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem 1rem' }}>
-      <h2 style={{ color: '#2C3E50', marginBottom: '0.5rem', textAlign: 'center' }}>
-        Subscription Plans
-      </h2>
-      <p style={{ color: '#888', marginBottom: '2rem', textAlign: 'center' }}>
-        Choose a plan that works for you. Support Unvoxia and unlock premium features.
+    <main style={{ maxWidth: '1000px', margin: '0 auto', padding: '3rem 1.5rem' }}>
+      <h1 style={{ color: '#2C3E50', marginBottom: '0.5rem', textAlign: 'center', fontSize: '2.5rem' }}>
+        Pricing Plans
+      </h1>
+      <p style={{ color: '#888', marginBottom: '3rem', textAlign: 'center', maxWidth: '600px', margin: '0 auto 3rem' }}>
+        {SITE.name} offers accessible tools that scale with your needs. Choose a plan that supports your growth.
       </p>
 
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
         gap: '1.5rem',
-        marginBottom: '2rem'
+        marginBottom: '3rem'
       }}>
         {PLANS.map((plan) => (
           <div key={plan.name} style={{
-            background: plan.name === 'Premium' ? 'linear-gradient(135deg, #1ABC9C 0%, #4DA8DA 100%)' : '#fff',
-            color: plan.name === 'Premium' ? '#fff' : '#2C3E50',
-            borderRadius: '16px',
-            padding: '2rem',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+            background: plan.name === 'Pro' ? 'linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%)' : '#fff',
+            color: plan.name === 'Pro' ? '#fff' : '#2C3E50',
+            borderRadius: '20px',
+            padding: '2.5rem 2rem',
+            boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
             position: 'relative'
           }}>
-            {plan.name === 'Premium' && (
+            {plan.name === 'Pro' && (
               <div style={{
                 position: 'absolute',
-                top: '-10px',
+                top: '-12px',
                 right: '20px',
                 background: '#FF6B35',
                 color: '#fff',
-                padding: '0.25rem 0.75rem',
-                borderRadius: '12px',
-                fontSize: '0.75rem',
+                padding: '0.35rem 1rem',
+                borderRadius: '16px',
+                fontSize: '0.8rem',
                 fontWeight: 600
               }}>
                 Popular
               </div>
             )}
-            <h3 style={{ marginBottom: '0.5rem' }}>{plan.name}</h3>
-            <div style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '0.25rem' }}>
+            <h3 style={{ marginBottom: '0.5rem', fontSize: '1.5rem' }}>{plan.name}</h3>
+            <div style={{ fontSize: '2.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>
               {plan.price}
-              <span style={{ fontSize: '0.9rem', fontWeight: 400 }}>{plan.period}</span>
+              <span style={{ fontSize: '1rem', fontWeight: 400, opacity: 0.8 }}>{plan.period}</span>
             </div>
             <ul style={{
               listStyle: 'none',
@@ -97,27 +107,28 @@ export default function BillingPage() {
               {plan.features.map((feature, i) => (
                 <li key={i} style={{
                   display: 'flex',
-                  alignItems: 'center',
+                  alignItems: 'flex-start',
                   gap: '0.5rem',
-                  marginBottom: '0.5rem',
+                  marginBottom: '0.6rem',
                   fontSize: '0.9rem'
                 }}>
-                  <span style={{ color: plan.name === 'Premium' ? '#fff' : '#1ABC9C' }}>&#10003;</span>
+                  <span style={{ color: plan.name === 'Pro' ? '#fff' : '#1ABC9C' }}>?</span>
                   {feature}
                 </li>
               ))}
             </ul>
             <button
-              disabled={plan.current}
+              disabled={!plan.current}
               style={{
                 width: '100%',
-                padding: '0.75rem',
-                background: plan.current ? '#ccc' : (plan.name === 'Premium' ? '#fff' : '#1ABC9C'),
-                color: plan.current ? '#888' : (plan.name === 'Premium' ? '#1ABC9C' : '#fff'),
+                padding: '0.85rem',
+                background: plan.current ? '#1ABC9C' : (plan.name === 'Pro' ? '#fff' : '#f5f5f5'),
+                color: plan.current ? '#fff' : (plan.name === 'Pro' ? '#9B59B6' : '#888'),
                 border: 'none',
-                borderRadius: '8px',
-                fontWeight: 600,
-                cursor: plan.current ? 'default' : 'pointer'
+                borderRadius: '10px',
+                fontWeight: 700,
+                cursor: plan.current ? 'pointer' : 'default',
+                fontSize: '1rem'
               }}
             >
               {plan.current ? 'Current Plan' : 'Coming Soon'}
@@ -127,18 +138,19 @@ export default function BillingPage() {
       </div>
 
       <div style={{
-        background: '#f5f5f5',
-        borderRadius: '12px',
-        padding: '2rem',
+        background: '#f9f9f9',
+        borderRadius: '16px',
+        padding: '2.5rem',
         textAlign: 'center'
       }}>
+        <h3 style={{ color: '#2C3E50', marginBottom: '1rem' }}>Payment Integration Coming Soon</h3>
         <p style={{ color: '#888', marginBottom: '1rem' }}>
-          Payment integration with Pesapal/M-Pesa coming soon.
+          We're finalizing integrations with M-Pesa, Pesapal, and Stripe. All users will be notified when subscriptions launch.
         </p>
-        <p style={{ color: '#2C3E50', fontSize: '0.9rem' }}>
+        <p style={{ color: '#2C3E50', fontSize: '0.95rem' }}>
           Questions? Contact us at{' '}
-          <a href="mailto:support@unvoxia.co.ke" style={{ color: '#1ABC9C' }}>
-            support@unvoxia.co.ke
+          <a href={`mailto:${CONTACT.emails[1]}`} style={{ color: '#1ABC9C' }}>
+            {CONTACT.emails[1]}
           </a>
         </p>
       </div>

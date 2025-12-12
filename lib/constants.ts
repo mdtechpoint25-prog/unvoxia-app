@@ -1,12 +1,14 @@
 export const SITE = {
-  name: 'Unvoxia',
-  domain: 'www.unvoxia.co.ke',
-  tagline: 'Share Your Voice. Heal. Connect. Anonymously.',
+  name: 'No Mask World',
+  shortName: 'NOMA',
+  domain: 'nomaworld.co.ke',
+  tagline: 'Real Work. Real Results. No Mask.',
+  description: 'A modern digital productivity platform that helps you work smarter, collaborate faster, and manage tasks effortlessly.'
 };
 
 export const CONTACT = {
-  emails: ['info@unvoxia.co.ke', 'support@unvoxia.co.ke', 'admin@unvoxia.co.ke'],
+  emails: ['info@nomaworld.co.ke', 'support@nomaworld.co.ke', 'admin@nomaworld.co.ke'],
   phones: ['0701066845', '0702794172']
 };
 
-export const CATEGORIES = ['Motivation','Mental Health','Reflection','Stories','Daily Tips'];
+export const CATEGORIES = ['Motivation', 'Productivity', 'Creativity', 'Collaboration', 'Growth', 'Daily Tips'];
