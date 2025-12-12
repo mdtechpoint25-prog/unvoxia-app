@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { query, execute } from '@/lib/turso';
 import { cookies } from 'next/headers';
 
 async function getUserFromSession() {
@@ -22,20 +22,20 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get notifications from the notifications table
-    const { data: notifications, error } = await supabase
-      .from('notifications')
-      .select('*')
-      .eq('user_id', user.userId)
-      .order('created_at', { ascending: false })
-      .limit(50);
+    const notifications = await query(
+      `SELECT * FROM notifications 
+       WHERE user_id = ? 
+       ORDER BY created_at DESC 
+       LIMIT 50`,
+      [user.userId]
+    );
 
-    if (error) {
-      console.error('Fetch notifications error:', error);
-      return NextResponse.json({ error: 'Failed to fetch notifications' }, { status: 500 });
-    }
+    const unreadCount = notifications.filter((n: any) => !n.read).length;
 
-    return NextResponse.json({ notifications: notifications || [] });
+    return NextResponse.json({ 
+      notifications,
+      unreadCount
+    });
   } catch (error) {
     console.error('Notifications GET error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

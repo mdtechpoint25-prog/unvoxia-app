@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { queryOne, execute } from '@/lib/turso';
 import { cookies } from 'next/headers';
 
 // Generate a 6-digit OTP
@@ -18,13 +18,12 @@ export async function POST(request: Request) {
       }
 
       // Find user by email
-      const { data: user, error: userError } = await supabase
-        .from('users')
-        .select('id, email, status')
-        .eq('email', email.toLowerCase())
-        .single();
+      const user = await queryOne<{ id: string; email: string; status: string }>(
+        'SELECT id, email, status FROM users WHERE email = ?',
+        [email.toLowerCase()]
+      );
 
-      if (userError || !user) {
+      if (!user) {
         return NextResponse.json({ error: 'No account found with this email' }, { status: 404 });
       }
 
@@ -37,34 +36,17 @@ export async function POST(request: Request) {
       const otpExpiry = new Date(Date.now() + 10 * 60 * 1000).toISOString();
 
       // Save OTP to user record
-      const { error: updateError } = await supabase
-        .from('users')
-        .update({
-          otp_code: otpCode,
-          otp_expiry: otpExpiry
-        })
-        .eq('id', user.id);
-
-      if (updateError) {
-        console.error('Update OTP error:', updateError);
-        return NextResponse.json({ error: 'Failed to generate OTP' }, { status: 500 });
-      }
+      await execute(
+        'UPDATE users SET otp_code = ?, otp_expires = ? WHERE id = ?',
+        [otpCode, otpExpiry, user.id]
+      );
 
       // In production, send email with OTP
-      // For now, log it (in development)
       console.log(`OTP for ${email}: ${otpCode}`);
-
-      // TODO: Send actual email with OTP
-      // await sendEmail({
-      //   to: email,
-      //   subject: 'Your NOMA Login Code',
-      //   body: `Your login code is: ${otpCode}. It expires in 10 minutes.`
-      // });
 
       return NextResponse.json({ 
         ok: true, 
         message: 'OTP sent to your email',
-        // Remove this in production - only for testing
         ...(process.env.NODE_ENV === 'development' && { devOtp: otpCode })
       });
     }
@@ -76,13 +58,19 @@ export async function POST(request: Request) {
       }
 
       // Find user and verify OTP
-      const { data: user, error: userError } = await supabase
-        .from('users')
-        .select('id, username, email, otp_code, otp_expiry, status')
-        .eq('email', email.toLowerCase())
-        .single();
+      const user = await queryOne<{
+        id: string;
+        username: string;
+        email: string;
+        otp_code: string;
+        otp_expires: string;
+        status: string;
+      }>(
+        'SELECT id, username, email, otp_code, otp_expires, status FROM users WHERE email = ?',
+        [email.toLowerCase()]
+      );
 
-      if (userError || !user) {
+      if (!user) {
         return NextResponse.json({ error: 'User not found' }, { status: 404 });
       }
 
@@ -96,19 +84,15 @@ export async function POST(request: Request) {
       }
 
       // Check expiry
-      if (!user.otp_expiry || new Date(user.otp_expiry) < new Date()) {
+      if (!user.otp_expires || new Date(user.otp_expires) < new Date()) {
         return NextResponse.json({ error: 'OTP has expired. Please request a new one.' }, { status: 400 });
       }
 
       // Clear OTP and update last login
-      await supabase
-        .from('users')
-        .update({
-          otp_code: null,
-          otp_expiry: null,
-          last_login: new Date().toISOString()
-        })
-        .eq('id', user.id);
+      await execute(
+        'UPDATE users SET otp_code = NULL, otp_expires = NULL, updated_at = ? WHERE id = ?',
+        [new Date().toISOString(), user.id]
+      );
 
       // Create session
       const session = {

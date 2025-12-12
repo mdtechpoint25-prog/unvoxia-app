@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { queryOne, execute, generateId } from '@/lib/turso';
 import { cookies } from 'next/headers';
 import { REPORT_REASONS } from '@/lib/constants';
 
@@ -40,42 +40,32 @@ export async function POST(
     }
 
     // Check if post exists
-    const { data: post, error: postError } = await supabase
-      .from('posts')
-      .select('id')
-      .eq('id', postId)
-      .single();
+    const post = await queryOne(
+      'SELECT id FROM posts WHERE id = ?',
+      [postId]
+    );
 
-    if (postError || !post) {
+    if (!post) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
 
     // Check if user already reported this post
-    const { data: existingReport } = await supabase
-      .from('flagged_posts')
-      .select('id')
-      .eq('post_id', postId)
-      .eq('reporter_id', user.userId)
-      .single();
+    const existingReport = await queryOne(
+      'SELECT id FROM flagged_posts WHERE post_id = ? AND reporter_id = ?',
+      [postId, user.userId]
+    );
 
     if (existingReport) {
       return NextResponse.json({ error: 'You have already reported this post' }, { status: 400 });
     }
 
     // Create the report
-    const { error: insertError } = await supabase
-      .from('flagged_posts')
-      .insert({
-        post_id: postId,
-        reporter_id: user.userId,
-        reason: reason.trim(),
-        status: 'pending'
-      });
-
-    if (insertError) {
-      console.error('Create report error:', insertError);
-      return NextResponse.json({ error: 'Failed to submit report' }, { status: 500 });
-    }
+    const reportId = generateId();
+    await execute(
+      `INSERT INTO flagged_posts (id, post_id, reporter_id, reason, status)
+       VALUES (?, ?, ?, ?, 'pending')`,
+      [reportId, postId, user.userId, reason.trim()]
+    );
 
     return NextResponse.json({
       ok: true,

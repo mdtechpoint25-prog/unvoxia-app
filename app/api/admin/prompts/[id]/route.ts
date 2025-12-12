@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { execute } from '@/lib/turso';
 import { cookies } from 'next/headers';
 
 async function getUserFromSession() {
@@ -33,16 +33,10 @@ export async function PATCH(
       return NextResponse.json({ error: 'Prompt text is required' }, { status: 400 });
     }
 
-    const { error } = await supabase
-      .from('daily_prompts')
-      .update({ prompt: prompt.trim() })
-      .eq('id', id)
-      .is('user_id', null);
-
-    if (error) {
-      console.error('Update prompt error:', error);
-      return NextResponse.json({ error: 'Failed to update prompt' }, { status: 500 });
-    }
+    await execute(
+      'UPDATE daily_prompts SET prompt = ? WHERE id = ? AND user_id IS NULL',
+      [prompt.trim(), id]
+    );
 
     return NextResponse.json({ ok: true });
   } catch (error) {
@@ -63,16 +57,10 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { error } = await supabase
-      .from('daily_prompts')
-      .delete()
-      .eq('id', id)
-      .is('user_id', null);
-
-    if (error) {
-      console.error('Delete prompt error:', error);
-      return NextResponse.json({ error: 'Failed to delete prompt' }, { status: 500 });
-    }
+    await execute(
+      'DELETE FROM daily_prompts WHERE id = ? AND user_id IS NULL',
+      [id]
+    );
 
     return NextResponse.json({ ok: true });
   } catch (error) {

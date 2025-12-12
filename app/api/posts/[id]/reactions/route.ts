@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { queryOne, execute, generateId } from '@/lib/turso';
 import { cookies } from 'next/headers';
 
 async function getUserFromSession() {
@@ -33,39 +33,27 @@ export async function POST(
     }
 
     // Check if user already reacted with this emoji
-    const { data: existing } = await supabase
-      .from('reactions')
-      .select('id')
-      .eq('target_type', 'post')
-      .eq('target_id', id)
-      .eq('user_id', user.userId)
-      .eq('emoji', emoji)
-      .single();
+    const existing = await queryOne<{ id: string }>(
+      'SELECT id FROM reactions WHERE post_id = ? AND user_id = ? AND emoji = ?',
+      [id, user.userId, emoji]
+    );
 
     if (existing) {
       // Remove reaction (toggle off)
-      await supabase
-        .from('reactions')
-        .delete()
-        .eq('id', existing.id);
+      await execute(
+        'DELETE FROM reactions WHERE id = ?',
+        [existing.id]
+      );
 
       return NextResponse.json({ ok: true, action: 'removed' });
     }
 
     // Add reaction
-    const { error } = await supabase
-      .from('reactions')
-      .insert({
-        target_type: 'post',
-        target_id: id,
-        user_id: user.userId,
-        emoji
-      });
-
-    if (error) {
-      console.error('Add reaction error:', error);
-      return NextResponse.json({ error: 'Failed to add reaction' }, { status: 500 });
-    }
+    const reactionId = generateId();
+    await execute(
+      'INSERT INTO reactions (id, post_id, user_id, emoji) VALUES (?, ?, ?, ?)',
+      [reactionId, id, user.userId, emoji]
+    );
 
     return NextResponse.json({ ok: true, action: 'added' });
   } catch (error) {

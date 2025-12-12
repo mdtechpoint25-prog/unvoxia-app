@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { query, queryOne, execute } from '@/lib/turso';
 import { cookies } from 'next/headers';
 import bcrypt from 'bcryptjs';
 
@@ -19,71 +19,80 @@ async function getUserFromSession() {
 export async function GET(_req: Request, { params }: { params: Promise<{ username: string }> }) {
   try {
     const { username } = await params;
-    // Get user profile with ID, including bio and streak
-    const { data: user, error: userError } = await supabase
-      .from('users')
-      .select('id, username, avatar_url, bio, badges, streak_count, created_at')
-      .eq('username', username)
-      .single();
+    
+    // Get user profile
+    const user = await queryOne<{
+      id: string;
+      username: string;
+      avatar_url: string | null;
+      bio: string | null;
+      streak_count: number;
+      created_at: string;
+    }>(
+      'SELECT id, username, avatar_url, bio, streak_count, created_at FROM users WHERE username = ?',
+      [username]
+    );
 
-    if (userError || !user) {
+    if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     const userId = user.id;
 
-    // Get user's posts (excluding anonymous posts for other viewers)
+    // Get user's posts
     const sessionUser = await getUserFromSession();
     const isOwnProfile = sessionUser?.username === username;
     
-    let postsQuery = supabase
-      .from('posts')
-      .select(`
-        *,
-        users:user_id (username, avatar_url)
-      `)
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false })
-      .limit(20);
+    let postsQuery = `
+      SELECT p.*, u.username, u.avatar_url as user_avatar
+      FROM posts p
+      LEFT JOIN users u ON p.user_id = u.id
+      WHERE p.user_id = ?
+    `;
     
-    // If not own profile, exclude anonymous posts
     if (!isOwnProfile) {
-      postsQuery = postsQuery.eq('is_anonymous', false);
+      postsQuery += ' AND p.is_anonymous = 0';
     }
     
-    const { data: posts } = await postsQuery;
+    postsQuery += ' ORDER BY p.created_at DESC LIMIT 20';
+    
+    const posts = await query(postsQuery, [userId]);
 
-    // Get post count
-    const { count: postsCount } = await supabase
-      .from('posts')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', userId);
+    // Format posts
+    const formattedPosts = posts.map((p: any) => ({
+      ...p,
+      users: { username: p.username, avatar_url: p.user_avatar }
+    }));
 
-    // Get comments count
-    const { count: commentsCount } = await supabase
-      .from('comments')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', userId);
-
-    // Get reactions received count
-    const { count: reactionsCount } = await supabase
-      .from('reactions')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', userId);
+    // Get counts
+    const postsCountResult = await queryOne<{ count: number }>(
+      'SELECT COUNT(*) as count FROM posts WHERE user_id = ?',
+      [userId]
+    );
+    
+    const commentsCountResult = await queryOne<{ count: number }>(
+      'SELECT COUNT(*) as count FROM comments WHERE user_id = ?',
+      [userId]
+    );
+    
+    const reactionsCountResult = await queryOne<{ count: number }>(
+      'SELECT COUNT(*) as count FROM reactions WHERE user_id = ?',
+      [userId]
+    );
 
     return NextResponse.json({
       username: user.username,
       avatar_url: user.avatar_url,
       bio: user.bio,
-      badges: user.badges,
+      badges: [],
       streak_count: user.streak_count || 0,
       created_at: user.created_at,
       stats: {
-        posts: postsCount || 0,
-        comments: commentsCount || 0,
-        reactions: reactionsCount || 0
+        posts: postsCountResult?.count || 0,
+        comments: commentsCountResult?.count || 0,
+        reactions: reactionsCountResult?.count || 0
       },
-      posts: posts || []
+      posts: formattedPosts
     });
   } catch (error) {
     console.error('Get user error:', error);
@@ -107,17 +116,19 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ us
     const body = await request.json();
     const { avatar_url, bio, password, notification_settings } = body;
 
-    const updates: Record<string, any> = {};
+    const updates: string[] = [];
+    const values: any[] = [];
 
     // Update avatar
     if (avatar_url !== undefined) {
-      updates.avatar_url = avatar_url;
+      updates.push('avatar_url = ?');
+      values.push(avatar_url);
     }
 
     // Update bio
     if (bio !== undefined) {
-      // Limit bio to 200 characters
-      updates.bio = bio.slice(0, 200);
+      updates.push('bio = ?');
+      values.push(bio.slice(0, 200));
     }
 
     // Update password
@@ -125,27 +136,28 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ us
       if (password.length < 8) {
         return NextResponse.json({ error: 'Password must be at least 8 characters' }, { status: 400 });
       }
-      updates.password_hash = await bcrypt.hash(password, 12);
+      updates.push('password_hash = ?');
+      values.push(await bcrypt.hash(password, 12));
     }
 
-    // Update notification settings (stored as JSON)
+    // Update notification settings
     if (notification_settings) {
-      updates.notification_settings = notification_settings;
+      updates.push('notification_settings = ?');
+      values.push(JSON.stringify(notification_settings));
     }
 
-    if (Object.keys(updates).length === 0) {
+    if (updates.length === 0) {
       return NextResponse.json({ error: 'No updates provided' }, { status: 400 });
     }
 
-    const { error } = await supabase
-      .from('users')
-      .update(updates)
-      .eq('id', sessionUser.userId);
+    updates.push('updated_at = ?');
+    values.push(new Date().toISOString());
+    values.push(sessionUser.userId);
 
-    if (error) {
-      console.error('Update user error:', error);
-      return NextResponse.json({ error: 'Failed to update profile' }, { status: 500 });
-    }
+    await execute(
+      `UPDATE users SET ${updates.join(', ')} WHERE id = ?`,
+      values
+    );
 
     return NextResponse.json({ ok: true, message: 'Profile updated successfully' });
   } catch (error) {

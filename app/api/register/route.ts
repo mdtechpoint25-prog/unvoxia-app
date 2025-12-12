@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { query, queryOne, execute, generateId } from '@/lib/turso';
 import { sendVerificationEmail, generateOTP } from '@/lib/email';
 import bcrypt from 'bcryptjs';
 
@@ -23,22 +23,20 @@ export async function POST(request: Request) {
     }
 
     // Check if username already exists
-    const { data: existingUsername } = await supabaseAdmin
-      .from('users')
-      .select('id')
-      .eq('username', username)
-      .single();
+    const existingUsername = await queryOne(
+      'SELECT id FROM users WHERE username = ?',
+      [username]
+    );
 
     if (existingUsername) {
       return NextResponse.json({ error: 'Username already taken' }, { status: 400 });
     }
 
     // Check if email already exists
-    const { data: existingEmail } = await supabaseAdmin
-      .from('users')
-      .select('id')
-      .eq('email', email)
-      .single();
+    const existingEmail = await queryOne(
+      'SELECT id FROM users WHERE email = ?',
+      [email]
+    );
 
     if (existingEmail) {
       return NextResponse.json({ error: 'Email already registered' }, { status: 400 });
@@ -49,30 +47,17 @@ export async function POST(request: Request) {
 
     // Generate OTP
     const otp = generateOTP();
-    const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+    const otpExpiry = new Date(Date.now() + 10 * 60 * 1000).toISOString(); // 10 minutes
+
+    // Generate user ID
+    const userId = generateId();
 
     // Insert user with pending verification
-    const { data: newUser, error: insertError } = await supabaseAdmin
-      .from('users')
-      .insert({
-        username,
-        email,
-        phone,
-        password_hash: passwordHash,
-        email_verified: false,
-        otp_code: otp,
-        otp_expiry: otpExpiry.toISOString()
-      })
-      .select('id')
-      .single();
-
-    if (insertError) {
-      console.error('Insert error:', insertError);
-      return NextResponse.json({ 
-        error: insertError.message || 'Failed to create account',
-        details: insertError.details || null
-      }, { status: 500 });
-    }
+    await execute(
+      `INSERT INTO users (id, username, email, phone, password_hash, email_verified, otp_code, otp_expires)
+       VALUES (?, ?, ?, ?, ?, 0, ?, ?)`,
+      [userId, username, email, phone, passwordHash, otp, otpExpiry]
+    );
 
     // Send verification email
     try {
@@ -85,7 +70,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ 
       ok: true, 
       message: 'Account created! Please check your email for verification code.',
-      userId: newUser?.id
+      userId
     });
   } catch (error: any) {
     console.error('Registration error:', error);

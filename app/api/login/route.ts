@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { queryOne, execute } from '@/lib/turso';
 import bcrypt from 'bcryptjs';
 import { cookies } from 'next/headers';
 
@@ -12,13 +12,18 @@ export async function POST(request: Request) {
     }
 
     // Find user by email or username
-    const { data: user, error: fetchError } = await supabaseAdmin
-      .from('users')
-      .select('id, username, email, password_hash, email_verified')
-      .or(`email.eq.${emailOrUsername},username.eq.${emailOrUsername}`)
-      .single();
+    const user = await queryOne<{
+      id: string;
+      username: string;
+      email: string;
+      password_hash: string;
+      email_verified: number;
+    }>(
+      'SELECT id, username, email, password_hash, email_verified FROM users WHERE email = ? OR username = ?',
+      [emailOrUsername, emailOrUsername]
+    );
 
-    if (fetchError || !user) {
+    if (!user) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
@@ -34,10 +39,10 @@ export async function POST(request: Request) {
     }
 
     // Update last login
-    await supabaseAdmin
-      .from('users')
-      .update({ last_login: new Date().toISOString() })
-      .eq('id', user.id);
+    await execute(
+      'UPDATE users SET updated_at = ? WHERE id = ?',
+      [new Date().toISOString(), user.id]
+    );
 
     // Set session cookie (simple token for now)
     const sessionToken = Buffer.from(JSON.stringify({

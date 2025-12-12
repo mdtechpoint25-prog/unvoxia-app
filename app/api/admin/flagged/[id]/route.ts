@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { execute } from '@/lib/turso';
 import { cookies } from 'next/headers';
 
 async function getUserFromSession() {
@@ -33,36 +33,19 @@ export async function PATCH(
       return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
     }
 
-    // Get the flagged post
-    const { data: flag, error: fetchError } = await supabase
-      .from('flagged_posts')
-      .select('post_id')
-      .eq('id', id)
-      .single();
-
-    if (fetchError || !flag) {
-      return NextResponse.json({ error: 'Flagged post not found' }, { status: 404 });
-    }
-
     // Update the flag status
     const newStatus = action === 'dismiss' ? 'dismissed' : 'actioned';
-    const { error: updateError } = await supabase
-      .from('flagged_posts')
-      .update({
-        status: newStatus,
-        reviewed_at: new Date().toISOString(),
-        reviewed_by: user.userId
-      })
-      .eq('id', id);
-
-    if (updateError) {
-      console.error('Update flag error:', updateError);
-      return NextResponse.json({ error: 'Failed to update flag' }, { status: 500 });
-    }
+    await execute(
+      `UPDATE flagged_posts SET status = ?, resolved_at = ?, reviewed_by = ? WHERE id = ?`,
+      [newStatus, new Date().toISOString(), user.userId, id]
+    );
 
     // If action taken, delete the post
     if (action === 'action') {
-      await supabase.from('posts').delete().eq('id', flag.post_id);
+      await execute(
+        `DELETE FROM posts WHERE id = (SELECT post_id FROM flagged_posts WHERE id = ?)`,
+        [id]
+      );
     }
 
     return NextResponse.json({

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { execute } from '@/lib/turso';
 import { cookies } from 'next/headers';
 
 async function getUserFromSession() {
@@ -22,8 +22,8 @@ export async function PATCH(
 ) {
   try {
     const { id } = await params;
-    const admin = await getUserFromSession();
-    if (!admin) {
+    const user = await getUserFromSession();
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -33,23 +33,14 @@ export async function PATCH(
       return NextResponse.json({ error: 'Invalid status' }, { status: 400 });
     }
 
-    const { error } = await supabase
-      .from('users')
-      .update({ status })
-      .eq('id', id);
+    await execute(
+      'UPDATE users SET status = ?, updated_at = ? WHERE id = ?',
+      [status, new Date().toISOString(), id]
+    );
 
-    if (error) {
-      console.error('Update user status error:', error);
-      return NextResponse.json({ error: 'Failed to update user status' }, { status: 500 });
-    }
-
-    return NextResponse.json({
-      ok: true,
-      status,
-      message: `User ${status === 'active' ? 'activated' : status}`
-    });
+    return NextResponse.json({ ok: true });
   } catch (error) {
-    console.error('User status PATCH error:', error);
+    console.error('User status update error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

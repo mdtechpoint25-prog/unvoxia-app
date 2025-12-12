@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { execute } from '@/lib/turso';
 import { cookies } from 'next/headers';
 
 async function getUserFromSession() {
@@ -23,18 +23,12 @@ export async function POST() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { error } = await supabase
-      .from('notifications')
-      .update({ read: true })
-      .eq('user_id', user.userId)
-      .eq('read', false);
+    await execute(
+      'UPDATE notifications SET read = 1 WHERE user_id = ?',
+      [user.userId]
+    );
 
-    if (error) {
-      console.error('Mark all read error:', error);
-      return NextResponse.json({ error: 'Failed to mark notifications as read' }, { status: 500 });
-    }
-
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, message: 'All notifications marked as read' });
   } catch (error) {
     console.error('Mark all read error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { query, execute, generateId } from '@/lib/turso';
 import { cookies } from 'next/headers';
 
 async function getUserFromSession() {
@@ -23,19 +23,12 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get all prompts (template prompts have no user_id)
-    const { data: prompts, error } = await supabase
-      .from('daily_prompts')
-      .select('*')
-      .is('user_id', null)
-      .order('created_at', { ascending: false });
+    // Get all template prompts (no user_id)
+    const prompts = await query(
+      `SELECT * FROM daily_prompts WHERE user_id IS NULL ORDER BY created_at DESC`
+    );
 
-    if (error) {
-      console.error('Fetch prompts error:', error);
-      return NextResponse.json({ error: 'Failed to fetch prompts' }, { status: 500 });
-    }
-
-    return NextResponse.json({ prompts: prompts || [] });
+    return NextResponse.json({ prompts });
   } catch (error) {
     console.error('Admin prompts GET error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
@@ -56,22 +49,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Prompt text is required' }, { status: 400 });
     }
 
-    const { data, error } = await supabase
-      .from('daily_prompts')
-      .insert({
-        prompt: prompt.trim(),
-        user_id: null,
-        response: null
-      })
-      .select()
-      .single();
+    const promptId = generateId();
 
-    if (error) {
-      console.error('Create prompt error:', error);
-      return NextResponse.json({ error: 'Failed to create prompt' }, { status: 500 });
-    }
+    await execute(
+      `INSERT INTO daily_prompts (id, user_id, prompt, response) VALUES (?, NULL, ?, NULL)`,
+      [promptId, prompt.trim()]
+    );
 
-    return NextResponse.json({ ok: true, prompt: data });
+    return NextResponse.json({ 
+      ok: true, 
+      prompt: { id: promptId, prompt: prompt.trim() } 
+    });
   } catch (error) {
     console.error('Admin prompts POST error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

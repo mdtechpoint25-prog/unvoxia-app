@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { execute } from '@/lib/turso';
 import { cookies } from 'next/headers';
 
 async function getUserFromSession() {
@@ -15,7 +15,7 @@ async function getUserFromSession() {
   }
 }
 
-// Mark a single notification as read
+// Mark single notification as read
 export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -29,20 +29,38 @@ export async function PATCH(
 
     const { read } = await request.json();
 
-    const { error } = await supabase
-      .from('notifications')
-      .update({ read })
-      .eq('id', id)
-      .eq('user_id', user.userId);
-
-    if (error) {
-      console.error('Update notification error:', error);
-      return NextResponse.json({ error: 'Failed to update notification' }, { status: 500 });
-    }
+    await execute(
+      'UPDATE notifications SET read = 1 WHERE id = ? AND user_id = ?',
+      [id, user.userId]
+    );
 
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error('Notification PATCH error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+
+// Delete notification
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    const user = await getUserFromSession();
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    await execute(
+      'DELETE FROM notifications WHERE id = ? AND user_id = ?',
+      [id, user.userId]
+    );
+
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    console.error('Notification DELETE error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

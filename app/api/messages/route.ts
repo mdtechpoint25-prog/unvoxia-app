@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { query, queryOne, execute, generateId } from '@/lib/turso';
 import { cookies } from 'next/headers';
 
 async function getUserFromSession() {
@@ -15,18 +15,6 @@ async function getUserFromSession() {
   }
 }
 
-interface MessageRow {
-  id: string;
-  sender_id: string;
-  receiver_id: string;
-  content: string;
-  created_at: string;
-  read: boolean;
-  is_anonymous: boolean;
-  sender: { username: string; avatar_url: string | null } | null;
-  receiver: { username: string; avatar_url: string | null } | null;
-}
-
 // Get list of conversations and pending chat requests
 export async function GET() {
   try {
@@ -36,65 +24,51 @@ export async function GET() {
     }
 
     // Get pending chat requests received
-    const { data: pendingRequests } = await supabase
-      .from('chat_requests')
-      .select(`
-        id,
-        requester_id,
-        message,
-        created_at,
-        requester:requester_id (username, avatar_url)
-      `)
-      .eq('recipient_id', user.userId)
-      .eq('status', 'pending')
-      .order('created_at', { ascending: false });
+    const pendingRequests = await query(
+      `SELECT cr.id, cr.requester_id, cr.created_at, u.username, u.avatar_url
+       FROM chat_requests cr
+       LEFT JOIN users u ON cr.requester_id = u.id
+       WHERE cr.receiver_id = ? AND cr.status = 'pending'
+       ORDER BY cr.created_at DESC`,
+      [user.userId]
+    );
 
-    // Get accepted conversations (where chat request was accepted)
-    const { data: acceptedRequests } = await supabase
-      .from('chat_requests')
-      .select('requester_id, recipient_id')
-      .or(`requester_id.eq.${user.userId},recipient_id.eq.${user.userId}`)
-      .eq('status', 'accepted');
+    // Get accepted conversations
+    const acceptedRequests = await query(
+      `SELECT requester_id, receiver_id FROM chat_requests
+       WHERE (requester_id = ? OR receiver_id = ?) AND status = 'accepted'`,
+      [user.userId, user.userId]
+    );
 
     const acceptedPartners = new Set<string>();
-    acceptedRequests?.forEach(req => {
+    acceptedRequests.forEach((req: any) => {
       if (req.requester_id === user.userId) {
-        acceptedPartners.add(req.recipient_id);
+        acceptedPartners.add(req.receiver_id);
       } else {
         acceptedPartners.add(req.requester_id);
       }
     });
 
-    // Get all conversations where user is sender or receiver
-    const { data, error } = await supabase
-      .from('messages')
-      .select(`
-        id,
-        sender_id,
-        receiver_id,
-        content,
-        created_at,
-        read,
-        is_anonymous,
-        sender:sender_id (username, avatar_url),
-        receiver:receiver_id (username, avatar_url)
-      `)
-      .or(`sender_id.eq.${user.userId},receiver_id.eq.${user.userId}`)
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Fetch messages error:', error);
-      return NextResponse.json({ error: 'Failed to fetch messages' }, { status: 500 });
-    }
-
-    const messages = data as unknown as MessageRow[];
+    // Get all messages for this user
+    const messages = await query(
+      `SELECT m.*, 
+              s.username as sender_username, s.avatar_url as sender_avatar,
+              r.username as receiver_username, r.avatar_url as receiver_avatar
+       FROM messages m
+       LEFT JOIN users s ON m.sender_id = s.id
+       LEFT JOIN users r ON m.receiver_id = r.id
+       WHERE m.sender_id = ? OR m.receiver_id = ?
+       ORDER BY m.created_at DESC`,
+      [user.userId, user.userId]
+    );
 
     // Group messages by conversation partner
     const conversationsMap = new Map();
     
-    for (const msg of messages || []) {
+    for (const msg of messages as any[]) {
       const partnerId = msg.sender_id === user.userId ? msg.receiver_id : msg.sender_id;
-      const partner = msg.sender_id === user.userId ? msg.receiver : msg.sender;
+      const partnerUsername = msg.sender_id === user.userId ? msg.receiver_username : msg.sender_username;
+      const partnerAvatar = msg.sender_id === user.userId ? msg.receiver_avatar : msg.sender_avatar;
       
       // Only show conversations with accepted partners
       if (!acceptedPartners.has(partnerId)) continue;
@@ -102,8 +76,8 @@ export async function GET() {
       if (!conversationsMap.has(partnerId)) {
         conversationsMap.set(partnerId, {
           partnerId,
-          partnerUsername: partner?.username || 'Anonymous',
-          partnerAvatar: partner?.avatar_url,
+          partnerUsername: partnerUsername || 'Anonymous',
+          partnerAvatar,
           lastMessage: msg.content,
           lastMessageAt: msg.created_at,
           unreadCount: 0,
@@ -120,9 +94,17 @@ export async function GET() {
 
     const conversations = Array.from(conversationsMap.values());
 
+    // Format pending requests
+    const formattedRequests = pendingRequests.map((req: any) => ({
+      id: req.id,
+      requester_id: req.requester_id,
+      created_at: req.created_at,
+      requester: { username: req.username, avatar_url: req.avatar_url }
+    }));
+
     return NextResponse.json({ 
       conversations,
-      pendingRequests: pendingRequests || []
+      pendingRequests: formattedRequests
     });
   } catch (error) {
     console.error('Messages GET error:', error);
@@ -145,13 +127,12 @@ export async function POST(request: Request) {
     }
 
     // Find receiver by username
-    const { data: receiver, error: receiverError } = await supabase
-      .from('users')
-      .select('id')
-      .eq('username', receiverUsername)
-      .single();
+    const receiver = await queryOne<{ id: string }>(
+      'SELECT id FROM users WHERE username = ?',
+      [receiverUsername]
+    );
 
-    if (receiverError || !receiver) {
+    if (!receiver) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
@@ -159,41 +140,29 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Cannot message yourself' }, { status: 400 });
     }
 
-    // Check if there's an existing accepted chat request
-    const { data: existingRequest } = await supabase
-      .from('chat_requests')
-      .select('id, status')
-      .or(`and(requester_id.eq.${user.userId},recipient_id.eq.${receiver.id}),and(requester_id.eq.${receiver.id},recipient_id.eq.${user.userId})`)
-      .single();
+    // Check if there's an existing chat request
+    const existingRequest = await queryOne<{ id: string; status: string }>(
+      `SELECT id, status FROM chat_requests 
+       WHERE (requester_id = ? AND receiver_id = ?) OR (requester_id = ? AND receiver_id = ?)`,
+      [user.userId, receiver.id, receiver.id, user.userId]
+    );
 
     if (!existingRequest) {
       // No existing request - create a new chat request
-      const { error: requestError } = await supabase
-        .from('chat_requests')
-        .insert({
-          requester_id: user.userId,
-          recipient_id: receiver.id,
-          message: content.trim(),
-          status: 'pending'
-        });
-
-      if (requestError) {
-        // Check if it's a unique constraint violation (request already exists)
-        if (requestError.code === '23505') {
-          return NextResponse.json({ error: 'Chat request already sent' }, { status: 400 });
-        }
-        console.error('Create chat request error:', requestError);
-        return NextResponse.json({ error: 'Failed to send chat request' }, { status: 500 });
-      }
+      const requestId = generateId();
+      await execute(
+        `INSERT INTO chat_requests (id, requester_id, receiver_id, status)
+         VALUES (?, ?, ?, 'pending')`,
+        [requestId, user.userId, receiver.id]
+      );
 
       // Create notification for recipient
-      await supabase.from('notifications').insert({
-        user_id: receiver.id,
-        type: 'chat_request',
-        title: 'New Chat Request',
-        message: `${user.username} wants to connect with you`,
-        link: '/messages'
-      });
+      const notifId = generateId();
+      await execute(
+        `INSERT INTO notifications (id, user_id, type, title, message)
+         VALUES (?, ?, 'chat_request', 'New Chat Request', ?)`,
+        [notifId, receiver.id, `${user.username} wants to connect with you`]
+      );
 
       return NextResponse.json({
         ok: true,
@@ -217,26 +186,17 @@ export async function POST(request: Request) {
     }
 
     // Chat request is accepted - send the message
-    const { data: message, error: msgError } = await supabase
-      .from('messages')
-      .insert({
-        sender_id: user.userId,
-        receiver_id: receiver.id,
-        content: content.trim(),
-        is_anonymous: isAnonymous || false
-      })
-      .select()
-      .single();
-
-    if (msgError) {
-      console.error('Send message error:', msgError);
-      return NextResponse.json({ error: 'Failed to send message' }, { status: 500 });
-    }
+    const messageId = generateId();
+    await execute(
+      `INSERT INTO messages (id, sender_id, receiver_id, content, is_anonymous)
+       VALUES (?, ?, ?, ?, ?)`,
+      [messageId, user.userId, receiver.id, content.trim(), isAnonymous ? 1 : 0]
+    );
 
     return NextResponse.json({
       ok: true,
       type: 'message_sent',
-      message
+      message: { id: messageId, content: content.trim() }
     });
   } catch (error) {
     console.error('Messages POST error:', error);

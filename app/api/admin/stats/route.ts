@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { query, queryOne } from '@/lib/turso';
 import { cookies } from 'next/headers';
 
 async function getUserFromSession() {
@@ -15,7 +15,6 @@ async function getUserFromSession() {
   }
 }
 
-// Get admin stats
 export async function GET() {
   try {
     const user = await getUserFromSession();
@@ -23,87 +22,73 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // TODO: Add admin role check here
-    // For now, return stats for any logged-in user
+    // Get counts
+    const usersCount = await queryOne<{ count: number }>('SELECT COUNT(*) as count FROM users');
+    const postsCount = await queryOne<{ count: number }>('SELECT COUNT(*) as count FROM posts');
+    const commentsCount = await queryOne<{ count: number }>('SELECT COUNT(*) as count FROM comments');
+    const messagesCount = await queryOne<{ count: number }>('SELECT COUNT(*) as count FROM messages');
 
-    // Get total users
-    const { count: usersCount } = await supabase
-      .from('users')
-      .select('*', { count: 'exact', head: true });
+    const stats = {
+      users: usersCount?.count || 0,
+      posts: postsCount?.count || 0,
+      comments: commentsCount?.count || 0,
+      messages: messagesCount?.count || 0
+    };
 
-    // Get total posts
-    const { count: postsCount } = await supabase
-      .from('posts')
-      .select('*', { count: 'exact', head: true });
-
-    // Get total comments
-    const { count: commentsCount } = await supabase
-      .from('comments')
-      .select('*', { count: 'exact', head: true });
-
-    // Get total messages
-    const { count: messagesCount } = await supabase
-      .from('messages')
-      .select('*', { count: 'exact', head: true });
-
-    // Get recent posts for moderation
-    const { data: recentPosts } = await supabase
-      .from('posts')
-      .select(`
-        id,
-        content,
-        category,
-        created_at,
-        is_anonymous,
-        users:user_id (username)
-      `)
-      .order('created_at', { ascending: false })
-      .limit(10);
-
-    // Get posts by category
-    const { data: categoryData } = await supabase
-      .from('posts')
-      .select('category');
-
+    // Get category stats
+    const categoryData = await query(
+      `SELECT category, COUNT(*) as count FROM posts GROUP BY category`
+    );
     const categoryStats: Record<string, number> = {};
-    (categoryData || []).forEach((p: any) => {
-      const cat = p.category || 'Other';
-      categoryStats[cat] = (categoryStats[cat] || 0) + 1;
+    categoryData.forEach((row: any) => {
+      categoryStats[row.category] = row.count;
     });
 
+    // Get recent posts
+    const recentPosts = await query(
+      `SELECT p.*, u.username 
+       FROM posts p 
+       LEFT JOIN users u ON p.user_id = u.id 
+       ORDER BY p.created_at DESC 
+       LIMIT 10`
+    );
+
+    // Format posts with user info
+    const formattedPosts = recentPosts.map((p: any) => ({
+      ...p,
+      users: { username: p.username }
+    }));
+
     // Get flagged posts
-    const { data: flaggedPosts } = await supabase
-      .from('flagged_posts')
-      .select(`
-        id,
-        post_id,
-        reason,
-        status,
-        created_at,
-        posts:post_id (content, users:user_id (username)),
-        reporter:reporter_id (username)
-      `)
-      .order('created_at', { ascending: false })
-      .limit(20);
+    const flaggedPosts = await query(
+      `SELECT fp.*, p.content as post_content, u.username as reporter_username, pu.username as post_username
+       FROM flagged_posts fp
+       LEFT JOIN posts p ON fp.post_id = p.id
+       LEFT JOIN users u ON fp.reporter_id = u.id
+       LEFT JOIN users pu ON p.user_id = pu.id
+       ORDER BY fp.created_at DESC`
+    );
+
+    const formattedFlagged = flaggedPosts.map((f: any) => ({
+      ...f,
+      posts: { content: f.post_content, users: { username: f.post_username } },
+      reporter: { username: f.reporter_username }
+    }));
 
     // Get users list
-    const { data: users } = await supabase
-      .from('users')
-      .select('id, username, email, status, created_at')
-      .order('created_at', { ascending: false })
-      .limit(50);
+    const users = await query(
+      `SELECT id, username, email, status, created_at 
+       FROM users 
+       ORDER BY created_at DESC 
+       LIMIT 50`
+    );
 
     return NextResponse.json({
-      stats: {
-        users: usersCount || 0,
-        posts: postsCount || 0,
-        comments: commentsCount || 0,
-        messages: messagesCount || 0
-      },
+      stats,
       categoryStats,
-      recentPosts: recentPosts || [],
-      flaggedPosts: flaggedPosts || [],
-      users: users || []
+      recentPosts: formattedPosts,
+      flaggedPosts: formattedFlagged,
+      users
     });
   } catch (error) {
     console.error('Admin stats error:', error);

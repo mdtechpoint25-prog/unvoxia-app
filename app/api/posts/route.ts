@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { query, execute, generateId } from '@/lib/turso';
 import { cookies } from 'next/headers';
 
 async function getUserFromSession() {
@@ -23,39 +23,30 @@ export async function GET(request: Request) {
     const limit = parseInt(searchParams.get('limit') || '10');
     const offset = (page - 1) * limit;
 
-    let query = supabase
-      .from('posts')
-      .select(`
-        *,
-        users:user_id (username, avatar_url)
-      `)
-      .order('created_at', { ascending: false })
-      .range(offset, offset + limit - 1);
+    let sql = `
+      SELECT p.*, u.username, u.avatar_url
+      FROM posts p
+      LEFT JOIN users u ON p.user_id = u.id
+    `;
+    const args: any[] = [];
 
     if (category && category !== 'all') {
-      query = query.eq('category', category);
+      sql += ' WHERE p.category = ?';
+      args.push(category);
     }
 
-    const { data: posts, error } = await query;
+    sql += ' ORDER BY p.created_at DESC LIMIT ? OFFSET ?';
+    args.push(limit, offset);
 
-    if (error) {
-      console.error('Fetch posts error:', error);
-      return NextResponse.json({ error: 'Failed to fetch posts' }, { status: 500 });
-    }
+    const posts = await query(sql, args);
 
-    // Hide user info for anonymous posts
-    const processedPosts = (posts || []).map(post => {
-      if (post.is_anonymous) {
-        return {
-          ...post,
-          users: {
-            username: 'Anonymous',
-            avatar_url: null
-          }
-        };
-      }
-      return post;
-    });
+    // Process posts to include user info and handle anonymous
+    const processedPosts = posts.map((post: any) => ({
+      ...post,
+      users: post.is_anonymous
+        ? { username: 'Anonymous', avatar_url: null }
+        : { username: post.username, avatar_url: post.avatar_url }
+    }));
 
     return NextResponse.json({ posts: processedPosts });
   } catch (error) {
@@ -77,24 +68,23 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Content or media is required' }, { status: 400 });
     }
 
-    const { data: post, error } = await supabase
-      .from('posts')
-      .insert({
-        user_id: user.userId,
-        content: content.trim(),
+    const postId = generateId();
+
+    await execute(
+      `INSERT INTO posts (id, user_id, content, category, media_url, is_anonymous)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [postId, user.userId, content.trim(), category || 'Thoughts', media_url || null, is_anonymous ? 1 : 0]
+    );
+
+    return NextResponse.json({ 
+      ok: true, 
+      post: { 
+        id: postId, 
+        content: content.trim(), 
         category: category || 'Thoughts',
-        media_url: media_url || null,
-        is_anonymous: is_anonymous || false
-      })
-      .select()
-      .single();
-
-    if (error) {
-      console.error('Create post error:', error);
-      return NextResponse.json({ error: 'Failed to create post' }, { status: 500 });
-    }
-
-    return NextResponse.json({ ok: true, post });
+        is_anonymous 
+      } 
+    });
   } catch (error) {
     console.error('Posts POST error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

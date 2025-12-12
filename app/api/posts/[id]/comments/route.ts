@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { query, queryOne, execute, generateId } from '@/lib/turso';
 import { cookies } from 'next/headers';
 
 async function getUserFromSession() {
@@ -20,12 +20,10 @@ function buildCommentTree(comments: any[]) {
   const commentMap = new Map();
   const rootComments: any[] = [];
 
-  // First pass: create map of all comments
   comments.forEach(comment => {
     commentMap.set(comment.id, { ...comment, replies: [] });
   });
 
-  // Second pass: build tree structure
   comments.forEach(comment => {
     const node = commentMap.get(comment.id);
     if (comment.parent_id && commentMap.has(comment.parent_id)) {
@@ -47,26 +45,27 @@ export async function GET(
     const { searchParams } = new URL(request.url);
     const threaded = searchParams.get('threaded') === 'true';
 
-    const { data: comments, error } = await supabase
-      .from('comments')
-      .select(`
-        *,
-        users:user_id (username, avatar_url)
-      `)
-      .eq('post_id', id)
-      .order('created_at', { ascending: true });
+    const comments = await query(
+      `SELECT c.*, u.username, u.avatar_url
+       FROM comments c
+       LEFT JOIN users u ON c.user_id = u.id
+       WHERE c.post_id = ?
+       ORDER BY c.created_at ASC`,
+      [id]
+    );
 
-    if (error) {
-      return NextResponse.json({ error: 'Failed to fetch comments' }, { status: 500 });
-    }
+    // Format comments with user info
+    const formattedComments = comments.map((c: any) => ({
+      ...c,
+      users: { username: c.username, avatar_url: c.avatar_url }
+    }));
 
-    // Return threaded or flat based on query param
     if (threaded) {
-      const threadedComments = buildCommentTree(comments || []);
+      const threadedComments = buildCommentTree(formattedComments);
       return NextResponse.json({ comments: threadedComments });
     }
 
-    return NextResponse.json({ comments: comments || [] });
+    return NextResponse.json({ comments: formattedComments });
   } catch (error) {
     console.error('Get comments error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
@@ -92,51 +91,48 @@ export async function POST(
 
     // If parent_id provided, verify it exists and belongs to this post
     if (parent_id) {
-      const { data: parentComment } = await supabase
-        .from('comments')
-        .select('id, post_id')
-        .eq('id', parent_id)
-        .single();
+      const parentComment = await queryOne(
+        'SELECT id, post_id FROM comments WHERE id = ?',
+        [parent_id]
+      );
 
-      if (!parentComment || parentComment.post_id !== id) {
+      if (!parentComment || (parentComment as any).post_id !== id) {
         return NextResponse.json({ error: 'Invalid parent comment' }, { status: 400 });
       }
     }
 
-    const { data: comment, error } = await supabase
-      .from('comments')
-      .insert({
+    const commentId = generateId();
+
+    await execute(
+      `INSERT INTO comments (id, post_id, user_id, parent_id, content)
+       VALUES (?, ?, ?, ?, ?)`,
+      [commentId, id, user.userId, parent_id || null, content.trim()]
+    );
+
+    // Update comments count on post
+    await execute(
+      'UPDATE posts SET comments_count = comments_count + 1 WHERE id = ?',
+      [id]
+    );
+
+    // Get user info for response
+    const userData = await queryOne(
+      'SELECT username, avatar_url FROM users WHERE id = ?',
+      [user.userId]
+    );
+
+    return NextResponse.json({ 
+      ok: true, 
+      comment: {
+        id: commentId,
         post_id: id,
         user_id: user.userId,
         parent_id: parent_id || null,
-        content: content.trim()
-      })
-      .select(`
-        *,
-        users:user_id (username, avatar_url)
-      `)
-      .single();
-
-    if (error) {
-      console.error('Create comment error:', error);
-      return NextResponse.json({ error: 'Failed to create comment' }, { status: 500 });
-    }
-
-    // Update comments count on post
-    const { data: post } = await supabase
-      .from('posts')
-      .select('comments_count')
-      .eq('id', id)
-      .single();
-
-    if (post) {
-      await supabase
-        .from('posts')
-        .update({ comments_count: (post.comments_count || 0) + 1 } as any)
-        .eq('id', id);
-    }
-
-    return NextResponse.json({ ok: true, comment });
+        content: content.trim(),
+        created_at: new Date().toISOString(),
+        users: userData || { username: user.username, avatar_url: null }
+      }
+    });
   } catch (error) {
     console.error('Comments POST error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
