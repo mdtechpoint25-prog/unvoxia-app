@@ -1,12 +1,23 @@
 import nodemailer from 'nodemailer';
 
-// SMTP Configuration with better error handling
+// Email addresses configuration
+export const EMAIL_ADDRESSES = {
+  info: process.env.SMTP_EMAIL_INFO || 'info@nomaworld.co.ke',
+  support: process.env.SMTP_EMAIL_SUPPORT || 'support@nomaworld.co.ke',
+  noreply: process.env.SMTP_EMAIL_NOREPLY || 'noreply@nomaworld.co.ke',
+  default: process.env.SMTP_DEFAULT_SENDER || process.env.SMTP_EMAIL_INFO || 'info@nomaworld.co.ke'
+};
+
+// Email sender types
+export type EmailSender = 'info' | 'support' | 'noreply';
+
+// SMTP Configuration - all emails share the same server and password
 const smtpConfig = {
   host: process.env.SMTP_HOST || 'mail.nomaworld.co.ke',
   port: parseInt(process.env.SMTP_PORT || '587'),
   secure: process.env.SMTP_PORT === '465', // true for 465, false for other ports
   auth: {
-    user: process.env.SMTP_USER || 'info@nomaworld.co.ke',
+    user: EMAIL_ADDRESSES.default, // Use default email for authentication
     pass: process.env.SMTP_PASS
   },
   tls: {
@@ -16,6 +27,29 @@ const smtpConfig = {
 
 // Create transporter
 const transporter = nodemailer.createTransport(smtpConfig);
+
+// Helper to create transporter with specific sender
+function createTransporterWithSender(senderEmail: string) {
+  return nodemailer.createTransport({
+    ...smtpConfig,
+    auth: {
+      user: senderEmail,
+      pass: process.env.SMTP_PASS
+    }
+  });
+}
+
+// Get sender email by type
+function getSenderEmail(sender: EmailSender): string {
+  return EMAIL_ADDRESSES[sender] || EMAIL_ADDRESSES.default;
+}
+
+// Get formatted "From" header
+function getFromHeader(sender: EmailSender, name?: string): string {
+  const email = getSenderEmail(sender);
+  const displayName = name || 'NOMA - No Mask World';
+  return `"${displayName}" <${email}>`;
+}
 
 // Verify connection on startup (optional, for debugging)
 export async function verifyEmailConnection(): Promise<boolean> {
@@ -29,22 +63,65 @@ export async function verifyEmailConnection(): Promise<boolean> {
   }
 }
 
-export async function sendVerificationEmail(to: string, code: string): Promise<void> {
-  // Check if SMTP password is configured
-  if (!process.env.SMTP_PASS || process.env.SMTP_PASS === 'your-email-password-here') {
-    console.warn('?? SMTP_PASS not configured. Email not sent. OTP code:', code);
-    // In development, just log the code instead of failing
+// Check if email is configured
+function isEmailConfigured(): boolean {
+  return !!(process.env.SMTP_PASS && process.env.SMTP_PASS !== 'your-shared-email-password-here');
+}
+
+// Send email with specified sender
+async function sendEmail(options: {
+  to: string;
+  subject: string;
+  html: string;
+  sender?: EmailSender;
+  senderName?: string;
+}): Promise<void> {
+  const { to, subject, html, sender = 'info', senderName } = options;
+
+  if (!isEmailConfigured()) {
+    console.warn('?? SMTP_PASS not configured. Email not sent.');
     if (process.env.NODE_ENV === 'development') {
-      console.log(`?? [DEV] Verification code for ${to}: ${code}`);
+      console.log(`?? [DEV] Would send email to ${to} from ${getSenderEmail(sender)}`);
+      console.log(`?? [DEV] Subject: ${subject}`);
       return;
     }
     throw new Error('Email service not configured');
   }
 
+  const senderEmail = getSenderEmail(sender);
+  const emailTransporter = createTransporterWithSender(senderEmail);
+
   const mailOptions = {
-    from: `"NOMA - No Mask World" <${process.env.SMTP_USER || 'info@nomaworld.co.ke'}>`,
+    from: getFromHeader(sender, senderName),
+    to,
+    subject,
+    html
+  };
+
+  try {
+    const info = await emailTransporter.sendMail(mailOptions);
+    console.log(`? Email sent from ${senderEmail}:`, info.messageId);
+  } catch (error: any) {
+    console.error(`? Failed to send email from ${senderEmail}:`, error.message);
+    throw new Error(`Failed to send email: ${error.message}`);
+  }
+}
+
+// ============================================
+// EMAIL TEMPLATES
+// ============================================
+
+export async function sendVerificationEmail(to: string, code: string): Promise<void> {
+  if (!isEmailConfigured() && process.env.NODE_ENV === 'development') {
+    console.log(`?? [DEV] Verification code for ${to}: ${code}`);
+    return;
+  }
+
+  await sendEmail({
     to,
     subject: 'Verify your NOMA account',
+    sender: 'noreply',
+    senderName: 'NOMA Verification',
     html: `
       <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;">
         <div style="background: linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%); padding: 2rem; text-align: center;">
@@ -73,32 +150,20 @@ export async function sendVerificationEmail(to: string, code: string): Promise<v
         </div>
       </div>
     `
-  };
-
-  try {
-    const info = await transporter.sendMail(mailOptions);
-    console.log('? Verification email sent:', info.messageId);
-  } catch (error: any) {
-    console.error('? Failed to send verification email:', error.message);
-    throw new Error(`Failed to send verification email: ${error.message}`);
-  }
+  });
 }
 
 export async function sendPasswordResetEmail(to: string, resetLink: string): Promise<void> {
-  // Check if SMTP password is configured
-  if (!process.env.SMTP_PASS || process.env.SMTP_PASS === 'your-email-password-here') {
-    console.warn('?? SMTP_PASS not configured. Password reset email not sent.');
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`?? [DEV] Password reset link for ${to}: ${resetLink}`);
-      return;
-    }
-    throw new Error('Email service not configured');
+  if (!isEmailConfigured() && process.env.NODE_ENV === 'development') {
+    console.log(`?? [DEV] Password reset link for ${to}: ${resetLink}`);
+    return;
   }
 
-  const mailOptions = {
-    from: `"NOMA - No Mask World" <${process.env.SMTP_USER || 'info@nomaworld.co.ke'}>`,
+  await sendEmail({
     to,
     subject: 'Reset your NOMA password',
+    sender: 'noreply',
+    senderName: 'NOMA Security',
     html: `
       <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;">
         <div style="background: linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%); padding: 2rem; text-align: center;">
@@ -129,32 +194,20 @@ export async function sendPasswordResetEmail(to: string, resetLink: string): Pro
         </div>
       </div>
     `
-  };
-
-  try {
-    const info = await transporter.sendMail(mailOptions);
-    console.log('? Password reset email sent:', info.messageId);
-  } catch (error: any) {
-    console.error('? Failed to send password reset email:', error.message);
-    throw new Error(`Failed to send password reset email: ${error.message}`);
-  }
+  });
 }
 
 export async function sendOTPEmail(to: string, code: string): Promise<void> {
-  // Check if SMTP password is configured
-  if (!process.env.SMTP_PASS || process.env.SMTP_PASS === 'your-email-password-here') {
-    console.warn('?? SMTP_PASS not configured. OTP email not sent.');
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`?? [DEV] OTP code for ${to}: ${code}`);
-      return;
-    }
-    throw new Error('Email service not configured');
+  if (!isEmailConfigured() && process.env.NODE_ENV === 'development') {
+    console.log(`?? [DEV] OTP code for ${to}: ${code}`);
+    return;
   }
 
-  const mailOptions = {
-    from: `"NOMA - No Mask World" <${process.env.SMTP_USER || 'info@nomaworld.co.ke'}>`,
+  await sendEmail({
     to,
     subject: 'Your NOMA Login Code',
+    sender: 'noreply',
+    senderName: 'NOMA Security',
     html: `
       <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;">
         <div style="background: linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%); padding: 2rem; text-align: center;">
@@ -183,18 +236,104 @@ export async function sendOTPEmail(to: string, code: string): Promise<void> {
         </div>
       </div>
     `
-  };
+  });
+}
 
-  try {
-    const info = await transporter.sendMail(mailOptions);
-    console.log('? OTP email sent:', info.messageId);
-  } catch (error: any) {
-    console.error('? Failed to send OTP email:', error.message);
-    throw new Error(`Failed to send OTP email: ${error.message}`);
+export async function sendWelcomeEmail(to: string, username: string): Promise<void> {
+  if (!isEmailConfigured() && process.env.NODE_ENV === 'development') {
+    console.log(`?? [DEV] Welcome email for ${to}`);
+    return;
   }
+
+  await sendEmail({
+    to,
+    subject: 'Welcome to NOMA! ??',
+    sender: 'info',
+    senderName: 'NOMA Team',
+    html: `
+      <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;">
+        <div style="background: linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%); padding: 2rem; text-align: center;">
+          <div style="display: inline-block; width: 60px; height: 60px; background: #fff; border-radius: 16px; line-height: 60px; color: #1ABC9C; font-size: 1.75rem; font-weight: bold;">N</div>
+          <h1 style="color: #fff; margin: 1rem 0 0; font-weight: 600;">Welcome to NOMA!</h1>
+        </div>
+        <div style="padding: 2rem;">
+          <p style="color: #4a5568; font-size: 1.1rem; line-height: 1.6;">
+            Hey <strong>@${username}</strong>! ??
+          </p>
+          <p style="color: #4a5568; font-size: 1rem; line-height: 1.6;">
+            Welcome to <strong>No Mask World</strong> - a place where real stories meet real connections. 
+            We're excited to have you join our community!
+          </p>
+          <div style="background: #f8f9fa; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0;">
+            <h3 style="color: #1a1a2e; margin: 0 0 1rem;">Here's what you can do:</h3>
+            <ul style="color: #4a5568; margin: 0; padding-left: 1.5rem; line-height: 2;">
+              <li>Share your authentic thoughts and stories</li>
+              <li>Connect with like-minded people</li>
+              <li>Respond to daily prompts</li>
+              <li>Join supportive conversations</li>
+            </ul>
+          </div>
+          <div style="text-align: center; margin: 2rem 0;">
+            <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://nomaworld.co.ke'}/feed" style="display: inline-block; background: linear-gradient(135deg, #1ABC9C 0%, #16a085 100%); color: #fff; padding: 1rem 2.5rem; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 1rem;">
+              Start Exploring
+            </a>
+          </div>
+        </div>
+        <div style="background: #f8f9fa; padding: 1.5rem; text-align: center; border-top: 1px solid #e5e7eb;">
+          <p style="color: #9ca3af; font-size: 0.8rem; margin: 0;">
+            Questions? Reply to this email or contact us at support@nomaworld.co.ke<br /><br />
+            NOMA - No Mask World | Real Stories. Real Connections.<br />
+            <a href="https://nomaworld.co.ke" style="color: #1ABC9C; text-decoration: none;">nomaworld.co.ke</a>
+          </p>
+        </div>
+      </div>
+    `
+  });
+}
+
+export async function sendSupportEmail(to: string, subject: string, message: string): Promise<void> {
+  if (!isEmailConfigured() && process.env.NODE_ENV === 'development') {
+    console.log(`?? [DEV] Support email to ${to}: ${subject}`);
+    return;
+  }
+
+  await sendEmail({
+    to,
+    subject,
+    sender: 'support',
+    senderName: 'NOMA Support',
+    html: `
+      <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;">
+        <div style="background: linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%); padding: 2rem; text-align: center;">
+          <div style="display: inline-block; width: 60px; height: 60px; background: #fff; border-radius: 16px; line-height: 60px; color: #1ABC9C; font-size: 1.75rem; font-weight: bold;">N</div>
+          <h1 style="color: #fff; margin: 1rem 0 0; font-weight: 600;">NOMA Support</h1>
+        </div>
+        <div style="padding: 2rem;">
+          ${message}
+        </div>
+        <div style="background: #f8f9fa; padding: 1.5rem; text-align: center; border-top: 1px solid #e5e7eb;">
+          <p style="color: #9ca3af; font-size: 0.8rem; margin: 0;">
+            Need more help? Reply to this email.<br /><br />
+            NOMA - No Mask World | Real Stories. Real Connections.<br />
+            <a href="https://nomaworld.co.ke" style="color: #1ABC9C; text-decoration: none;">nomaworld.co.ke</a>
+          </p>
+        </div>
+      </div>
+    `
+  });
 }
 
 export function generateOTP(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+// Export email configuration for testing
+export function getEmailConfig() {
+  return {
+    host: smtpConfig.host,
+    port: smtpConfig.port,
+    emails: EMAIL_ADDRESSES,
+    configured: isEmailConfigured()
+  };
 }
 
