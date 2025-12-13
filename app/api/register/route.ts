@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { query, queryOne, execute, generateId } from '@/lib/turso';
+import { queryOne, execute, generateId } from '@/lib/turso';
 import { sendVerificationEmail, generateOTP } from '@/lib/email';
 import bcrypt from 'bcryptjs';
 
@@ -60,17 +60,29 @@ export async function POST(request: Request) {
     );
 
     // Send verification email
+    let emailSent = false;
+    let emailError = null;
+    
     try {
       await sendVerificationEmail(email, otp);
-    } catch (emailError) {
-      console.error('Email error:', emailError);
-      // Continue even if email fails - user can request resend
+      emailSent = true;
+    } catch (err: any) {
+      console.error('Email sending error:', err.message);
+      emailError = err.message;
+      // Don't fail registration if email fails
     }
 
+    // Return response with email status
     return NextResponse.json({ 
       ok: true, 
-      message: 'Account created! Please check your email for verification code.',
-      userId
+      message: emailSent 
+        ? 'Account created! Please check your email for verification code.'
+        : 'Account created! Email service is temporarily unavailable. Please use the code below to verify.',
+      userId,
+      emailSent,
+      // In development, return the OTP for testing
+      ...(process.env.NODE_ENV === 'development' && { devOtp: otp }),
+      ...(emailError && { emailError })
     });
   } catch (error: any) {
     console.error('Registration error:', error);
