@@ -1,8 +1,17 @@
 import { SITE } from '@/lib/constants';
 
+export const metadata = {
+  title: 'About NOMA – Our Mission & Values | Anonymous Emotional Support',
+  description: 'Learn about NOMA\'s mission to provide safe, anonymous emotional support. We believe healing begins when you can speak without fear.',
+  openGraph: {
+    title: 'About NOMA – Speaking Without Fear',
+    description: 'NOMA is building a world where emotional honesty is safe, supported, and anonymous.',
+  },
+};
+
 export default function AboutPage() {
   return (
-    <main style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem' }}>
+    <main style={{ maxWidth: '800px', margin: '0 auto', padding: '6rem 1.5rem 3rem' }}>
       <h1 style={{ color: '#2C3E50', fontSize: '2.5rem', marginBottom: '1rem' }}>
         About {SITE.name} ({SITE.shortName})
       </h1>
@@ -72,6 +81,32 @@ export default function AboutPage() {
           Here, you'll find a compassionate community ready to listen, support, and uplift. Whether you need to vent, 
           seek guidance, find motivation, or simply be heard, NOMA offers the safe space and emotional support you deserve. 
           Healing begins when we stop hiding.
+        </p>
+      </section>
+
+      <section style={{
+        background: '#fff3cd',
+        border: '2px solid #ffc107',
+        borderRadius: '16px',
+        padding: '1.5rem',
+        marginBottom: '2rem'
+      }}>
+        <h2 style={{
+          fontSize: '1.25rem',
+          fontWeight: 700,
+          color: '#856404',
+          marginBottom: '0.75rem'
+        }}>
+          ⚠️ Important Disclaimer
+        </h2>
+        <p style={{
+          fontSize: '1rem',
+          color: '#856404',
+          lineHeight: 1.8
+        }}>
+          <strong>NOMA provides emotional support and peer connection. 
+          It does not replace professional medical or mental health services.</strong>
+          {' '}If you are in crisis, please contact a professional helpline immediately.
         </p>
       </section>
 

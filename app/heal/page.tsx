@@ -70,11 +70,28 @@ export default function HealPage() {
             fontSize: '1.125rem',
             color: '#7a8a9a',
             maxWidth: '600px',
-            margin: '0 auto',
+            margin: '0 auto 1rem',
             lineHeight: 1.6
           }}>
             Anonymous voices finding support and compassion. You are not alone.
           </p>
+
+          {/* Disclaimer */}
+          <div style={{
+            background: '#fff3cd',
+            border: '1px solid #ffc107',
+            borderRadius: '12px',
+            padding: '1rem',
+            marginTop: '1.5rem',
+            fontSize: '0.875rem',
+            color: '#856404',
+            lineHeight: 1.6,
+            maxWidth: '600px',
+            margin: '1.5rem auto 0'
+          }}>
+            <strong>Disclaimer:</strong> NOMA provides emotional support and peer connection. 
+            It does not replace professional medical or mental health services.
+          </div>
         </div>
 
         {/* Filter Buttons */}

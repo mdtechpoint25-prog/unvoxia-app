@@ -13,11 +13,23 @@ type Post = {
   comments_count: number;
 };
 
+// Metadata will be generated dynamically via page title updates
 export default function CirclePage() {
   const params = useParams();
   const router = useRouter();
   const circleId = params?.circleId as string;
   const circle = getCircleById(circleId);
+
+  // Update page title for SEO
+  useEffect(() => {
+    if (circle) {
+      document.title = `${circle.name} – Anonymous Support Circle | NOMA`;
+      const metaDescription = document.querySelector('meta[name="description"]');
+      if (metaDescription) {
+        metaDescription.setAttribute('content', `Join the ${circle.name} healing circle. Share experiences and find anonymous support. ${circle.description}`);
+      }
+    }
+  }, [circle]);
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);

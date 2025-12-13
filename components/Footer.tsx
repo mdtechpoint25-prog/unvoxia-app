@@ -6,18 +6,18 @@ import { SITE, CONTACT } from '@/lib/constants';
 
 const footerLinks = {
   platform: [
-    { href: '/feed', label: 'Feed' },
-    { href: '/reels', label: 'Reels' },
-    { href: '/daily-prompts', label: 'Daily Prompts' },
-    { href: '/messages', label: 'Messages' },
-    { href: '/notifications', label: 'Notifications' },
+    { href: '/share', label: 'Share Your Feelings' },
+    { href: '/circles', label: 'Healing Circles' },
+    { href: '/heal', label: 'Stories of Healing' },
+    { href: '/journal', label: 'Private Journal' },
+    { href: '/stories', label: 'Community Stories' },
   ],
   company: [
-    { href: '/about', label: 'About Us' },
-    { href: '/billing', label: 'Pricing' },
+    { href: '/about', label: 'About NOMA' },
+    { href: '/safety', label: 'Safety & Support' },
+    { href: '/faq', label: 'FAQ' },
     { href: '/contact', label: 'Contact' },
     { href: '/privacy', label: 'Privacy Policy' },
-    { href: '/terms', label: 'Terms of Service' },
   ],
 };
 

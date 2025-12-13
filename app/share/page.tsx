@@ -72,12 +72,28 @@ export default function SharePage() {
         <p style={{
           fontSize: '1rem',
           color: '#7a8a9a',
-          marginBottom: '2rem',
+          marginBottom: '1rem',
           textAlign: 'center',
           lineHeight: 1.6
         }}>
           Type what's weighing on your heart… no name, no judgment.
         </p>
+
+        {/* Safety Disclaimer */}
+        <div style={{
+          background: '#fff3cd',
+          border: '1px solid #ffc107',
+          borderRadius: '12px',
+          padding: '1rem',
+          marginBottom: '2rem',
+          fontSize: '0.875rem',
+          color: '#856404',
+          lineHeight: 1.6
+        }}>
+          <strong>⚠️ Safety Notice:</strong> NOMA provides emotional support, not crisis intervention. 
+          If you're experiencing thoughts of self-harm, please contact a crisis helpline immediately. 
+          Kenya: 0722 178 177 (Befrienders)
+        </div>
 
         {/* Mood Selector */}
         <div style={{ marginBottom: '1.5rem' }}>

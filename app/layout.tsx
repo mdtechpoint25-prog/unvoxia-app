@@ -4,10 +4,10 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
-  title: 'No Mask World (NOMA) - Real Work. Real Results.',
-  description: 'A modern digital productivity platform that helps you work smarter, collaborate faster, and manage tasks effortlessly. Real Work. Real Results. No Mask.',
+  title: 'NOMA – Speak Without Fear | Anonymous Emotional Support',
+  description: 'NOMA is a safe, anonymous space to share feelings, release pain, and find emotional support without judgment. Healing circles for love, mental health, trauma & more.',
   metadataBase: new URL('https://nomaworld.co.ke'),
-  keywords: ['productivity', 'collaboration', 'project management', 'messaging', 'NOMA', 'No Mask World'],
+  keywords: ['anonymous mental health support', 'share feelings anonymously', 'safe space to express emotions', 'anonymous emotional support', 'speak without fear', 'anonymous community for healing', 'mental health safe space', 'depression support anonymous', 'anxiety help without judgement', 'trauma anonymous sharing', 'emotional support Kenya'],
   manifest: '/manifest.json',
   icons: {
     icon: [
@@ -18,16 +18,16 @@ export const metadata: Metadata = {
     shortcut: '/favicon.svg'
   },
   openGraph: {
-    title: 'No Mask World (NOMA)',
-    description: 'Work smarter with NOMA - your clean, simple, and powerful productivity hub.',
-    siteName: 'No Mask World',
+    title: 'NOMA – Speak Without Fear | Anonymous Emotional Support',
+    description: 'A safe, anonymous space to share feelings and find emotional support without judgment. You are not alone.',
+    siteName: 'NOMA',
     type: 'website',
     images: [{ url: '/images/og-image.svg', width: 1200, height: 400 }]
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'No Mask World (NOMA)',
-    description: 'A modern digital productivity platform - Real Work. Real Results.',
+    title: 'NOMA – Speak Without Fear',
+    description: 'Anonymous emotional support and healing circles. Share your feelings without fear or judgment.',
     images: ['/images/og-image.svg']
   }
 };
@@ -46,8 +46,38 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
-      </head>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />        
+        {/* Structured Data for SEO */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'NOMA',
+              alternateName: 'No Mask World',
+              url: 'https://nomaworld.co.ke',
+              description: 'NOMA is a safe, anonymous space to share feelings, release pain, and find emotional support without judgment.',
+              contactPoint: {
+                '@type': 'ContactPoint',
+                contactType: 'Customer Support',
+                email: 'support@nomaworld.co.ke',
+              },
+            })
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: 'NOMA',
+              url: 'https://nomaworld.co.ke',
+              description: 'Anonymous emotional support platform for healing and connection',
+            })
+          }}
+        />      </head>
       <body>
         <Header />
         {children}
