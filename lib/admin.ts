@@ -5,7 +5,8 @@ import { queryOne } from '@/lib/turso';
 export const ADMIN_EMAILS = [
   'admin@nomaworld.co.ke',
   'info@nomaworld.co.ke',
-  'support@nomaworld.co.ke'
+  'support@nomaworld.co.ke',
+  'maxwellotieno11@gmail.com'
 ];
 
 export interface AdminUser {
