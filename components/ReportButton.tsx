@@ -7,6 +7,21 @@ interface ReportButtonProps {
   postId: string;
 }
 
+// SVG Icons
+const FlagIcon = ({ size = 16 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
+    <line x1="4" y1="22" x2="4" y2="15" />
+  </svg>
+);
+
+const CheckIcon = () => (
+  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1ABC9C" strokeWidth="2">
+    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+    <polyline points="22 4 12 14.01 9 11.01" />
+  </svg>
+);
+
 export default function ReportButton({ postId }: ReportButtonProps) {
   const [showModal, setShowModal] = useState(false);
   const [selectedReason, setSelectedReason] = useState('');
@@ -55,15 +70,16 @@ export default function ReportButton({ postId }: ReportButtonProps) {
           color: '#9ca3af',
           cursor: 'pointer',
           fontSize: '0.85rem',
-          padding: '0.25rem 0.5rem',
+          padding: '0.5rem 0.75rem',
           borderRadius: '4px',
           display: 'flex',
           alignItems: 'center',
-          gap: '0.25rem'
+          gap: '0.5rem'
         }}
         title="Report this post"
       >
-        <span>Flag</span>
+        <FlagIcon size={14} />
+        <span>Report</span>
       </button>
 
       {showModal && (
@@ -90,7 +106,9 @@ export default function ReportButton({ postId }: ReportButtonProps) {
           }}>
             {success ? (
               <div style={{ textAlign: 'center', padding: '1rem' }}>
-                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>Check</div>
+                <div style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'center' }}>
+                  <CheckIcon />
+                </div>
                 <h3 style={{ color: '#1a1a2e', marginBottom: '0.5rem' }}>Report Submitted</h3>
                 <p style={{ color: '#6b7280' }}>Thank you for helping keep our community safe.</p>
               </div>

@@ -30,6 +30,22 @@ interface Comment {
   };
 }
 
+// SVG Icons
+const UserIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+);
+
+const MoreIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <circle cx="12" cy="12" r="1" />
+    <circle cx="19" cy="12" r="1" />
+    <circle cx="5" cy="12" r="1" />
+  </svg>
+);
+
 export default function PostCard({
   id,
   username,
@@ -50,7 +66,7 @@ export default function PostCard({
   const [showMenu, setShowMenu] = useState(false);
 
   const displayName = isAnonymous ? 'Anonymous' : username;
-  const displayAvatar = isAnonymous ? '?' : (avatar || username.charAt(0).toUpperCase());
+  const displayAvatar = isAnonymous ? null : (avatar || username.charAt(0).toUpperCase());
 
   const formatTime = (dateString: string) => {
     const date = new Date(dateString);
@@ -118,7 +134,7 @@ export default function PostCard({
             fontWeight: 600,
             fontSize: '1rem'
           }}>
-            {displayAvatar}
+            {isAnonymous ? <UserIcon /> : displayAvatar}
           </span>
           <div>
             <strong style={{ color: '#1a1a2e' }}>
@@ -144,7 +160,7 @@ export default function PostCard({
                 fontSize: '1.25rem'
               }}
             >
-              ...
+              <MoreIcon />
             </button>
             {showMenu && (
               <div style={{

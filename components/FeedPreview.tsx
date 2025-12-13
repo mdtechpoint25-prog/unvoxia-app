@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import PostCard from "./PostCard";
 
 interface PreviewPost {
   id: string;
@@ -67,6 +66,25 @@ const getCategoryColor = (category: string) => {
   };
   return colors[category] || "#1ABC9C";
 };
+
+// SVG Icons
+const HeartIcon = ({ filled = false, size = 16 }: { filled?: boolean; size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={filled ? "#e74c3c" : "none"} stroke="#e74c3c" strokeWidth="2">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+  </svg>
+);
+
+const ChatIcon = ({ size = 16 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+  </svg>
+);
+
+const ArrowIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M5 12h14M12 5l7 7-7 7" />
+  </svg>
+);
 
 export default function FeedPreview() {
   return (
@@ -160,28 +178,8 @@ export default function FeedPreview() {
                 transition:
                   "transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease",
                 cursor: "pointer",
-                position: "relative",
               }}
             >
-              {/* Post Badge */}
-              <span
-                style={{
-                  position: "absolute",
-                  top: "1rem",
-                  right: "1rem",
-                  background: `${getCategoryColor(post.category)}15`,
-                  color: getCategoryColor(post.category),
-                  padding: "0.25rem 0.75rem",
-                  borderRadius: "12px",
-                  fontSize: "0.7rem",
-                  fontWeight: 600,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.5px",
-                }}
-              >
-                {post.category}
-              </span>
-
               {/* Post Header */}
               <div
                 style={{
@@ -251,28 +249,24 @@ export default function FeedPreview() {
                   borderTop: "1px solid #f3f4f6",
                 }}
               >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.35rem",
-                    color: "#6b7280",
-                    fontSize: "0.85rem",
-                  }}
-                >
-                  <span style={{ color: "#e74c3c" }}>Heart</span>
+                <div style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '0.35rem',
+                  color: '#6b7280',
+                  fontSize: '0.85rem'
+                }}>
+                  <HeartIcon filled size={16} />
                   <span>{post.reactions}</span>
                 </div>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.35rem",
-                    color: "#6b7280",
-                    fontSize: "0.85rem",
-                  }}
-                >
-                  <span>Chat</span>
+                <div style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '0.35rem',
+                  color: '#6b7280',
+                  fontSize: '0.85rem'
+                }}>
+                  <ChatIcon size={16} />
                   <span>{post.comments}</span>
                 </div>
               </div>
@@ -301,7 +295,7 @@ export default function FeedPreview() {
             }}
           >
             View Full Feed
-            <span>-&gt;</span>
+            <ArrowIcon />
           </Link>
           <p
             style={{

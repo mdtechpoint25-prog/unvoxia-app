@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 
 interface ReelCardProps {
   id: string;
@@ -14,6 +14,42 @@ interface ReelCardProps {
   isLiked?: boolean;
   isActive?: boolean;
 }
+
+// SVG Icons
+const HeartIcon = ({ filled = false }: { filled?: boolean }) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill={filled ? "#fff" : "none"} stroke="#fff" strokeWidth="2">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+  </svg>
+);
+
+const ChatIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+  </svg>
+);
+
+const ShareIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
+    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+    <polyline points="16 6 12 2 8 6" />
+    <line x1="12" y1="2" x2="12" y2="15" />
+  </svg>
+);
+
+const MusicIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M9 18V5l12-2v13" />
+    <circle cx="6" cy="18" r="3" />
+    <circle cx="18" cy="16" r="3" />
+  </svg>
+);
+
+const CloseIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <line x1="18" y1="6" x2="6" y2="18" />
+    <line x1="6" y1="6" x2="18" y2="18" />
+  </svg>
+);
 
 export default function ReelCard({
   id,
@@ -30,7 +66,6 @@ export default function ReelCard({
   const [liked, setLiked] = useState(isLiked);
   const [likeCount, setLikeCount] = useState(likes);
   const [showComments, setShowComments] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
 
   const handleLike = async () => {
     setLiked(!liked);
@@ -50,7 +85,6 @@ export default function ReelCard({
 
   return (
     <div
-      ref={cardRef}
       style={{
         position: 'relative',
         width: '100%',
@@ -134,7 +168,7 @@ export default function ReelCard({
             transition: 'all 0.3s ease',
             transform: liked ? 'scale(1.1)' : 'scale(1)'
           }}>
-            <span style={{ fontSize: '1.25rem' }}>{liked ? 'Heart' : 'Heart-O'}</span>
+            <HeartIcon filled={liked} />
           </div>
           <span style={{ color: '#fff', fontSize: '0.75rem', fontWeight: 500 }}>
             {likeCount}
@@ -164,7 +198,7 @@ export default function ReelCard({
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            <span style={{ fontSize: '1.25rem' }}>Chat</span>
+            <ChatIcon />
           </div>
           <span style={{ color: '#fff', fontSize: '0.75rem', fontWeight: 500 }}>
             {comments}
@@ -193,7 +227,7 @@ export default function ReelCard({
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            <span style={{ fontSize: '1.25rem' }}>Share</span>
+            <ShareIcon />
           </div>
           <span style={{ color: '#fff', fontSize: '0.75rem', fontWeight: 500 }}>
             {shares}
@@ -251,7 +285,7 @@ export default function ReelCard({
             color: 'rgba(255,255,255,0.8)',
             fontSize: '0.85rem'
           }}>
-            <span>Music</span>
+            <MusicIcon />
             <span style={{
               overflow: 'hidden',
               textOverflow: 'ellipsis',
@@ -292,12 +326,12 @@ export default function ReelCard({
               style={{
                 background: 'none',
                 border: 'none',
-                fontSize: '1.5rem',
                 cursor: 'pointer',
-                color: '#6b7280'
+                color: '#6b7280',
+                padding: '0.25rem'
               }}
             >
-              X
+              <CloseIcon />
             </button>
           </div>
           <div style={{ padding: '1rem', color: '#6b7280', textAlign: 'center' }}>

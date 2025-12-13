@@ -20,6 +20,21 @@ interface CommentSectionProps {
   onCommentAdded?: (comment: Comment) => void;
 }
 
+// SVG Icons
+const UserIcon = ({ size = 12 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+);
+
+const SendIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <line x1="22" y1="2" x2="11" y2="13" />
+    <polygon points="22 2 15 22 11 13 2 9 22 2" />
+  </svg>
+);
+
 // Recursive comment component for threading
 function CommentItem({ 
   comment, 
@@ -47,7 +62,8 @@ function CommentItem({
     setLoading(false);
   };
 
-  const maxDepth = 3; // Limit nesting depth
+  const maxDepth = 3;
+  const hasUsername = comment.users?.username;
 
   return (
     <div style={{ 
@@ -70,7 +86,7 @@ function CommentItem({
           fontWeight: 600,
           flexShrink: 0
         }}>
-          {comment.users?.username?.charAt(0).toUpperCase() || '?'}
+          {hasUsername ? comment.users.username.charAt(0).toUpperCase() : <UserIcon size={14} />}
         </span>
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: '0.85rem' }}>
@@ -124,10 +140,13 @@ function CommentItem({
                   border: 'none',
                   borderRadius: '8px',
                   cursor: 'pointer',
-                  fontSize: '0.85rem'
+                  fontSize: '0.85rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.25rem'
                 }}
               >
-                {loading ? '...' : 'Reply'}
+                {loading ? '...' : <><SendIcon /> Reply</>}
               </button>
             </div>
           )}
@@ -198,7 +217,6 @@ export default function CommentSection({ postId, comments, onCommentAdded }: Com
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
 
-      // Add reply to local state (flat, will show on refresh)
       setLocalComments([...localComments, data.comment]);
       onCommentAdded?.(data.comment);
     } catch (err: any) {
@@ -206,7 +224,6 @@ export default function CommentSection({ postId, comments, onCommentAdded }: Com
     }
   };
 
-  // Simple flat display for now (threaded requires fetching with ?threaded=true)
   const displayComments = showAll ? localComments : localComments.slice(0, 5);
 
   const formatTime = (dateString: string) => {
@@ -274,10 +291,13 @@ export default function CommentSection({ postId, comments, onCommentAdded }: Com
             borderRadius: '10px',
             cursor: (loading || !content.trim()) ? 'not-allowed' : 'pointer',
             fontSize: '0.9rem',
-            fontWeight: 600
+            fontWeight: 600,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem'
           }}
         >
-          {loading ? '...' : 'Send'}
+          {loading ? '...' : <><SendIcon /> Send</>}
         </button>
       </form>
       {error && <p style={{ color: '#dc2626', fontSize: '0.8rem', marginTop: '0.5rem' }}>{error}</p>}
