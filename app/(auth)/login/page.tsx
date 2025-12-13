@@ -62,7 +62,7 @@ export default function LoginPage() {
             maxWidth: '400px',
             lineHeight: 1.7
           }}>
-            Sign in to continue your productivity journey with No Mask World.
+            Sign in to continue your healing journey. Your safe space awaits.
           </p>
         </div>
       </div>

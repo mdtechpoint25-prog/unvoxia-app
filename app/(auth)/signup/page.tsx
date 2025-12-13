@@ -62,7 +62,7 @@ export default function SignupPage() {
             maxWidth: '400px',
             lineHeight: 1.7
           }}>
-            Start your productivity journey with No Mask World. Real work, real results.
+            Begin your healing journey. A safe, anonymous space to speak without fear.
           </p>
         </div>
       </div>
