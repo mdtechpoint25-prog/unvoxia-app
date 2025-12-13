@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { SITE } from '@/lib/constants';
 
 export default function CTASection() {
   return (
@@ -123,32 +122,6 @@ export default function CTASection() {
           Join a compassionate community where you can speak your truth without fear. 
           Your healing starts here, completely anonymous and safe.
         </p>
-          color: '#fff',
-          marginBottom: '1.5rem',
-          lineHeight: 1.2
-        }}>
-          Ready to Transform Your{' '}
-          <span style={{
-            background: 'linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text'
-          }}>
-            Productivity?
-          </span>
-        </h2>
-
-        {/* Description */}
-        <p style={{
-          fontSize: '1.25rem',
-          color: 'rgba(255, 255, 255, 0.7)',
-          maxWidth: '600px',
-          margin: '0 auto 2.5rem',
-          lineHeight: 1.7
-        }}>
-          Join thousands of users who have already discovered the power of authentic, 
-          streamlined productivity with {SITE.name}.
-        </p>
 
         {/* CTA Buttons */}
         <div style={{
@@ -159,7 +132,7 @@ export default function CTASection() {
           marginBottom: '3rem'
         }}>
           <Link
-            href="/signup"
+            href="/share"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -175,13 +148,13 @@ export default function CTASection() {
               transition: 'all 0.3s ease'
             }}
           >
-            Create Free Account
+            Share What You're Feeling
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </Link>
           <Link
-            href="/billing"
+            href="/circles"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -198,7 +171,7 @@ export default function CTASection() {
               transition: 'all 0.3s ease'
             }}
           >
-            View Pricing
+            Join a Healing Circle
           </Link>
         </div>
 
