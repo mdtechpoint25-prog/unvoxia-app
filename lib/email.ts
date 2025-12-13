@@ -28,7 +28,8 @@ function isEmailConfigured(): boolean {
 function createTransporter() {
   const host = process.env.SMTP_HOST || 'mail.nomaworld.co.ke';
   const port = parseInt(process.env.SMTP_PORT || '587');
-  const user = EMAIL_ADDRESSES.default;
+  // SMTP_USER can be different from sender email (e.g., full email or just username)
+  const user = process.env.SMTP_USER || EMAIL_ADDRESSES.default;
   const pass = process.env.SMTP_PASS || '';
 
   console.log(`📧 SMTP: ${host}:${port} | User: ${user}`);
@@ -39,13 +40,14 @@ function createTransporter() {
     secure: port === 465,
     auth: { user, pass },
     tls: {
-      rejectUnauthorized: false,
-      ciphers: 'SSLv3'
+      rejectUnauthorized: false
     },
     requireTLS: port === 587,
     connectionTimeout: 30000,
     greetingTimeout: 30000,
-    socketTimeout: 30000
+    socketTimeout: 30000,
+    debug: true,
+    logger: true
   });
 }
 
@@ -380,9 +382,11 @@ export function generateOTP(): string {
 }
 
 export function getEmailConfig() {
+  const smtpUser = process.env.SMTP_USER || EMAIL_ADDRESSES.default;
   return {
-    host: process.env.SMTP_HOST || 'smtp.nomaworld.co.ke',
+    host: process.env.SMTP_HOST || 'mail.nomaworld.co.ke',
     port: parseInt(process.env.SMTP_PORT || '587'),
+    user: smtpUser,
     configured: isEmailConfigured(),
     emails: {
       noreply: EMAIL_ADDRESSES.noreply + ' (Verification, OTP, Password Reset)',

@@ -27,6 +27,7 @@ export async function GET() {
     smtp: {
       host: config.host,
       port: config.port,
+      user: config.user,
       configured: config.configured
     },
     emailRoles: {
@@ -37,8 +38,8 @@ export async function GET() {
     replyTo: config.replyTo,
     connection: connectionResult,
     message: config.configured 
-      ? (connectionResult.success ? '? Email is configured and working!' : `? Connection failed: ${connectionResult.error}`)
-      : '⚠️ SMTP_PASS not set. Please update your .env.local file.'
+      ? (connectionResult.success ? '✅ Email is configured and working!' : `❌ Connection failed: ${connectionResult.error}`)
+      : '⚠️ SMTP_PASS not set. Please update your environment variables.'
   });
 }
 
