@@ -26,7 +26,7 @@ function isEmailConfigured(): boolean {
 
 // Create SMTP transporter
 function createTransporter() {
-  const host = process.env.SMTP_HOST || 'smtp.nomaworld.co.ke';
+  const host = process.env.SMTP_HOST || 'mail.nomaworld.co.ke';
   const port = parseInt(process.env.SMTP_PORT || '587');
   const user = EMAIL_ADDRESSES.default;
   const pass = process.env.SMTP_PASS || '';

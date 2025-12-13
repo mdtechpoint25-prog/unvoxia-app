@@ -307,7 +307,7 @@ export default function SafetyPage() {
             color: '#1ABC9C',
             fontWeight: 600
           }}>
-            Email: support@mail.nomaworld.co.ke
+            Email: support@nomaworld.co.ke
           </p>
         </section>
 

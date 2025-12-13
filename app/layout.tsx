@@ -61,7 +61,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               contactPoint: {
                 '@type': 'ContactPoint',
                 contactType: 'Customer Support',
-                email: 'support@mail.nomaworld.co.ke',
+                email: 'support@nomaworld.co.ke',
               },
             })
           }}

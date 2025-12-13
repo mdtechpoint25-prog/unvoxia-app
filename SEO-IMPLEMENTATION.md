@@ -152,7 +152,7 @@ Help people who are silently searching for help find NOMA at the moment they nee
 ### Footer Updates:
 - "Safety & Support" link prominent
 - FAQ link for transparency
-- Contact email: support@mail.nomaworld.co.ke
+- Contact email: support@nomaworld.co.ke
 - Updated navigation reflects healing platform
 
 ---
@@ -406,4 +406,4 @@ NOMA's SEO strategy prioritizes:
 
 ## Support Contact
 For SEO strategy questions or updates:  
-📧 support@mail.nomaworld.co.ke
+📧 support@nomaworld.co.ke

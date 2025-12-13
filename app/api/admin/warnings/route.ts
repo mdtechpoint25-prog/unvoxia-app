@@ -61,7 +61,7 @@ async function sendWarningEmail(to: string, username: string, reason: string, se
         </div>
 
         <p style="color: #999; font-size: 14px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
-          This is an automated message from the NOMA moderation team. If you have questions, please contact support@mail.nomaworld.co.ke
+          This is an automated message from the NOMA moderation team. If you have questions, please contact support@nomaworld.co.ke
         </p>
       </div>
     </div>
@@ -69,11 +69,11 @@ async function sendWarningEmail(to: string, username: string, reason: string, se
 
   try {
     await transporter.sendMail({
-      from: `"NOMA Support" <support@mail.nomaworld.co.ke>`,
+      from: `"NOMA Support" <support@nomaworld.co.ke>`,
       to,
       subject: emailSubject,
       html: emailContent,
-      replyTo: 'support@mail.nomaworld.co.ke'
+      replyTo: 'support@nomaworld.co.ke'
     });
     console.log(`📤 Warning email sent to ${to}`);
   } catch (error) {

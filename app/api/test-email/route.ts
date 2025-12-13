@@ -13,11 +13,14 @@ import {
 export async function GET() {
   const config = getEmailConfig();
 
-  let connectionResult = { success: false, error: 'Not tested' };
-  
-  if (config.configured) {
-    connectionResult = await verifyEmailConnection();
-  }
+  const testedResult = config.configured
+    ? await verifyEmailConnection()
+    : { success: false, error: 'Not tested' };
+
+  const connectionResult = {
+    success: testedResult.success,
+    error: testedResult.error ?? 'Not tested'
+  };
 
   return NextResponse.json({
     ok: true,
@@ -27,9 +30,9 @@ export async function GET() {
       configured: config.configured
     },
     emailRoles: {
-      'noreply@mail.nomaworld.co.ke': 'Verification codes, OTP, Password reset',
-      'info@mail.nomaworld.co.ke': 'Welcome emails, Announcements, Newsletters',
-      'support@mail.nomaworld.co.ke': 'Support tickets, Report confirmations, Account issues'
+      'noreply@nomaworld.co.ke': 'Verification codes, OTP, Password reset',
+      'info@nomaworld.co.ke': 'Welcome emails, Announcements, Newsletters',
+      'support@nomaworld.co.ke': 'Support tickets, Report confirmations, Account issues'
     },
     replyTo: config.replyTo,
     connection: connectionResult,
