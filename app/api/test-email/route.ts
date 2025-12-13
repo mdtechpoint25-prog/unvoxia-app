@@ -1,29 +1,22 @@
 import { NextResponse } from 'next/server';
 import { 
   verifyEmailConnection, 
-  sendVerificationEmail, 
-  generateOTP, 
-  getEmailConfig,
-  EMAIL_ADDRESSES,
-  type EmailSender
+  getEmailConfig, 
+  sendVerificationEmail,
+  sendWelcomeEmail,
+  sendSupportEmail,
+  generateOTP,
+  EMAIL_ADDRESSES
 } from '@/lib/email';
 
-// Test email configuration (only in development)
+// GET - Check email configuration
 export async function GET() {
-  // Only allow in development
-  if (process.env.NODE_ENV === 'production') {
-    return NextResponse.json({ error: 'Not available in production' }, { status: 403 });
-  }
-
   const config = getEmailConfig();
 
-  // Test connection
-  let connectionStatus = 'Not tested';
-  try {
-    const isConnected = await verifyEmailConnection();
-    connectionStatus = isConnected ? '? Connected' : '? Failed';
-  } catch (error: any) {
-    connectionStatus = `? Error: ${error.message}`;
+  let connectionResult = { success: false, error: 'Not tested' };
+  
+  if (config.configured) {
+    connectionResult = await verifyEmailConnection();
   }
 
   return NextResponse.json({
@@ -33,53 +26,78 @@ export async function GET() {
       port: config.port,
       configured: config.configured
     },
-    emails: {
-      info: config.emails.info,
-      support: config.emails.support,
-      noreply: config.emails.noreply,
-      default: config.emails.default
+    emailRoles: {
+      'noreply@nomaworld.co.ke': 'Verification codes, OTP, Password reset',
+      'info@nomaworld.co.ke': 'Welcome emails, Announcements, Newsletters',
+      'support@nomaworld.co.ke': 'Support tickets, Report confirmations, Account issues'
     },
-    connectionStatus,
+    replyTo: config.replyTo,
+    connection: connectionResult,
     message: config.configured 
-      ? 'SMTP configuration looks good'
-      : '?? Please set SMTP_PASS in your .env.local file with your actual email password'
+      ? (connectionResult.success ? '? Email is configured and working!' : `? Connection failed: ${connectionResult.error}`)
+      : '?? SMTP_PASS not set. Please update your .env.local file.'
   });
 }
 
-// Send test email (POST)
+// POST - Send test email
 export async function POST(request: Request) {
-  // Only allow in development
-  if (process.env.NODE_ENV === 'production') {
-    return NextResponse.json({ error: 'Not available in production' }, { status: 403 });
-  }
-
   try {
-    const { email, sender = 'info' } = await request.json();
+    const { email, type = 'verification' } = await request.json();
 
     if (!email) {
       return NextResponse.json({ error: 'Email is required' }, { status: 400 });
     }
 
-    // Validate sender
-    const validSenders: EmailSender[] = ['info', 'support', 'noreply'];
-    if (!validSenders.includes(sender)) {
+    const config = getEmailConfig();
+    
+    if (!config.configured) {
       return NextResponse.json({ 
-        error: `Invalid sender. Must be one of: ${validSenders.join(', ')}` 
+        ok: false,
+        error: 'SMTP_PASS not configured'
       }, { status: 400 });
     }
 
-    const testCode = generateOTP();
-    const senderEmail = EMAIL_ADDRESSES[sender as EmailSender];
+    let result: { sender: string; description: string };
 
-    await sendVerificationEmail(email, testCode);
+    switch (type) {
+      case 'verification':
+        const code = generateOTP();
+        await sendVerificationEmail(email, code);
+        result = { 
+          sender: EMAIL_ADDRESSES.noreply,
+          description: `Verification code: ${code}`
+        };
+        break;
+        
+      case 'welcome':
+        await sendWelcomeEmail(email, 'TestUser');
+        result = { 
+          sender: EMAIL_ADDRESSES.info,
+          description: 'Welcome email sent'
+        };
+        break;
+        
+      case 'support':
+        await sendSupportEmail(email, 'Test Support', '<p>This is a test support email from NOMA.</p>');
+        result = { 
+          sender: EMAIL_ADDRESSES.support,
+          description: 'Support email sent'
+        };
+        break;
+        
+      default:
+        return NextResponse.json({ error: 'Invalid type. Use: verification, welcome, support' }, { status: 400 });
+    }
 
     return NextResponse.json({
       ok: true,
-      message: `Test email sent to ${email}`,
-      from: senderEmail,
-      code: testCode
+      message: `? Test email sent to ${email}`,
+      type,
+      from: result.sender,
+      details: result.description
     });
   } catch (error: any) {
+    console.error('Test email error:', error);
     return NextResponse.json({
       ok: false,
       error: error.message
