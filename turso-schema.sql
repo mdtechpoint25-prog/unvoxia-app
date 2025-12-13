@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS users (
   password_hash TEXT NOT NULL,
   avatar_url TEXT,
   bio TEXT,
+  role TEXT DEFAULT 'user',
   status TEXT DEFAULT 'active',
   streak_count INTEGER DEFAULT 0,
   last_prompt_date TEXT,

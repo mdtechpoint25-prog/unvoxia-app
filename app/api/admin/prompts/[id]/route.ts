@@ -1,19 +1,6 @@
 import { NextResponse } from 'next/server';
 import { execute } from '@/lib/turso';
-import { cookies } from 'next/headers';
-
-async function getUserFromSession() {
-  try {
-    const cookieStore = await cookies();
-    const session = cookieStore.get('session')?.value;
-    if (!session) return null;
-    const decoded = JSON.parse(Buffer.from(session, 'base64').toString());
-    if (decoded.exp < Date.now()) return null;
-    return decoded;
-  } catch {
-    return null;
-  }
-}
+import { getAdminFromSession } from '@/lib/admin';
 
 // Update a prompt
 export async function PATCH(
@@ -22,9 +9,9 @@ export async function PATCH(
 ) {
   try {
     const { id } = await params;
-    const user = await getUserFromSession();
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const admin = await getAdminFromSession();
+    if (!admin) {
+      return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
     }
 
     const { prompt } = await request.json();
@@ -52,9 +39,9 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const user = await getUserFromSession();
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const admin = await getAdminFromSession();
+    if (!admin) {
+      return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
     }
 
     await execute(

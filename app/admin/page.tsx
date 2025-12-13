@@ -1,6 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
+
+// SVG Icons
+const ShieldIcon = () => (
+  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" strokeWidth="1.5">
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+    <line x1="12" y1="8" x2="12" y2="12" />
+    <line x1="12" y1="16" x2="12.01" y2="16" />
+  </svg>
+);
 
 interface Stats {
   users: number;
@@ -32,6 +42,7 @@ interface User {
   id: string;
   username: string;
   email: string;
+  role?: string;
   status: string;
   created_at: string;
 }
@@ -50,6 +61,7 @@ export default function AdminPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [prompts, setPrompts] = useState<Prompt[]>([]);
   const [loading, setLoading] = useState(true);
+  const [accessDenied, setAccessDenied] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'flagged' | 'users' | 'prompts'>('overview');
   const [newPrompt, setNewPrompt] = useState('');
   const [editingPrompt, setEditingPrompt] = useState<string | null>(null);
@@ -64,6 +76,13 @@ export default function AdminPage() {
     try {
       const res = await fetch('/api/admin/stats');
       const data = await res.json();
+      
+      if (res.status === 403 || res.status === 401) {
+        setAccessDenied(true);
+        setLoading(false);
+        return;
+      }
+      
       if (res.ok) {
         setStats(data.stats);
         setCategoryStats(data.categoryStats || {});
@@ -171,6 +190,79 @@ export default function AdminPage() {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
   };
+
+  // Access Denied Screen
+  if (accessDenied) {
+    return (
+      <main style={{ 
+        minHeight: '100vh',
+        background: 'linear-gradient(180deg, #f9fafb 0%, #fff 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '2rem'
+      }}>
+        <div style={{
+          textAlign: 'center',
+          maxWidth: '400px'
+        }}>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <ShieldIcon />
+          </div>
+          <h1 style={{ color: '#1a1a2e', fontSize: '1.75rem', marginBottom: '0.75rem' }}>
+            Access Denied
+          </h1>
+          <p style={{ color: '#6b7280', marginBottom: '1.5rem', lineHeight: 1.6 }}>
+            You don't have permission to access the admin dashboard. 
+            This area is restricted to administrators only.
+          </p>
+          <Link 
+            href="/feed"
+            style={{
+              display: 'inline-block',
+              padding: '0.75rem 2rem',
+              background: 'linear-gradient(135deg, #1ABC9C 0%, #16a085 100%)',
+              color: '#fff',
+              borderRadius: '10px',
+              textDecoration: 'none',
+              fontWeight: 600
+            }}
+          >
+            Go to Feed
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
+  // Loading Screen
+  if (loading) {
+    return (
+      <main style={{ 
+        minHeight: '100vh',
+        background: 'linear-gradient(180deg, #f9fafb 0%, #fff 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{
+            width: '40px',
+            height: '40px',
+            border: '3px solid #e5e7eb',
+            borderTopColor: '#1ABC9C',
+            borderRadius: '50%',
+            margin: '0 auto 1rem',
+            animation: 'spin 1s linear infinite'
+          }} />
+          <p style={{ color: '#6b7280' }}>Loading admin dashboard...</p>
+          <style jsx>{`
+            @keyframes spin { to { transform: rotate(360deg); } }
+          `}</style>
+        </div>
+      </main>
+    );
+  }
 
   const pendingFlags = flaggedPosts.filter(f => f.status === 'pending').length;
 

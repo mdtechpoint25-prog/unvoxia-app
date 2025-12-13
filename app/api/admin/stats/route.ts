@@ -2,14 +2,35 @@ import { NextResponse } from 'next/server';
 import { query, queryOne } from '@/lib/turso';
 import { cookies } from 'next/headers';
 
-async function getUserFromSession() {
+// Admin emails - users with these emails have admin access
+const ADMIN_EMAILS = [
+  'admin@nomaworld.co.ke',
+  'info@nomaworld.co.ke',
+  'support@nomaworld.co.ke'
+];
+
+async function getAdminFromSession() {
   try {
     const cookieStore = await cookies();
     const session = cookieStore.get('session')?.value;
     if (!session) return null;
+    
     const decoded = JSON.parse(Buffer.from(session, 'base64').toString());
     if (decoded.exp < Date.now()) return null;
-    return decoded;
+    
+    // Check if user is admin (by role or email)
+    const user = await queryOne<{ id: string; email: string; role: string }>(
+      'SELECT id, email, role FROM users WHERE id = ?',
+      [decoded.userId]
+    );
+    
+    if (!user) return null;
+    
+    // Check admin access
+    const isAdmin = user.role === 'admin' || ADMIN_EMAILS.includes(user.email);
+    if (!isAdmin) return null;
+    
+    return { ...decoded, email: user.email, role: user.role };
   } catch {
     return null;
   }
@@ -17,9 +38,9 @@ async function getUserFromSession() {
 
 export async function GET() {
   try {
-    const user = await getUserFromSession();
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const admin = await getAdminFromSession();
+    if (!admin) {
+      return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
     }
 
     // Get counts
@@ -77,7 +98,7 @@ export async function GET() {
 
     // Get users list
     const users = await query(
-      `SELECT id, username, email, status, created_at 
+      `SELECT id, username, email, role, status, created_at 
        FROM users 
        ORDER BY created_at DESC 
        LIMIT 50`

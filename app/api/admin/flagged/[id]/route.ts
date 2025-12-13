@@ -1,19 +1,6 @@
 import { NextResponse } from 'next/server';
 import { execute } from '@/lib/turso';
-import { cookies } from 'next/headers';
-
-async function getUserFromSession() {
-  try {
-    const cookieStore = await cookies();
-    const session = cookieStore.get('session')?.value;
-    if (!session) return null;
-    const decoded = JSON.parse(Buffer.from(session, 'base64').toString());
-    if (decoded.exp < Date.now()) return null;
-    return decoded;
-  } catch {
-    return null;
-  }
-}
+import { getAdminFromSession } from '@/lib/admin';
 
 // Handle flagged post action
 export async function PATCH(
@@ -22,9 +9,9 @@ export async function PATCH(
 ) {
   try {
     const { id } = await params;
-    const user = await getUserFromSession();
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const admin = await getAdminFromSession();
+    if (!admin) {
+      return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
     }
 
     const { action } = await request.json();
@@ -36,8 +23,8 @@ export async function PATCH(
     // Update the flag status
     const newStatus = action === 'dismiss' ? 'dismissed' : 'actioned';
     await execute(
-      `UPDATE flagged_posts SET status = ?, resolved_at = ?, reviewed_by = ? WHERE id = ?`,
-      [newStatus, new Date().toISOString(), user.userId, id]
+      `UPDATE flagged_posts SET status = ?, resolved_at = ?, admin_notes = ? WHERE id = ?`,
+      [newStatus, new Date().toISOString(), `Reviewed by ${admin.username}`, id]
     );
 
     // If action taken, delete the post
