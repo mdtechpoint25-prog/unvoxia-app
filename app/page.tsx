@@ -3,6 +3,7 @@ import StatsSection from '@/components/StatsSection';
 import FeaturesBlocks from '@/components/FeaturesBlocks';
 import HowItWorks from '@/components/HowItWorks';
 import TestimonialCards from '@/components/TestimonialCards';
+import FAQSection from '@/components/FAQSection';
 import CTASection from '@/components/CTASection';
 
 export const metadata = {
@@ -22,6 +23,7 @@ export default function HomePage() {
       <FeaturesBlocks />
       <HowItWorks />
       <TestimonialCards />
+      <FAQSection />
       <CTASection />
     </main>
   );
