@@ -2,131 +2,17 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { STORIES, STORY_CATEGORIES, getFeaturedStories, getTrendingStories } from '@/lib/stories-data';
 
-// Story categories with counts
-const CATEGORIES = [
-  { id: 'love-relationships', name: 'Love & Relationships', emoji: '💔', count: 1247 },
-  { id: 'mental-health', name: 'Mental Health', emoji: '🧠', count: 892 },
-  { id: 'marriage-family', name: 'Marriage & Family', emoji: '💍', count: 654 },
-  { id: 'job-stress', name: 'Jobs & Career', emoji: '💼', count: 521 },
-  { id: 'home-trauma', name: 'Family Trauma', emoji: '🏠', count: 438 },
-  { id: 'loneliness', name: 'Loneliness', emoji: '😔', count: 763 },
-  { id: 'secrets', name: 'Confessions', emoji: '🔒', count: 1089 },
-  { id: 'healing-growth', name: 'Healing & Growth', emoji: '🌱', count: 567 },
-];
-
-// Sample featured stories
-const FEATURED_STORIES = [
-  {
-    id: 1,
-    title: "Learning to Love Myself After Years of Self-Doubt",
-    excerpt: "For years, I let other people's opinions define my worth. Today, I'm finally learning that my value isn't determined by anyone but myself...",
-    category: 'Healing & Growth',
-    emoji: '🌱',
-    reactions: 234,
-    comments: 45,
-    timeAgo: '2 hours ago'
-  },
-  {
-    id: 2,
-    title: "The Day I Finally Asked for Help",
-    excerpt: "I always thought asking for help was weakness. But when I couldn't get out of bed for the third day in a row, I realized strength isn't suffering alone...",
-    category: 'Mental Health',
-    emoji: '🧠',
-    reactions: 189,
-    comments: 62,
-    timeAgo: '4 hours ago'
-  },
-  {
-    id: 3,
-    title: "Moving On From a Toxic Relationship",
-    excerpt: "It took me 3 years to leave. Everyone asks why I stayed so long. Unless you've been there, you won't understand the complexity of leaving someone who...",
-    category: 'Love & Relationships',
-    emoji: '💔',
-    reactions: 312,
-    comments: 89,
-    timeAgo: '6 hours ago'
-  }
-];
-
-// Sample latest stories
-const LATEST_STORIES = [
-  {
-    id: 4,
-    title: "I Can't Tell My Family About My Depression",
-    excerpt: "In my culture, mental health isn't talked about. They'd say I'm just being dramatic or that I need to pray more. But I'm drowning and no one sees it...",
-    category: 'Mental Health',
-    emoji: '🧠',
-    reactions: 156,
-    comments: 34,
-    timeAgo: '1 hour ago',
-    anonymous: 'Silent Fighter'
-  },
-  {
-    id: 5,
-    title: "My Marriage is Falling Apart",
-    excerpt: "We've been together for 12 years. Lately, we're just roommates sharing a house. I don't know how to bring the spark back or if it's even possible...",
-    category: 'Marriage & Family',
-    emoji: '💍',
-    reactions: 98,
-    comments: 41,
-    timeAgo: '2 hours ago',
-    anonymous: 'Seeking Light'
-  },
-  {
-    id: 6,
-    title: "Lost My Job Today, Don't Know What to Do",
-    excerpt: "After 8 years of loyalty, they let me go with a 2-minute meeting. I have a family to support. The shame is overwhelming. How do I even start over at 42?",
-    category: 'Jobs & Career',
-    emoji: '💼',
-    reactions: 203,
-    comments: 67,
-    timeAgo: '3 hours ago',
-    anonymous: 'Rising Phoenix'
-  },
-  {
-    id: 7,
-    title: "I Forgave My Father After 20 Years",
-    excerpt: "He wasn't there for my childhood. But holding onto that anger was destroying me, not him. Forgiveness isn't about them—it's about freeing yourself...",
-    category: 'Family Trauma',
-    emoji: '🏠',
-    reactions: 278,
-    comments: 52,
-    timeAgo: '4 hours ago',
-    anonymous: 'Healing Soul'
-  },
-  {
-    id: 8,
-    title: "The Loneliness of Being Surrounded by People",
-    excerpt: "I have friends, family, colleagues. But none of them really know me. The real me. I smile all day and cry alone at night. Does anyone else feel this way?",
-    category: 'Loneliness',
-    emoji: '😔',
-    reactions: 445,
-    comments: 123,
-    timeAgo: '5 hours ago',
-    anonymous: 'Quiet Strength'
-  },
-  {
-    id: 9,
-    title: "A Secret I've Carried for 10 Years",
-    excerpt: "I've never told anyone this. Not my partner, not my best friend. It's eating me alive but I'm terrified of what happens if the truth comes out...",
-    category: 'Confessions',
-    emoji: '🔒',
-    reactions: 189,
-    comments: 76,
-    timeAgo: '6 hours ago',
-    anonymous: 'Anonymous Voice'
-  }
-];
-
-// Trending stories
-const TRENDING_STORIES = [
-  { id: 10, title: "Why I Stopped Chasing Happiness", reactions: 892, category: 'Healing & Growth' },
-  { id: 11, title: "The Truth About My Perfect Instagram Life", reactions: 756, category: 'Confessions' },
-  { id: 12, title: "Healing From Childhood Neglect at 35", reactions: 634, category: 'Family Trauma' },
-  { id: 13, title: "When Your Partner Doesn't Believe in Your Dreams", reactions: 521, category: 'Love & Relationships' },
-  { id: 14, title: "Anxiety Made Me Miss My Best Friend's Wedding", reactions: 489, category: 'Mental Health' },
-];
+// Get the stories from the data file
+const FEATURED_STORIES = getFeaturedStories();
+const TRENDING_STORIES = getTrendingStories();
+const LATEST_STORIES = STORIES.filter(s => !s.featured).slice(0, 10);
+const CATEGORIES = STORY_CATEGORIES.map(cat => ({
+  ...cat,
+  // Add some realistic counts
+  count: Math.floor(Math.random() * 800) + 200
+}));
 
 export default function ExperiencesPage() {
   const [searchQuery, setSearchQuery] = useState('');
