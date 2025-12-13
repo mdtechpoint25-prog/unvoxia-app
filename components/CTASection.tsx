@@ -5,8 +5,8 @@ import Link from 'next/link';
 export default function CTASection() {
   return (
     <section style={{
-      padding: '6rem 0',
-      background: 'linear-gradient(135deg, #1a1a2e 0%, #2C3E50 100%)',
+      padding: '5rem 0',
+      background: '#0f172a',
       position: 'relative',
       overflow: 'hidden'
     }}>
@@ -20,104 +20,52 @@ export default function CTASection() {
         overflow: 'hidden',
         pointerEvents: 'none'
       }}>
-        {/* Gradient Orbs */}
+        {/* Subtle gradient */}
         <div style={{
           position: 'absolute',
-          width: '500px',
-          height: '500px',
+          width: '600px',
+          height: '600px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(26, 188, 156, 0.2) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(13, 148, 136, 0.08) 0%, transparent 70%)',
           top: '-200px',
-          right: '-100px',
-          filter: 'blur(40px)'
+          right: '-100px'
         }} />
         <div style={{
           position: 'absolute',
           width: '400px',
           height: '400px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(155, 89, 182, 0.2) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(124, 58, 237, 0.08) 0%, transparent 70%)',
           bottom: '-150px',
-          left: '-100px',
-          filter: 'blur(40px)'
-        }} />
-        
-        {/* Floating shapes */}
-        <div style={{
-          position: 'absolute',
-          width: '60px',
-          height: '60px',
-          borderRadius: '12px',
-          border: '2px solid rgba(26, 188, 156, 0.3)',
-          top: '20%',
-          left: '10%',
-          transform: 'rotate(45deg)',
-          animation: 'float 4s ease-in-out infinite'
-        }} />
-        <div style={{
-          position: 'absolute',
-          width: '40px',
-          height: '40px',
-          borderRadius: '50%',
-          border: '2px solid rgba(155, 89, 182, 0.3)',
-          top: '60%',
-          right: '15%',
-          animation: 'float 3s ease-in-out infinite 1s'
+          left: '-100px'
         }} />
       </div>
 
       <div style={{
-        maxWidth: '900px',
+        maxWidth: '800px',
         margin: '0 auto',
         padding: '0 1.5rem',
         textAlign: 'center',
         position: 'relative',
         zIndex: 1
       }}>
-        {/* Badge */}
-        <div style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '0.5rem',
-          background: 'rgba(26, 188, 156, 0.15)',
-          border: '1px solid rgba(26, 188, 156, 0.3)',
-          padding: '0.5rem 1.25rem',
-          borderRadius: '50px',
-          marginBottom: '2rem'
-        }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1ABC9C" strokeWidth="2">
-            <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          <span style={{ color: '#1ABC9C', fontWeight: 600, fontSize: '0.875rem' }}>
-            Anonymous & Safe
-          </span>
-        </div>
-
         {/* Heading */}
         <h2 style={{
-          fontSize: 'clamp(2rem, 5vw, 3.5rem)',
-          fontWeight: 800,
+          fontSize: 'clamp(1.75rem, 4vw, 2.75rem)',
+          fontWeight: 700,
           lineHeight: 1.2,
           color: '#fff',
-          marginBottom: '1.5rem'
+          marginBottom: '1.25rem'
         }}>
-          Ready to Begin Your{' '}
-          <span style={{
-            background: 'linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text'
-          }}>
-            Healing Journey?
-          </span>
+          Ready to Begin Your Healing Journey?
         </h2>
         <p style={{
-          fontSize: '1.25rem',
-          color: 'rgba(255, 255, 255, 0.7)',
-          lineHeight: 1.7,
-          marginBottom: '3rem',
-          maxWidth: '700px',
-          margin: '0 auto 3rem'
+          fontSize: '1.125rem',
+          color: 'rgba(255, 255, 255, 0.6)',
+          lineHeight: 1.6,
+          marginBottom: '2.5rem',
+          maxWidth: '560px',
+          margin: '0 auto 2.5rem'
         }}>
           Join a compassionate community where you can speak your truth without fear. 
           Your healing starts here, completely anonymous and safe.
@@ -129,27 +77,26 @@ export default function CTASection() {
           gap: '1rem',
           justifyContent: 'center',
           flexWrap: 'wrap',
-          marginBottom: '3rem'
+          marginBottom: '2.5rem'
         }}>
           <Link
             href="/share"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '0.75rem',
-              background: 'linear-gradient(135deg, #1ABC9C 0%, #16a085 100%)',
+              gap: '0.5rem',
+              background: '#0d9488',
               color: '#fff',
               fontWeight: 600,
-              fontSize: '1.125rem',
-              padding: '1rem 2.5rem',
-              borderRadius: '12px',
+              fontSize: '1rem',
+              padding: '0.875rem 2rem',
+              borderRadius: '8px',
               textDecoration: 'none',
-              boxShadow: '0 10px 40px rgba(26, 188, 156, 0.4)',
-              transition: 'all 0.3s ease'
+              transition: 'background 0.2s ease'
             }}
           >
             Share What You're Feeling
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </Link>
@@ -159,16 +106,15 @@ export default function CTASection() {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.5rem',
-              background: 'rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(10px)',
+              background: 'transparent',
               color: '#fff',
               fontWeight: 600,
-              fontSize: '1.125rem',
-              padding: '1rem 2.5rem',
-              borderRadius: '12px',
+              fontSize: '1rem',
+              padding: '0.875rem 2rem',
+              borderRadius: '8px',
               textDecoration: 'none',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              transition: 'all 0.3s ease'
+              border: '1px solid rgba(255, 255, 255, 0.25)',
+              transition: 'border-color 0.2s ease'
             }}
           >
             Join a Healing Circle
@@ -192,23 +138,16 @@ export default function CTASection() {
               display: 'flex',
               alignItems: 'center',
               gap: '0.5rem',
-              color: 'rgba(255, 255, 255, 0.6)'
+              color: 'rgba(255, 255, 255, 0.5)'
             }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d={item.icon} strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-              <span style={{ fontSize: '0.9rem' }}>{item.text}</span>
+              <span style={{ fontSize: '0.875rem' }}>{item.text}</span>
             </div>
           ))}
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0) rotate(45deg); }
-          50% { transform: translateY(-15px) rotate(45deg); }
-        }
-      `}</style>
     </section>
   );
 }

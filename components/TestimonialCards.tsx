@@ -6,7 +6,7 @@ const testimonials = [
     name: 'Grace W.',
     role: 'NOMA Member',
     avatar: '/images/avatar-1.svg',
-    color: '#1ABC9C',
+    color: '#0d9488',
     rating: 5
   },
   {
@@ -14,7 +14,7 @@ const testimonials = [
     name: 'Daniel O.',
     role: 'Finding My Path',
     avatar: '/images/avatar-2.svg',
-    color: '#9B59B6',
+    color: '#7c3aed',
     rating: 5
   },
   {
@@ -22,7 +22,7 @@ const testimonials = [
     name: 'Lydia M.',
     role: 'Healing Journey',
     avatar: '/images/avatar-3.svg',
-    color: '#4DA8DA',
+    color: '#0284c7',
     rating: 5
   },
   {
@@ -30,7 +30,7 @@ const testimonials = [
     name: 'James K.',
     role: 'Grateful Member',
     avatar: '/images/avatar-4.svg',
-    color: '#FF6B35',
+    color: '#ea580c',
     rating: 5
   }
 ];
@@ -38,23 +38,11 @@ const testimonials = [
 export default function TestimonialCards() {
   return (
     <section style={{
-      padding: '6rem 0',
-      background: 'linear-gradient(180deg, #f9fafb 0%, #fff 100%)',
+      padding: '5rem 0',
+      background: '#f8fafc',
       position: 'relative',
       overflow: 'hidden'
     }}>
-      {/* Background Pattern */}
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundImage: `radial-gradient(circle at 1px 1px, rgba(26, 188, 156, 0.08) 1px, transparent 0)`,
-        backgroundSize: '40px 40px',
-        pointerEvents: 'none'
-      }} />
-
       <div style={{
         maxWidth: '1200px',
         margin: '0 auto',
@@ -62,54 +50,34 @@ export default function TestimonialCards() {
         position: 'relative'
       }}>
         {/* Section Header */}
-        <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            background: 'linear-gradient(135deg, rgba(26, 188, 156, 0.1) 0%, rgba(155, 89, 182, 0.1) 100%)',
-            padding: '0.5rem 1.25rem',
-            borderRadius: '50px',
-            marginBottom: '1rem'
+        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+          <span style={{
+            display: 'inline-block',
+            color: '#0d9488',
+            fontWeight: 600,
+            fontSize: '0.875rem',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+            marginBottom: '0.75rem'
           }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1ABC9C" strokeWidth="2">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-            </svg>
-            <span style={{
-              background: 'linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              fontWeight: 600,
-              fontSize: '0.875rem'
-            }}>
-              TESTIMONIALS
-            </span>
-          </div>
+            Testimonials
+          </span>
           <h2 style={{
-            fontSize: 'clamp(2rem, 4vw, 3rem)',
-            fontWeight: 800,
-            color: '#1a1a2e',
+            fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)',
+            fontWeight: 700,
+            color: '#1e293b',
             marginBottom: '1rem'
           }}>
-            Stories of{' '}
-            <span style={{
-              background: 'linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
-            }}>
-              Hope & Healing
-            </span>
+            Stories of Hope & Healing
           </h2>
           <p style={{
-            fontSize: '1.125rem',
-            color: '#6b7280',
-            maxWidth: '600px',
+            fontSize: '1.0625rem',
+            color: '#64748b',
+            maxWidth: '560px',
             margin: '0 auto',
-            lineHeight: 1.7
+            lineHeight: 1.6
           }}>
-            See what our users are saying about their experience with No Mask World.
+            See what our users are saying about their experience with NOMA.
           </p>
         </div>
 
@@ -208,15 +176,14 @@ export default function TestimonialCards() {
                 <div>
                   <div style={{
                     fontWeight: 600,
-                    color: '#1a1a2e',
-                    fontSize: '1rem'
+                    color: '#1e293b',
+                    fontSize: '0.9375rem'
                   }}>
                     {testimonial.name}
                   </div>
                   <div style={{
-                    color: testimonial.color,
-                    fontSize: '0.875rem',
-                    fontWeight: 500
+                    color: '#64748b',
+                    fontSize: '0.875rem'
                   }}>
                     {testimonial.role}
                   </div>
@@ -229,8 +196,8 @@ export default function TestimonialCards() {
 
       <style jsx>{`
         .testimonial-card:hover {
-          transform: translateY(-6px);
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+          transform: translateY(-4px);
+          box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
         }
       `}</style>
     </section>

@@ -20,12 +20,8 @@ export default function Logo({ size = 40, showText = true, variant = 'full', cla
     >
       <defs>
         <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#1ABC9C" />
-          <stop offset="100%" stopColor="#9B59B6" />
-        </linearGradient>
-        <linearGradient id="logoGradientHover" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#16a085" />
-          <stop offset="100%" stopColor="#8e44ad" />
+          <stop offset="0%" stopColor="#0d9488" />
+          <stop offset="100%" stopColor="#7c3aed" />
         </linearGradient>
       </defs>
       {/* Rounded square background */}
@@ -34,43 +30,40 @@ export default function Logo({ size = 40, showText = true, variant = 'full', cla
         y="5"
         width="90"
         height="90"
-        rx="20"
+        rx="18"
         fill="url(#logoGradient)"
       />
       {/* Letter N */}
       <path
         d="M30 70V30L50 55L70 30V70"
         stroke="white"
-        strokeWidth="8"
+        strokeWidth="7"
         strokeLinecap="round"
         strokeLinejoin="round"
         fill="none"
       />
-      {/* Decorative dots */}
-      <circle cx="25" cy="25" r="4" fill="rgba(255,255,255,0.3)" />
-      <circle cx="75" cy="75" r="4" fill="rgba(255,255,255,0.3)" />
     </svg>
   );
 
   const LogoText = () => (
-    <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15 }}>
       <span style={{
         fontSize: fontSize,
-        fontWeight: 800,
-        color: '#1a1a2e',
+        fontWeight: 700,
+        color: '#1e293b',
         letterSpacing: '-0.02em',
-        fontFamily: 'var(--font-display)'
+        fontFamily: 'Inter, system-ui, sans-serif'
       }}>
         No Mask
       </span>
       {size >= 40 && (
         <span style={{
-          fontSize: fontSize * 0.45,
-          fontWeight: 600,
-          color: '#1ABC9C',
-          letterSpacing: '0.02em'
+          fontSize: fontSize * 0.4,
+          fontWeight: 500,
+          color: '#0d9488',
+          letterSpacing: '0.01em'
         }}>
-          (NOMA)
+          NOMA
         </span>
       )}
     </div>
@@ -109,15 +102,15 @@ export function LogoMark({ size = 32 }: { size?: number }) {
     >
       <defs>
         <linearGradient id="markGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#1ABC9C" />
-          <stop offset="100%" stopColor="#9B59B6" />
+          <stop offset="0%" stopColor="#0d9488" />
+          <stop offset="100%" stopColor="#7c3aed" />
         </linearGradient>
       </defs>
-      <rect x="5" y="5" width="90" height="90" rx="20" fill="url(#markGradient)" />
+      <rect x="5" y="5" width="90" height="90" rx="18" fill="url(#markGradient)" />
       <path
         d="M30 70V30L50 55L70 30V70"
         stroke="white"
-        strokeWidth="8"
+        strokeWidth="7"
         strokeLinecap="round"
         strokeLinejoin="round"
         fill="none"

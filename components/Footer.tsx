@@ -31,9 +31,9 @@ const socialLinks = [
 export default function Footer() {
   return (
     <footer style={{
-      background: 'linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%)',
+      background: '#0f172a',
       color: '#fff',
-      paddingTop: '5rem',
+      paddingTop: '4rem',
       paddingBottom: '2rem'
     }}>
       <div style={{
@@ -224,8 +224,8 @@ export default function Footer() {
       </div>
 
       <style jsx global>{`
-        .footer-link:hover { color: #1ABC9C !important; }
-        .social-link:hover { background: linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%) !important; }
+        .footer-link:hover { color: #0d9488 !important; }
+        .social-link:hover { background: #0d9488 !important; }
       `}</style>
     </footer>
   );

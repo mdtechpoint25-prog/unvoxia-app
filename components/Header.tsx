@@ -62,9 +62,9 @@ export default function Header() {
                 href={link.href}
                 className="nav-link"
                 style={{
-                  color: scrolled ? '#2C3E50' : '#1a1a2e',
+                  color: scrolled ? '#475569' : '#334155',
                   fontWeight: 500,
-                  fontSize: '0.95rem',
+                  fontSize: '0.9375rem',
                   textDecoration: 'none',
                   position: 'relative',
                   padding: '0.25rem 0',
@@ -80,34 +80,33 @@ export default function Header() {
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '1rem'
+            gap: '0.75rem'
           }} className="desktop-nav">
             <Link
               href="/login"
               style={{
-                color: scrolled ? '#2C3E50' : '#1a1a2e',
-                fontWeight: 600,
-                fontSize: '0.95rem',
+                color: scrolled ? '#475569' : '#334155',
+                fontWeight: 500,
+                fontSize: '0.9375rem',
                 textDecoration: 'none',
-                padding: '0.5rem 1rem',
+                padding: '0.5rem 0.875rem',
                 transition: 'color 0.2s ease'
               }}
             >
-              Login
+              Sign in
             </Link>
             <Link
               href="/signup"
               className="cta-button"
               style={{
-                background: 'linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%)',
+                background: '#0d9488',
                 color: '#fff',
-                fontWeight: 600,
-                fontSize: '0.95rem',
+                fontWeight: 500,
+                fontSize: '0.9375rem',
                 textDecoration: 'none',
-                padding: '0.65rem 1.5rem',
-                borderRadius: '10px',
-                boxShadow: '0 4px 15px rgba(26, 188, 156, 0.3)',
-                transition: 'all 0.3s ease'
+                padding: '0.5rem 1.125rem',
+                borderRadius: '6px',
+                transition: 'all 0.2s ease'
               }}
             >
               Get Started
@@ -127,7 +126,7 @@ export default function Header() {
             className="mobile-menu-btn"
             aria-label="Toggle menu"
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={scrolled ? '#2C3E50' : '#1a1a2e'} strokeWidth="2">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={scrolled ? '#334155' : '#1e293b'} strokeWidth="2">
               {mobileOpen ? (
                 <path d="M6 6L18 18M6 18L18 6" />
               ) : (
@@ -160,9 +159,9 @@ export default function Header() {
               key={link.href}
               href={link.href}
               style={{
-                color: '#2C3E50',
-                fontWeight: 600,
-                fontSize: '1.25rem',
+                color: '#1e293b',
+                fontWeight: 500,
+                fontSize: '1.125rem',
                 textDecoration: 'none'
               }}
             >
@@ -171,7 +170,7 @@ export default function Header() {
           ))}
           <div style={{ marginTop: '1rem', display: 'flex', gap: '1rem' }}>
             <Link href="/login" className="btn btn-secondary">
-              <span onClick={() => setMobileOpen(false)}>Login</span>
+              <span onClick={() => setMobileOpen(false)}>Sign in</span>
             </Link>
             <Link href="/signup" className="btn btn-primary">
               <span onClick={() => setMobileOpen(false)}>Get Started</span>
@@ -181,8 +180,8 @@ export default function Header() {
       )}
 
       <style jsx global>{`
-        .nav-link:hover { color: #1ABC9C !important; }
-        .cta-button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(26, 188, 156, 0.4) !important; }
+        .nav-link:hover { color: #0d9488 !important; }
+        .cta-button:hover { background: #0f766e !important; }
         @media (max-width: 768px) {
           .desktop-nav { display: none !important; }
           .mobile-menu-btn { display: block !important; }

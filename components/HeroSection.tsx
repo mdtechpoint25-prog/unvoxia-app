@@ -9,11 +9,11 @@ export default function HeroSection() {
       minHeight: '100vh',
       display: 'flex',
       alignItems: 'center',
-      background: 'linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 40%, #1ABC9C 100%)',
+      background: 'linear-gradient(160deg, #0f172a 0%, #1e293b 50%, #134e4a 100%)',
       overflow: 'hidden',
       paddingTop: '5rem'
     }}>
-      {/* Background Elements */}
+      {/* Subtle Background Elements */}
       <div style={{
         position: 'absolute',
         top: 0,
@@ -25,32 +25,23 @@ export default function HeroSection() {
       }}>
         <div style={{
           position: 'absolute',
-          width: '600px',
-          height: '600px',
+          width: '800px',
+          height: '800px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(26, 188, 156, 0.4) 0%, transparent 70%)',
-          top: '-200px',
-          right: '-100px',
-          filter: 'blur(60px)'
+          background: 'radial-gradient(circle, rgba(13, 148, 136, 0.15) 0%, transparent 60%)',
+          top: '-300px',
+          right: '-200px',
+          filter: 'blur(80px)'
         }} />
         <div style={{
           position: 'absolute',
-          width: '400px',
-          height: '400px',
+          width: '500px',
+          height: '500px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(155, 89, 182, 0.4) 0%, transparent 70%)',
-          bottom: '-100px',
-          left: '-100px',
-          filter: 'blur(60px)'
-        }} />
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
-          backgroundSize: '50px 50px'
+          background: 'radial-gradient(circle, rgba(124, 58, 237, 0.12) 0%, transparent 60%)',
+          bottom: '-200px',
+          left: '-150px',
+          filter: 'blur(80px)'
         }} />
       </div>
 
@@ -71,38 +62,35 @@ export default function HeroSection() {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '0.5rem',
-            background: 'rgba(255, 255, 255, 0.1)',
+            background: 'rgba(255, 255, 255, 0.06)',
             backdropFilter: 'blur(10px)',
             padding: '0.5rem 1rem',
             borderRadius: '50px',
             marginBottom: '1.5rem',
-            border: '1px solid rgba(255, 255, 255, 0.1)'
+            border: '1px solid rgba(255, 255, 255, 0.08)'
           }}>
             <span style={{
-              width: '8px',
-              height: '8px',
+              width: '6px',
+              height: '6px',
               borderRadius: '50%',
-              background: '#1ABC9C',
-              boxShadow: '0 0 10px #1ABC9C'
+              background: '#14b8a6'
             }} />
-            <span style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.875rem', fontWeight: 500 }}>
+            <span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.8125rem', fontWeight: 500 }}>
               Safe Space for Healing
             </span>
           </div>
 
           <h1 style={{
-            fontSize: 'clamp(2.5rem, 5vw, 4rem)',
-            fontWeight: 800,
-            lineHeight: 1.1,
+            fontSize: 'clamp(2.25rem, 4.5vw, 3.5rem)',
+            fontWeight: 700,
+            lineHeight: 1.15,
             color: '#fff',
-            marginBottom: '1.5rem'
+            marginBottom: '1.5rem',
+            letterSpacing: '-0.025em'
           }}>
             Speak Without Fear.{' '}
             <span style={{
-              background: 'linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
+              color: '#14b8a6'
             }}>
               Heal
             </span>
@@ -110,36 +98,35 @@ export default function HeroSection() {
           </h1>
 
           <p style={{
-            fontSize: '1.25rem',
-            color: 'rgba(255, 255, 255, 0.7)',
+            fontSize: '1.125rem',
+            color: 'rgba(255, 255, 255, 0.6)',
             lineHeight: 1.7,
-            marginBottom: '2.5rem',
-            maxWidth: '540px'
+            marginBottom: '2rem',
+            maxWidth: '520px'
           }}>
-            NOMA is a safe, anonymous healing platform where you can freely express your true feelings, 
-            receive emotional support, and find healing without fear of judgement. You are heard. You are safe. You are not alone.
+            A safe, anonymous platform where you can freely express your feelings, 
+            receive support, and find healing. You are heard. You are not alone.
           </p>
 
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '0.875rem', flexWrap: 'wrap' }}>
             <Link
               href="/share"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                background: 'linear-gradient(135deg, #1ABC9C 0%, #16a085 100%)',
+                background: '#0d9488',
                 color: '#fff',
-                fontWeight: 600,
-                fontSize: '1.1rem',
-                padding: '1rem 2.5rem',
-                borderRadius: '12px',
+                fontWeight: 500,
+                fontSize: '1rem',
+                padding: '0.875rem 1.75rem',
+                borderRadius: '8px',
                 textDecoration: 'none',
-                boxShadow: '0 10px 30px rgba(26, 188, 156, 0.4)',
-                transition: 'all 0.3s ease'
+                transition: 'all 0.2s ease'
               }}
             >
-              Share What You're Feeling
-              <span>→</span>
+              Share Your Story
+              <span style={{ opacity: 0.7 }}>→</span>
             </Link>
             <Link
               href="/circles"
@@ -147,55 +134,46 @@ export default function HeroSection() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                background: 'rgba(255, 255, 255, 0.1)',
-                backdropFilter: 'blur(10px)',
+                background: 'transparent',
                 color: '#fff',
-                fontWeight: 600,
-                fontSize: '1.1rem',
-                padding: '1rem 2.5rem',
-                borderRadius: '12px',
+                fontWeight: 500,
+                fontSize: '1rem',
+                padding: '0.875rem 1.75rem',
+                borderRadius: '8px',
                 textDecoration: 'none',
-                border: '2px solid rgba(255, 255, 255, 0.2)',
-                transition: 'all 0.3s ease'
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                transition: 'all 0.2s ease'
               }}
             >
-              Join Healing Circles
+              Join Communities
             </Link>
           </div>
 
           <div style={{
             display: 'flex',
-            gap: '3rem',
+            gap: '2.5rem',
             marginTop: '3rem',
             paddingTop: '2rem',
-            borderTop: '1px solid rgba(255, 255, 255, 0.1)'
+            borderTop: '1px solid rgba(255, 255, 255, 0.08)'
           }}>
             {[
-              { value: '100%', label: 'Anonymous', icon: '🔒' },
-              { value: '24/7', label: 'Always Here', icon: '💚' },
-              { value: '0', label: 'Judgement', icon: '✨' }
+              { value: '100%', label: 'Anonymous' },
+              { value: '24/7', label: 'Support' },
+              { value: 'Free', label: 'Forever' }
             ].map((stat, i) => (
               <div key={i}>
                 <div style={{
-                  fontSize: '2rem',
-                  fontWeight: 700,
-                  color: '#fff',
-                  lineHeight: 1,
-                  background: 'linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem'
+                  fontSize: '1.5rem',
+                  fontWeight: 600,
+                  color: '#14b8a6',
+                  lineHeight: 1
                 }}>
-                  <span>{stat.icon}</span>
                   {stat.value}
                 </div>
                 <div style={{
-                  fontSize: '0.875rem',
+                  fontSize: '0.8125rem',
                   color: 'rgba(255, 255, 255, 0.5)',
-                  marginTop: '0.5rem'
+                  marginTop: '0.375rem'
                 }}>
                   {stat.label}
                 </div>

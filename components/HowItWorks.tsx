@@ -28,7 +28,7 @@ const steps = [
 export default function HowItWorks() {
   return (
     <section style={{
-      padding: '6rem 0',
+      padding: '5rem 0',
       background: '#fff',
       position: 'relative'
     }}>
@@ -38,47 +38,32 @@ export default function HowItWorks() {
         padding: '0 1.5rem'
       }}>
         {/* Section Header */}
-        <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-          <div style={{
+        <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+          <span style={{
             display: 'inline-block',
-            background: 'linear-gradient(135deg, rgba(26, 188, 156, 0.1) 0%, rgba(155, 89, 182, 0.1) 100%)',
-            padding: '0.5rem 1.25rem',
-            borderRadius: '50px',
-            marginBottom: '1rem'
+            color: '#0d9488',
+            fontWeight: 600,
+            fontSize: '0.875rem',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+            marginBottom: '0.75rem'
           }}>
-            <span style={{
-              background: 'linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              fontWeight: 600,
-              fontSize: '0.875rem'
-            }}>
-              HOW IT WORKS
-            </span>
-          </div>
+            How It Works
+          </span>
           <h2 style={{
-            fontSize: 'clamp(2rem, 4vw, 3rem)',
-            fontWeight: 800,
-            color: '#1a1a2e',
+            fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)',
+            fontWeight: 700,
+            color: '#1e293b',
             marginBottom: '1rem'
           }}>
-            Your Path to{' '}
-            <span style={{
-              background: 'linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
-            }}>
-              Healing
-            </span>
+            Your Path to Healing
           </h2>
           <p style={{
-            fontSize: '1.125rem',
-            color: '#6b7280',
-            maxWidth: '600px',
+            fontSize: '1.0625rem',
+            color: '#64748b',
+            maxWidth: '560px',
             margin: '0 auto',
-            lineHeight: 1.7
+            lineHeight: 1.6
           }}>
             Four simple steps to begin your healing journey in a safe, anonymous environment.
           </p>
@@ -98,8 +83,8 @@ export default function HowItWorks() {
             left: '15%',
             right: '15%',
             height: '2px',
-            background: 'linear-gradient(90deg, #1ABC9C 0%, #9B59B6 100%)',
-            opacity: 0.3,
+            background: '#0d9488',
+            opacity: 0.2,
             display: 'none' // Show on larger screens via media query
           }} className="connection-line" />
 
@@ -113,20 +98,19 @@ export default function HowItWorks() {
             >
               {/* Step Number with Icon */}
               <div style={{
-                width: '80px',
-                height: '80px',
-                margin: '0 auto 1.5rem',
-                borderRadius: '20px',
-                background: 'linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%)',
+                width: '72px',
+                height: '72px',
+                margin: '0 auto 1.25rem',
+                borderRadius: '16px',
+                background: '#0d9488',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                position: 'relative',
-                boxShadow: '0 10px 30px rgba(26, 188, 156, 0.3)'
+                position: 'relative'
               }}>
                 <svg
-                  width="32"
-                  height="32"
+                  width="28"
+                  height="28"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="#fff"
@@ -141,17 +125,17 @@ export default function HowItWorks() {
                   position: 'absolute',
                   top: '-8px',
                   right: '-8px',
-                  width: '28px',
-                  height: '28px',
+                  width: '26px',
+                  height: '26px',
                   borderRadius: '50%',
                   background: '#fff',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                  border: '2px solid #0d9488',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontWeight: 700,
+                  fontWeight: 600,
                   fontSize: '0.75rem',
-                  color: '#1ABC9C'
+                  color: '#0d9488'
                 }}>
                   {step.number}
                 </div>
@@ -159,18 +143,18 @@ export default function HowItWorks() {
 
               {/* Content */}
               <h3 style={{
-                fontSize: '1.25rem',
-                fontWeight: 700,
-                color: '#1a1a2e',
-                marginBottom: '0.75rem'
+                fontSize: '1.125rem',
+                fontWeight: 600,
+                color: '#1e293b',
+                marginBottom: '0.5rem'
               }}>
                 {step.title}
               </h3>
               <p style={{
-                color: '#6b7280',
-                fontSize: '0.95rem',
-                lineHeight: 1.7,
-                maxWidth: '280px',
+                color: '#64748b',
+                fontSize: '0.9375rem',
+                lineHeight: 1.6,
+                maxWidth: '260px',
                 margin: '0 auto'
               }}>
                 {step.description}
