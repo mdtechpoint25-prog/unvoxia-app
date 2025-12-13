@@ -34,6 +34,7 @@ export default function ShareStoryPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [storyId, setStoryId] = useState<string | null>(null);
+  const [storySlug, setStorySlug] = useState<string | null>(null);
 
   useEffect(() => {
     setAnonymousName(ANONYMOUS_NAMES[Math.floor(Math.random() * ANONYMOUS_NAMES.length)]);
@@ -65,6 +66,7 @@ export default function ShareStoryPage() {
 
       setSuccess(true);
       setStoryId(data.storyId);
+      setStorySlug(data.slug);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
       setSubmitting(false);
@@ -82,8 +84,8 @@ export default function ShareStoryPage() {
           <p>Thank you for having the courage to share your experience. Your story may help someone going through the same thing.</p>
           
           <div className="success-actions">
-            {storyId && (
-              <Link href={`/story/${storyId}`} className="btn btn-primary">
+            {storySlug && (
+              <Link href={`/story/${storySlug}`} className="btn btn-primary">
                 View Your Story
               </Link>
             )}
@@ -97,6 +99,7 @@ export default function ShareStoryPage() {
               setContent('');
               setCategoryId('');
               setStoryId(null);
+              setStorySlug(null);
             }} className="btn btn-outline">
               Share Another Story
             </button>

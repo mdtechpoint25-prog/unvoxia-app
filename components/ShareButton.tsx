@@ -5,15 +5,18 @@ import { useState } from 'react';
 interface ShareButtonProps {
   storyId: string | number;
   title: string;
+  slug?: string;
 }
 
-export default function ShareButton({ storyId, title }: ShareButtonProps) {
+export default function ShareButton({ storyId, title, slug }: ShareButtonProps) {
   const [showMenu, setShowMenu] = useState(false);
   const [copied, setCopied] = useState(false);
 
+  // Use slug if provided, fallback to ID
+  const storyPath = slug || storyId;
   const url = typeof window !== 'undefined' 
-    ? `${window.location.origin}/story/${storyId}`
-    : `/story/${storyId}`;
+    ? `${window.location.origin}/story/${storyPath}`
+    : `/story/${storyPath}`;
 
   const handleCopy = async () => {
     try {

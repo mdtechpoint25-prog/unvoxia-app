@@ -7,6 +7,7 @@
 -- =====================================================
 CREATE TABLE IF NOT EXISTS stories (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
+  slug TEXT UNIQUE, -- URL-friendly slug for SEO
   title TEXT NOT NULL,
   content TEXT NOT NULL,
   excerpt TEXT,
@@ -25,6 +26,7 @@ CREATE TABLE IF NOT EXISTS stories (
 );
 
 -- Index for faster queries
+CREATE INDEX IF NOT EXISTS idx_stories_slug ON stories(slug);
 CREATE INDEX IF NOT EXISTS idx_stories_category ON stories(category_id);
 CREATE INDEX IF NOT EXISTS idx_stories_status ON stories(status);
 CREATE INDEX IF NOT EXISTS idx_stories_created ON stories(created_at DESC);

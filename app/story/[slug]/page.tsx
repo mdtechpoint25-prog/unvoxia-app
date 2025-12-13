@@ -1,26 +1,26 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { STORIES, getStoryById, STORY_CATEGORIES } from '@/lib/stories-data';
+import { STORIES, getStoryBySlug, getAllStorySlugs, STORY_CATEGORIES } from '@/lib/stories-data';
 import StoryReactions from '@/components/StoryReactions';
 import StoryComments from '@/components/StoryComments';
 import ShareButton from '@/components/ShareButton';
 
 export async function generateStaticParams() {
-  return STORIES.map((story) => ({
-    id: story.id.toString(),
+  return getAllStorySlugs().map((slug) => ({
+    slug,
   }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const story = getStoryById(parseInt(id));
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const story = getStoryBySlug(slug);
   
   if (!story) {
-    return { title: 'Story Not Found - NOMA' };
+    return { title: 'Story Not Found - No Mask' };
   }
 
   return {
-    title: `${story.title} | NOMA Experiences`,
+    title: `${story.title} | No Mask (NOMA) Experiences`,
     description: story.excerpt,
     openGraph: {
       title: story.title,
@@ -30,9 +30,9 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   };
 }
 
-export default async function StoryPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const story = getStoryById(parseInt(id));
+export default async function StoryPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const story = getStoryBySlug(slug);
 
   if (!story) {
     notFound();
@@ -107,7 +107,7 @@ export default async function StoryPage({ params }: { params: Promise<{ id: stri
             <a href="#comments" className="comment-btn">
               💬 Comment ({story.comments})
             </a>
-            <ShareButton storyId={story.id} title={story.title} />
+            <ShareButton storyId={story.id} title={story.title} slug={story.slug} />
           </div>
 
           <div id="comments">
@@ -125,7 +125,7 @@ export default async function StoryPage({ params }: { params: Promise<{ id: stri
             {relatedStories.length > 0 ? (
               <div className="related-list">
                 {relatedStories.map((related) => (
-                  <Link href={`/story/${related.id}`} key={related.id} className="related-item">
+                  <Link href={`/story/${related.slug}`} key={related.id} className="related-item">
                     <span className="related-emoji">{related.emoji}</span>
                     <div className="related-info">
                       <div className="related-title">{related.title}</div>

@@ -56,7 +56,7 @@ export default function ExperiencesPage() {
           {/* Featured */}
           <div className="featured-grid">
             {featured.slice(0, 3).map((story) => (
-              <Link href={`/story/${story.id}`} key={story.id} className="featured-card">
+              <Link href={`/story/${story.slug}`} key={story.id} className="featured-card">
                 <div className="featured-header">
                   <span className="featured-emoji">{story.emoji}</span>
                   <span className="featured-cat">{story.category}</span>
@@ -131,7 +131,7 @@ export default function ExperiencesPage() {
             <div className="stories-list">
               {filteredStories.length > 0 ? (
                 filteredStories.map((story) => (
-                  <Link href={`/story/${story.id}`} key={story.id} className="story-card">
+                  <Link href={`/story/${story.slug}`} key={story.id} className="story-card">
                     <div className="story-header">
                       <span className="story-emoji">{story.emoji}</span>
                       <span className="story-cat">{story.category}</span>
@@ -163,7 +163,7 @@ export default function ExperiencesPage() {
               <h3>🔥 Trending</h3>
               <div className="trending-list">
                 {trending.slice(0, 5).map((story) => (
-                  <Link href={`/story/${story.id}`} key={story.id} className="trending-item">
+                  <Link href={`/story/${story.slug}`} key={story.id} className="trending-item">
                     <span className="trending-emoji">{story.emoji}</span>
                     <div className="trending-info">
                       <span className="trending-title">{story.title}</span>

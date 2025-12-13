@@ -34,6 +34,23 @@ function generateExcerpt(content: string, maxLength = 160): string {
   return cleanContent.substring(0, maxLength).trim() + '...';
 }
 
+// Generate URL-friendly slug from title
+function generateSlug(title: string, id?: number | bigint): string {
+  let slug = title
+    .toLowerCase()
+    .replace(/['']/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .substring(0, 80);
+  
+  // Append ID to ensure uniqueness for user-submitted stories
+  if (id) {
+    slug = `${slug}-${id}`;
+  }
+  
+  return slug;
+}
+
 function getSessionId(request: Request): string {
   // Try to get session from cookie or generate one
   const cookies = request.headers.get('cookie') || '';
@@ -182,6 +199,19 @@ export async function POST(request: Request) {
     });
 
     const storyId = result.lastInsertRowid;
+    
+    if (!storyId) {
+      return NextResponse.json({ error: 'Failed to create story' }, { status: 500 });
+    }
+    
+    // Generate slug with ID for uniqueness
+    const slug = generateSlug(title.trim(), storyId);
+    
+    // Update story with slug
+    await db.execute({
+      sql: 'UPDATE stories SET slug = ? WHERE id = ?',
+      args: [slug, Number(storyId)]
+    });
 
     // Insert tags if provided
     if (tags && Array.isArray(tags)) {
@@ -198,7 +228,8 @@ export async function POST(request: Request) {
     const response = NextResponse.json({
       success: true,
       message: 'Your story has been shared!',
-      storyId: storyId?.toString()
+      storyId: storyId?.toString(),
+      slug: slug
     }, { status: 201 });
 
     // Set session cookie

@@ -162,7 +162,7 @@ export default function StoriesPage() {
           {filteredStories.map((story) => (
             <Link
               key={story.id}
-              href={`/story/${story.id}`}
+              href={`/story/${story.slug}`}
               style={{
                 background: '#fff',
                 borderRadius: '16px',

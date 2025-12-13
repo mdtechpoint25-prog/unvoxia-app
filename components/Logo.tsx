@@ -61,17 +61,16 @@ export default function Logo({ size = 40, showText = true, variant = 'full', cla
         letterSpacing: '-0.02em',
         fontFamily: 'var(--font-display)'
       }}>
-        NOMA
+        No Mask
       </span>
       {size >= 40 && (
         <span style={{
-          fontSize: fontSize * 0.4,
-          fontWeight: 500,
-          color: '#6b7280',
-          letterSpacing: '0.05em',
-          textTransform: 'uppercase'
+          fontSize: fontSize * 0.45,
+          fontWeight: 600,
+          color: '#1ABC9C',
+          letterSpacing: '0.02em'
         }}>
-          No Mask World
+          (NOMA)
         </span>
       )}
     </div>

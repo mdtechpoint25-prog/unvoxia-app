@@ -1,6 +1,7 @@
 // Story data with full content for the Experiences/Stories section
 export interface Story {
   id: number;
+  slug: string;
   title: string;
   excerpt: string;
   content: string;
@@ -19,9 +20,20 @@ export interface Story {
   trending?: boolean;
 }
 
+// Generate URL-friendly slug from title
+export function slugify(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/['']/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .substring(0, 80);
+}
+
 export const STORIES: Story[] = [
   {
     id: 1,
+    slug: "learning-to-love-myself-after-years-of-self-doubt",
     title: "Learning to Love Myself After Years of Self-Doubt",
     excerpt: "For years, I let other people's opinions define my worth. Today, I'm finally learning that my value isn't determined by anyone but myself...",
     content: `For as long as I can remember, I've measured my worth by what others thought of me. Every compliment was validation, and every criticism felt like proof that I wasn't good enough.
@@ -60,6 +72,7 @@ You are enough. Not because of what you do, but because of who you are.`,
   },
   {
     id: 2,
+    slug: "the-day-i-finally-asked-for-help",
     title: "The Day I Finally Asked for Help",
     excerpt: "I always thought asking for help was weakness. But when I couldn't get out of bed for the third day in a row, I realized strength isn't suffering alone...",
     content: `I grew up in a family where vulnerability was weakness. "Suck it up" was our motto. When I scraped my knee, I was told not to cry. When I failed a test, I was told to try harder. When I was sad, I was told to smile.
@@ -100,6 +113,7 @@ Strength isn't about suffering in silence. It's about having the courage to say,
   },
   {
     id: 3,
+    slug: "moving-on-from-a-toxic-relationship",
     title: "Moving On From a Toxic Relationship",
     excerpt: "It took me 3 years to leave. Everyone asks why I stayed so long. Unless you've been there, you won't understand the complexity of leaving someone who...",
     content: `"Just leave him." If I had a dollar for every time someone said that, I'd be rich. But leaving isn't that simple. Not when your entire sense of self has been eroded. Not when you've been convinced that no one else will ever love you.
@@ -138,6 +152,7 @@ You are worthy of respect. You are worthy of kindness. You are worthy of love.`,
   },
   {
     id: 4,
+    slug: "i-cant-tell-my-family-about-my-depression",
     title: "I Can't Tell My Family About My Depression",
     excerpt: "In my culture, mental health isn't talked about. They'd say I'm just being dramatic or that I need to pray more. But I'm drowning and no one sees it...",
     content: `In my culture, we don't talk about mental health. Depression isn't a real illness—it's laziness. Anxiety isn't a condition—it's a lack of faith. Seeking therapy isn't getting help—it's bringing shame to the family.
@@ -177,6 +192,7 @@ You are not alone.`,
   },
   {
     id: 5,
+    slug: "my-marriage-is-falling-apart",
     title: "My Marriage is Falling Apart",
     excerpt: "We've been together for 12 years. Lately, we're just roommates sharing a house. I don't know how to bring the spark back or if it's even possible...",
     content: `I married my best friend. At least, that's what I thought 12 years ago when we said our vows. Now, I'm not sure who the person sleeping next to me is anymore.
@@ -212,6 +228,7 @@ If anyone has been through this and found their way back to each other, please s
   },
   {
     id: 6,
+    slug: "lost-my-job-today-dont-know-what-to-do",
     title: "Lost My Job Today, Don't Know What to Do",
     excerpt: "After 8 years of loyalty, they let me go with a 2-minute meeting. I have a family to support. The shame is overwhelming. How do I even start over at 42?",
     content: `At 9:47 AM today, my world fell apart.
@@ -249,6 +266,7 @@ If you've been through this, I'd love to hear how you got through it. Right now,
   },
   {
     id: 7,
+    slug: "i-forgave-my-father-after-20-years",
     title: "I Forgave My Father After 20 Years",
     excerpt: "He wasn't there for my childhood. But holding onto that anger was destroying me, not him. Forgiveness isn't about them—it's about freeing yourself...",
     content: `My father left when I was six. One morning he was there, the next he was gone. No goodbye, no explanation, no forwarding address. Just... gone.
@@ -292,6 +310,7 @@ Forgiveness isn't about them. It's about you.`,
   },
   {
     id: 8,
+    slug: "the-loneliness-of-being-surrounded-by-people",
     title: "The Loneliness of Being Surrounded by People",
     excerpt: "I have friends, family, colleagues. But none of them really know me. The real me. I smile all day and cry alone at night. Does anyone else feel this way?",
     content: `I have 847 friends on Facebook. My phone is full of contacts. My calendar is packed with social events. And yet, I've never felt more alone in my life.
@@ -328,6 +347,7 @@ Until then, know that your loneliness is valid. And there's nothing wrong with y
   },
   {
     id: 9,
+    slug: "a-secret-ive-carried-for-10-years",
     title: "A Secret I've Carried for 10 Years",
     excerpt: "I've never told anyone this. Not my partner, not my best friend. It's eating me alive but I'm terrified of what happens if the truth comes out...",
     content: `I've been carrying this secret for ten years. It's the first thing I think about when I wake up and the last thing I think about before I sleep. It follows me everywhere, a shadow I can't escape.
@@ -369,6 +389,7 @@ Whatever you're carrying, I hope you find peace.`,
   },
   {
     id: 10,
+    slug: "why-i-stopped-chasing-happiness",
     title: "Why I Stopped Chasing Happiness",
     excerpt: "I spent my whole life pursuing happiness like it was a destination. Then I realized: maybe the chase itself was making me miserable...",
     content: `For 30 years, I chased happiness like it was a train I was always about to miss.
@@ -413,6 +434,7 @@ You just have to be still enough to see it.`,
   },
   {
     id: 11,
+    slug: "the-truth-about-my-perfect-instagram-life",
     title: "The Truth About My Perfect Instagram Life",
     excerpt: "1 million followers. Perfect photos. Enviable lifestyle. Behind the scenes? Crippling anxiety, broken relationships, and a complete loss of identity...",
     content: `You see the filtered photos, the luxury vacations, the designer clothes. What you don't see is me crying in five-star hotel bathrooms, popping Xanax before photoshoots, and feeling more isolated than I've ever felt in my life.
@@ -453,6 +475,7 @@ We're all just pretending.`,
   },
   {
     id: 12,
+    slug: "healing-from-childhood-neglect-at-35",
     title: "Healing From Childhood Neglect at 35",
     excerpt: "My parents never hit me. They just... weren't there. It took me decades to understand that emotional neglect is also abuse...",
     content: `For the longest time, I thought I had a happy childhood. My parents never hit me. We had food on the table. There was no obvious trauma. So why did I grow up feeling so broken?
@@ -493,6 +516,7 @@ You deserved to be seen. You deserved to be loved. And you still do.`,
   },
   {
     id: 13,
+    slug: "when-your-partner-doesnt-believe-in-your-dreams",
     title: "When Your Partner Doesn't Believe in Your Dreams",
     excerpt: "I wanted to start a business. She called it a pipe dream. Years later, I'm successful—but alone. Was it worth it?",
     content: `Five years ago, I told my wife I wanted to quit my job and start my own business. Her response crushed me: "That's a pipe dream. We have bills to pay. Stop being irresponsible."
@@ -533,6 +557,7 @@ Sometimes life just hurts.`,
   },
   {
     id: 14,
+    slug: "anxiety-made-me-miss-my-best-friends-wedding",
     title: "Anxiety Made Me Miss My Best Friend's Wedding",
     excerpt: "I was supposed to be the maid of honor. But on the day, I couldn't leave my house. The panic attacks won. She hasn't spoken to me since...",
     content: `She asked me to be her maid of honor two years before the wedding. I cried, hugged her, and said yes immediately. It was supposed to be the happiest day of our friendship.
@@ -579,6 +604,7 @@ You're not weak. You're fighting a war no one else can see.`,
   },
   {
     id: 15,
+    slug: "i-havent-spoken-to-my-mother-in-3-years",
     title: "I Haven't Spoken to My Mother in 3 Years",
     excerpt: "Everyone says you only get one mother. But what if that mother is toxic? What if distance is the only way to survive?",
     content: `"Blood is thicker than water." "You only get one mother." "Family comes first."
@@ -622,6 +648,7 @@ Even if it hurts.`,
   },
   {
     id: 16,
+    slug: "im-50-and-starting-over-from-nothing",
     title: "I'm 50 and Starting Over From Nothing",
     excerpt: "Divorce took everything. My house, my savings, half my retirement. At 50, I'm living in a studio apartment wondering how I got here...",
     content: `At 25, I had a plan. By 50, I'd be settled. House paid off. Kids grown. Comfortable retirement in sight.
@@ -663,6 +690,7 @@ It's never too late to begin again.`,
   },
   {
     id: 17,
+    slug: "my-childs-diagnosis-changed-everything",
     title: "My Child's Diagnosis Changed Everything",
     excerpt: "When the doctor said 'autism,' my world stopped. Two years later, I've learned that different doesn't mean less. My son taught me that...",
     content: `The moment the doctor said "autism spectrum disorder," time stopped. I remember the fluorescent lights, the concerned expression on my wife's face, the poster of a smiling child on the wall that suddenly seemed like mockery.
@@ -702,6 +730,7 @@ Different is beautiful.`,
   },
   {
     id: 18,
+    slug: "recovering-from-addiction-in-secret",
     title: "Recovering from Addiction in Secret",
     excerpt: "I'm 6 months sober. No one in my life knows I was ever addicted. The recovery is lonely, but the shame of telling the truth feels worse...",
     content: `Six months sober today. There's no one I can tell.
@@ -743,6 +772,7 @@ One step at a time.`,
   },
   {
     id: 19,
+    slug: "finding-love-after-60",
     title: "Finding Love After 60",
     excerpt: "I thought romance was for young people. Then I met him at a grief support group. At 63, I'm learning that love has no expiration date...",
     content: `I buried my husband of 40 years three years ago. The grief nearly killed me. For months, I couldn't eat, couldn't sleep, couldn't see a reason to continue.
@@ -784,6 +814,7 @@ Love might find you when you least expect it.`,
   },
   {
     id: 20,
+    slug: "i-quit-social-media-and-found-myself",
     title: "I Quit Social Media and Found Myself",
     excerpt: "30 days without Instagram, Twitter, or TikTok. What I discovered in the silence changed everything I thought I knew about happiness...",
     content: `It started as an experiment. Thirty days without social media. No Instagram, Twitter, TikTok, Facebook—nothing. Just me, my thoughts, and the analog world.
@@ -832,6 +863,12 @@ export const getStoriesByCategory = (categoryId: string) => STORIES.filter(s => 
 
 // Helper to get a story by ID
 export const getStoryById = (id: number) => STORIES.find(s => s.id === id);
+
+// Helper to get a story by slug
+export const getStoryBySlug = (slug: string) => STORIES.find(s => s.slug === slug);
+
+// Get all story slugs for static generation
+export const getAllStorySlugs = () => STORIES.map(s => s.slug);
 
 // Categories with story counts
 export const STORY_CATEGORIES = [
