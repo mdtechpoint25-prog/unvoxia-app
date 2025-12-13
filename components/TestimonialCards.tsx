@@ -102,9 +102,6 @@ export default function TestimonialCards() {
               Hope & Healing
             </span>
           </h2>
-              Thousands
-            </span>
-          </h2>
           <p style={{
             fontSize: '1.125rem',
             color: '#6b7280',
