@@ -14,7 +14,7 @@ export const organizationSchema = {
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'Customer Support',
-    email: 'support@nomaworld.co.ke',
+    email: 'support@mail.nomaworld.co.ke',
   },
 };
 

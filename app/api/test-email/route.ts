@@ -27,9 +27,9 @@ export async function GET() {
       configured: config.configured
     },
     emailRoles: {
-      'noreply@nomaworld.co.ke': 'Verification codes, OTP, Password reset',
-      'info@nomaworld.co.ke': 'Welcome emails, Announcements, Newsletters',
-      'support@nomaworld.co.ke': 'Support tickets, Report confirmations, Account issues'
+      'noreply@mail.nomaworld.co.ke': 'Verification codes, OTP, Password reset',
+      'info@mail.nomaworld.co.ke': 'Welcome emails, Announcements, Newsletters',
+      'support@mail.nomaworld.co.ke': 'Support tickets, Report confirmations, Account issues'
     },
     replyTo: config.replyTo,
     connection: connectionResult,

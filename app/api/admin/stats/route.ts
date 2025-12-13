@@ -4,9 +4,9 @@ import { cookies } from 'next/headers';
 
 // Admin emails - users with these emails have admin access
 const ADMIN_EMAILS = [
-  'admin@nomaworld.co.ke',
-  'info@nomaworld.co.ke',
-  'support@nomaworld.co.ke'
+  'admin@mail.nomaworld.co.ke',
+  'info@mail.nomaworld.co.ke',
+  'support@mail.nomaworld.co.ke'
 ];
 
 async function getAdminFromSession() {

@@ -5,7 +5,7 @@ A modern digital productivity platform that helps you work smarter, collaborate 
 **Real Work. Real Results. No Mask.**
 
 Domain: nomaworld.co.ke
-Emails: info@nomaworld.co.ke, support@nomaworld.co.ke, admin@nomaworld.co.ke
+Emails: info@mail.nomaworld.co.ke, support@mail.nomaworld.co.ke, admin@mail.nomaworld.co.ke
 Phones: 0701066845 / 0702794172
 
 ## Features
