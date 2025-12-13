@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { db } from '@/lib/turso';
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
     const { content, mood, anonymous } = await req.json();
 
