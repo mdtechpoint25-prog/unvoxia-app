@@ -3,10 +3,10 @@ import { db } from '@/lib/turso';
 
 export async function GET(
   req: Request,
-  { params }: { params: { circleId: string } }
+  { params }: { params: Promise<{ circleId: string }> }
 ) {
   try {
-    const { circleId } = params;
+    const { circleId } = await params;
 
     // Fetch posts for this circle
     const result = await db.execute({
@@ -41,10 +41,10 @@ export async function GET(
 
 export async function POST(
   req: Request,
-  { params }: { params: { circleId: string } }
+  { params }: { params: Promise<{ circleId: string }> }
 ) {
   try {
-    const { circleId } = params;
+    const { circleId } = await params;
     const { content, post_type, anonymous_label } = await req.json();
 
     if (!content || content.trim().length === 0) {
