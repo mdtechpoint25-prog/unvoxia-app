@@ -1,4 +1,17 @@
-'use client';
+
+// SVG Icons
+const MessageIcon = () => (
+  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="1.5">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+  </svg>
+);
+
+const PlusIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+    <line x1="12" y1="5" x2="12" y2="19" />
+    <line x1="5" y1="12" x2="19" y2="12" />
+  </svg>
+);
 
 interface Conversation {
   partnerId: string;
@@ -46,6 +59,9 @@ export default function ConversationList({
         <button
           onClick={onNewChat}
           style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
             padding: '0.5rem 1rem',
             background: '#1ABC9C',
             color: '#fff',
@@ -55,15 +71,20 @@ export default function ConversationList({
             cursor: 'pointer'
           }}
         >
-          + New Chat
+          <PlusIcon />
+          New Chat
         </button>
       </div>
 
       {conversations.length === 0 ? (
-        <div style={{ padding: '2rem', textAlign: 'center' }}>
-          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>??</div>
-          <p style={{ color: '#888' }}>No conversations yet.</p>
-          <p style={{ color: '#888', fontSize: '0.9rem' }}>
+        <div style={{ padding: '3rem 2rem', textAlign: 'center' }}>
+          <div style={{ marginBottom: '1rem', opacity: 0.6 }}>
+            <MessageIcon />
+          </div>
+          <h4 style={{ color: '#4a5568', marginBottom: '0.5rem', fontWeight: 600 }}>
+            No conversations yet
+          </h4>
+          <p style={{ color: '#9ca3af', fontSize: '0.9rem' }}>
             Start a chat with someone from their profile.
           </p>
         </div>
@@ -86,7 +107,7 @@ export default function ConversationList({
               width: '48px',
               height: '48px',
               borderRadius: '50%',
-              background: '#9B59B6',
+              background: 'linear-gradient(135deg, #9B59B6 0%, #1ABC9C 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -102,37 +123,44 @@ export default function ConversationList({
               )}
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <strong style={{ color: '#2C3E50' }}>@{conv.partnerUsername}</strong>
-                <span style={{ fontSize: '0.75rem', color: '#888' }}>
+              <div style={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                alignItems: 'center',
+                marginBottom: '0.25rem'
+              }}>
+                <span style={{ fontWeight: conv.unreadCount > 0 ? 700 : 600, color: '#2C3E50' }}>
+                  @{conv.partnerUsername}
+                </span>
+                <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>
                   {formatTime(conv.lastMessageAt)}
                 </span>
               </div>
-              <p style={{
-                margin: '0.25rem 0 0',
-                color: '#888',
+              <div style={{
                 fontSize: '0.9rem',
+                color: conv.unreadCount > 0 ? '#4a5568' : '#9ca3af',
+                fontWeight: conv.unreadCount > 0 ? 500 : 400,
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis'
               }}>
                 {conv.lastMessage}
-              </p>
+              </div>
             </div>
             {conv.unreadCount > 0 && (
               <div style={{
-                width: '20px',
-                height: '20px',
+                width: '22px',
+                height: '22px',
                 borderRadius: '50%',
                 background: '#1ABC9C',
                 color: '#fff',
+                fontSize: '0.75rem',
+                fontWeight: 600,
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '0.75rem',
-                fontWeight: 600
+                justifyContent: 'center'
               }}>
-                {conv.unreadCount}
+                {conv.unreadCount > 9 ? '9+' : conv.unreadCount}
               </div>
             )}
           </div>
