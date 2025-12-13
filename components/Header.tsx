@@ -5,11 +5,10 @@ import { useState, useEffect } from 'react';
 import Logo from './Logo';
 
 const navLinks = [
-  { href: '/share', label: 'Share' },
-  { href: '/circles', label: 'Circles' },
-  { href: '/heal', label: 'Heal' },
-  { href: '/journal', label: 'Journal' },
-  { href: '/stories', label: 'Stories' },
+  { href: '/experiences', label: 'Experiences' },
+  { href: '/circles', label: 'Communities' },
+  { href: '/share', label: 'Share Story' },
+  { href: '/about', label: 'About' },
 ];
 
 export default function Header() {
