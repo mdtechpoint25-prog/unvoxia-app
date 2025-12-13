@@ -9,17 +9,19 @@ export default function AboutPage() {
       
       <section style={{ marginBottom: '2.5rem' }}>
         <p style={{ fontSize: '1.1rem', lineHeight: 1.8, color: '#444', marginBottom: '1.5rem' }}>
-          {SITE.name} ({SITE.shortName}) is a modern digital platform built to simplify the way people work, learn, collaborate, 
-          and manage their daily tasks. We believe that productivity should not be complicated - it should be natural, 
-          transparent, and accessible to everyone.
+          {SITE.name} ({SITE.shortName}) is an anonymous healing platform where people can freely express their deepest feelings, 
+          struggles, and truths without fear of judgement. We believe that healing begins when we can speak honestly 
+          about what hurts—and that anonymity creates the safety needed for true vulnerability.
         </p>
         <p style={{ fontSize: '1.1rem', lineHeight: 1.8, color: '#444', marginBottom: '1.5rem' }}>
-          Our name, &quot;No Mask,&quot; symbolizes authenticity and openness. In a world full of noise and complexity, NOMA offers clarity: 
-          a space where your work speaks for itself, your communication flows easily, and your ideas can grow without barriers.
+          Our name, &quot;No Mask,&quot; represents emotional authenticity and liberation. In a world where we hide our pain 
+          behind smiles and filters, NOMA offers a sanctuary: a space where your voice is heard, your feelings are valid, 
+          and your identity remains protected. Here, you can remove the mask and be your truest self.
         </p>
         <p style={{ fontSize: '1.1rem', lineHeight: 1.8, color: '#444' }}>
-          From freelancers and content creators to academic writers, students, small businesses, and large teams, NOMA provides 
-          tools that streamline communication, enhance project management, and ensure smooth delivery of results.
+          Whether you're dealing with emotional pain, mental health struggles, life challenges, or simply need someone to listen, 
+          NOMA provides a compassionate community where you can share anonymously, receive support from caring individuals, 
+          and begin your journey toward healing and emotional freedom.
         </p>
       </section>
 
@@ -32,8 +34,8 @@ export default function AboutPage() {
       }}>
         <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Our Mission</h2>
         <p style={{ fontSize: '1.1rem', lineHeight: 1.7 }}>
-          To empower you with a clean, efficient, and trustworthy digital environment where real work gets done, 
-          and real connections thrive.
+          To create a safe, anonymous space where anyone can express their truth, receive compassionate support, 
+          and find healing without fear of judgement or exposure. Your voice matters. You are heard. You are not alone.
         </p>
       </section>
 
@@ -41,11 +43,11 @@ export default function AboutPage() {
         <h2 style={{ color: '#2C3E50', fontSize: '1.75rem', marginBottom: '1.5rem' }}>What We Stand For</h2>
         <div style={{ display: 'grid', gap: '1rem' }}>
           {[
-            { title: 'Authenticity', desc: 'No pretence. No unnecessary complexity. Just real work.' },
-            { title: 'Speed and Efficiency', desc: 'Delivering tools that save time and increase productivity.' },
-            { title: 'Quality', desc: 'Ensuring excellence through clean workflows and professional support.' },
-            { title: 'User Empowerment', desc: 'Helping individuals and teams express talent, manage tasks, and grow.' },
-            { title: 'Innovation', desc: 'Creating solutions that adapt to your needs in a fast-changing digital world.' }
+            { title: 'Anonymity & Safety', desc: 'Your identity is protected. Share freely without exposure or fear.' },
+            { title: 'Compassionate Support', desc: 'A community built on empathy, kindness, and genuine care for one another.' },
+            { title: 'No Judgement', desc: 'Express your truth without shame, criticism, or ridicule. You are safe here.' },
+            { title: 'Mental Wellness', desc: 'Promoting emotional health, healing, and mental wellbeing through support and connection.' },
+            { title: 'Empowerment', desc: 'Helping individuals find their voice, build confidence, and discover paths forward.' }
           ].map((item, i) => (
             <div key={i} style={{ 
               background: '#f9f9f9', 
@@ -62,13 +64,14 @@ export default function AboutPage() {
 
       <section style={{ marginBottom: '2.5rem' }}>
         <h2 style={{ color: '#2C3E50', fontSize: '1.75rem', marginBottom: '1rem' }}>Why NOMA Matters</h2>
-        <p style={{ fontSize: '1.05rem', lineHeight: 1.8, color: '#444', marginBottom: '1rem' }}>
-          In todays world, people juggle school, work, deadlines, creativity, and communication across countless tools. 
-          NOMA brings these needs into one unified ecosystem - clean, powerful, and easy to use.
+        <p style={{ fontSize: '1.05rem', lineHeight: 1.8, color: '#444', marginBottom: '1rem' }}>          In today's world, mental health struggles, emotional pain, and life challenges are everywhere—yet so many people 
+          suffer in silence, afraid of judgement, shame, or exposure. NOMA breaks that cycle by providing complete anonymity, 
+          allowing you to speak your truth without revealing who you are.
         </p>
         <p style={{ fontSize: '1.05rem', lineHeight: 1.8, color: '#444' }}>
-          With us, you experience seamless communication, reliable project management, professional delivery systems, 
-          strong user support, and a platform built on clarity, trust, and truth.
+          Here, you'll find a compassionate community ready to listen, support, and uplift. Whether you need to vent, 
+          seek guidance, find motivation, or simply be heard, NOMA offers the safe space and emotional support you deserve. 
+          Healing begins when we stop hiding.
         </p>
       </section>
 
@@ -79,7 +82,7 @@ export default function AboutPage() {
         borderRadius: '16px' 
       }}>
         <p style={{ fontSize: '1.25rem', color: '#2C3E50', fontWeight: 600 }}>
-          Welcome to No Mask World - where real work thrives.
+          Welcome to NOMA - where healing begins without masks.
         </p>
       </div>
     </main>

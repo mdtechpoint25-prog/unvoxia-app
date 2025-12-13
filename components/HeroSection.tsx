@@ -86,7 +86,7 @@ export default function HeroSection() {
               boxShadow: '0 0 10px #1ABC9C'
             }} />
             <span style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.875rem', fontWeight: 500 }}>
-              Authenticity Reimagined
+              Safe Space for Healing
             </span>
           </div>
 
@@ -97,16 +97,16 @@ export default function HeroSection() {
             color: '#fff',
             marginBottom: '1.5rem'
           }}>
-            Welcome to{' '}
+            Speak Without Fear.{' '}
             <span style={{
               background: 'linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text'
             }}>
-              NOMA
+              Heal
             </span>
-            {' '}- A World With No Masks
+            {' '}Without Judgement
           </h1>
 
           <p style={{
@@ -116,8 +116,8 @@ export default function HeroSection() {
             marginBottom: '2.5rem',
             maxWidth: '540px'
           }}>
-            NOMA is the social platform created for authenticity. No filters, no pressure, 
-            no pretending - just real people sharing real thoughts and real life.
+            NOMA is a safe, anonymous healing platform where you can freely express your true feelings, 
+            receive emotional support, and find healing without fear of judgement. You are heard. You are safe. You are not alone.
           </p>
 
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>

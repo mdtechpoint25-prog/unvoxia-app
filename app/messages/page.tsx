@@ -139,7 +139,7 @@ export default function MessagesPage() {
             boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
             border: '1px solid #e5e7eb'
           }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>??</div>
+            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔑</div>
             <h3 style={{ color: '#1a1a2e', marginBottom: '0.5rem', fontWeight: 600 }}>
               Sign in to message
             </h3>
@@ -233,7 +233,7 @@ export default function MessagesPage() {
               marginBottom: '0.75rem',
               fontWeight: 600
             }}>
-              ?? Pending Requests ({pendingRequests.length})
+              ⏳ Pending Requests ({pendingRequests.length})
             </h3>
             {pendingRequests.map((request) => (
               <div 
@@ -290,7 +290,7 @@ export default function MessagesPage() {
                           fontSize: '0.85rem'
                         }}
                       >
-                        ? Accept
+                        ✅ Accept
                       </button>
                       <button
                         onClick={() => handleChatRequestAction(request.id, 'decline')}
@@ -341,7 +341,7 @@ export default function MessagesPage() {
             </div>
           ) : conversations.length === 0 ? (
             <div style={{ padding: '3rem', textAlign: 'center' }}>
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>??</div>
+              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>💌</div>
               <h3 style={{ color: '#1a1a2e', marginBottom: '0.5rem', fontWeight: 600 }}>
                 No conversations yet
               </h3>
@@ -381,7 +381,7 @@ export default function MessagesPage() {
               boxShadow: '0 20px 60px rgba(0,0,0,0.2)'
             }}>
               <h3 style={{ color: '#1a1a2e', marginBottom: '0.5rem', fontWeight: 600 }}>
-                ?? Start a Connection
+                🤝 Start a Connection
               </h3>
               <p style={{ color: '#6b7280', fontSize: '0.9rem', marginBottom: '1.25rem' }}>
                 Send a chat request. They'll need to accept before you can message each other.
@@ -454,7 +454,7 @@ export default function MessagesPage() {
                   }} />
                 </button>
                 <span style={{ fontSize: '0.9rem', color: isAnonymousChat ? '#9B59B6' : '#666' }}>
-                  {isAnonymousChat ? '?? Anonymous Mode' : '?? Show Identity'}
+                  {isAnonymousChat ? '🎭 Anonymous Mode' : '👤 Show Identity'}
                 </span>
               </div>
 

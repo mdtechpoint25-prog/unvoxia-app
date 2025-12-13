@@ -25,7 +25,7 @@ export default function PromptCard({ prompt, onRespond }: PromptCardProps) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          content: `?? Today's Reflection:\n"${prompt}"\n\n${response}${feelingsScore ? `\n\nFeeling: ${FEELINGS.find(f => f.value === feelingsScore)?.emoji} ${FEELINGS.find(f => f.value === feelingsScore)?.label}` : ''}`,
+          content: `✨ Today's Reflection:\n"${prompt}"\n\n${response}${feelingsScore ? `\n\nFeeling: ${FEELINGS.find(f => f.value === feelingsScore)?.emoji} ${FEELINGS.find(f => f.value === feelingsScore)?.label}` : ''}`,
           category: 'Feelings'
         })
       });
@@ -103,7 +103,7 @@ export default function PromptCard({ prompt, onRespond }: PromptCardProps) {
           justifyContent: 'center',
           fontSize: '1.25rem'
         }}>
-          ??
+          ✨
         </div>
         <div>
           <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)' }}>

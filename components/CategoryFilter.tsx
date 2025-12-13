@@ -9,13 +9,13 @@ interface CategoryFilterProps {
 
 // Category icons/emojis for NOMA categories
 const CATEGORY_ICONS: Record<string, string> = {
-  all: '??',
-  Feelings: '??',
-  Thoughts: '??',
-  Creativity: '??',
-  Life: '??',
-  Anonymous: '??',
-  Support: '??'
+  all: '🌟',
+  'Emotional Pain': '💔',
+  'Mental Health': '🧠',
+  'Life Struggles': '🌊',
+  'Dreams & Goals': '✨',
+  'Anonymous Confessions': '🎭',
+  'Seeking Support': '🤝'
 };
 
 export default function CategoryFilter({ selected, onSelect }: CategoryFilterProps) {
@@ -49,7 +49,7 @@ export default function CategoryFilter({ selected, onSelect }: CategoryFilterPro
             boxShadow: selected === cat ? '0 4px 12px rgba(26, 188, 156, 0.3)' : 'none'
           }}
         >
-          <span>{CATEGORY_ICONS[cat] || '??'}</span>
+          <span>{CATEGORY_ICONS[cat] || '📌'}</span>
           <span>{cat === 'all' ? 'All' : cat}</span>
         </button>
       ))}

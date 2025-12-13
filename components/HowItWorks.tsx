@@ -1,26 +1,26 @@
 const steps = [
   {
     number: '01',
-    title: 'Create Your Account',
-    description: 'Sign up in seconds with your email. No credit card required. Start with our generous free plan.',
+    title: 'Join Anonymously',
+    description: 'Create your account with just an email. Your identity stays protected. No names, no faces—just you.',
     icon: 'M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z'
   },
   {
     number: '02',
-    title: 'Set Up Your Workspace',
-    description: 'Customize your profile, create projects, and invite team members to collaborate on tasks.',
-    icon: 'M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z'
+    title: 'Share Your Truth',
+    description: 'Express your deepest struggles, trauma, stress, or confessions safely. No judgement. No exposure.',
+    icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z'
   },
   {
     number: '03',
-    title: 'Collaborate & Create',
-    description: 'Share ideas in the feed, message teammates, track progress, and achieve your goals together.',
-    icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z'
+    title: 'Receive Support',
+    description: 'Get compassionate responses, mentorship, and emotional support from the community. You are heard.',
+    icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z'
   },
   {
     number: '04',
-    title: 'Achieve Real Results',
-    description: 'Track your productivity, celebrate milestones, and watch your projects come to life with NOMA.',
+    title: 'Begin Healing',
+    description: 'Find clarity, build confidence, and discover your path forward with guidance and community support.',
     icon: 'M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z'
   }
 ];
@@ -63,14 +63,14 @@ export default function HowItWorks() {
             color: '#1a1a2e',
             marginBottom: '1rem'
           }}>
-            Get Started in{' '}
+            Your Path to{' '}
             <span style={{
               background: 'linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text'
             }}>
-              Minutes
+              Healing
             </span>
           </h2>
           <p style={{
@@ -80,7 +80,7 @@ export default function HowItWorks() {
             margin: '0 auto',
             lineHeight: 1.7
           }}>
-            Four simple steps to transform your productivity and start achieving real results.
+            Four simple steps to begin your healing journey in a safe, anonymous environment.
           </p>
         </div>
 

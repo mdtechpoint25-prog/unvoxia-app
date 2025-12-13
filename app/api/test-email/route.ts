@@ -35,7 +35,7 @@ export async function GET() {
     connection: connectionResult,
     message: config.configured 
       ? (connectionResult.success ? '? Email is configured and working!' : `? Connection failed: ${connectionResult.error}`)
-      : '?? SMTP_PASS not set. Please update your .env.local file.'
+      : '⚠️ SMTP_PASS not set. Please update your .env.local file.'
   });
 }
 

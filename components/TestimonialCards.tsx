@@ -2,33 +2,33 @@
 
 const testimonials = [
   {
-    quote: 'NOMA simplified my entire workflow. I no longer switch between apps - everything lives in one place now. The productivity boost has been incredible.',
-    name: 'Grace Wanjiku',
-    role: 'Freelance Designer',
+    quote: 'NOMA gave me the courage to share things I could never say out loud. The anonymity made me feel safe, and the support I received helped me start healing.',
+    name: 'Grace W.',
+    role: 'NOMA Member',
     avatar: '/images/avatar-1.svg',
     color: '#1ABC9C',
     rating: 5
   },
   {
-    quote: 'The project system is a lifesaver for academic work. Clean, simple, and reliable. I managed to complete my thesis on time thanks to NOMA.',
-    name: 'Daniel Ochieng',
-    role: 'Graduate Student',
+    quote: 'For the first time, I felt heard without judgement. The compassionate responses from strangers reminded me I\'m not alone in my struggles.',
+    name: 'Daniel O.',
+    role: 'Finding My Path',
     avatar: '/images/avatar-2.svg',
     color: '#9B59B6',
     rating: 5
   },
   {
-    quote: 'Authentic interactions, meaningful tools, and real productivity. NOMA is different from anything else I have tried. Highly recommended!',
-    name: 'Lydia Muthoni',
-    role: 'Business Owner',
+    quote: 'NOMA became my safe space when everything else felt overwhelming. Being anonymous let me be vulnerable, and that vulnerability led to genuine healing.',
+    name: 'Lydia M.',
+    role: 'Healing Journey',
     avatar: '/images/avatar-3.svg',
     color: '#4DA8DA',
     rating: 5
   },
   {
-    quote: 'The messaging feature with consent flow is exactly what we needed for our team. Professional and secure communication made easy.',
-    name: 'James Kariuki',
-    role: 'Team Lead',
+    quote: 'The mentorship and support I found here changed my perspective. Sometimes we just need someone to listen without knowing who we are.',
+    name: 'James K.',
+    role: 'Grateful Member',
     avatar: '/images/avatar-4.svg',
     color: '#FF6B35',
     rating: 5
@@ -92,13 +92,16 @@ export default function TestimonialCards() {
             color: '#1a1a2e',
             marginBottom: '1rem'
           }}>
-            Loved by{' '}
+            Stories of{' '}
             <span style={{
               background: 'linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text'
             }}>
+              Hope & Healing
+            </span>
+          </h2>
               Thousands
             </span>
           </h2>

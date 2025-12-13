@@ -88,12 +88,12 @@ export default function NotificationsPage() {
 
   const getIcon = (type: string) => {
     switch (type) {
-      case 'reaction': return '??';
-      case 'comment': return '??';
-      case 'chat_request': return '??';
-      case 'badge': return '??';
-      case 'system': return '??';
-      default: return '??';
+      case 'reaction': return '❤️';
+      case 'comment': return '💬';
+      case 'chat_request': return '✉️';
+      case 'badge': return '🏆';
+      case 'system': return '📢';
+      default: return '🔔';
     }
   };
 
@@ -125,7 +125,7 @@ export default function NotificationsPage() {
             boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
             border: '1px solid #e5e7eb'
           }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>??</div>
+            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔑</div>
             <h3 style={{ color: '#1a1a2e', marginBottom: '0.5rem', fontWeight: 600 }}>
               Sign in to view notifications
             </h3>
@@ -232,7 +232,7 @@ export default function NotificationsPage() {
             boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
             border: '1px solid #e5e7eb'
           }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>??</div>
+            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📭</div>
             <h3 style={{ color: '#1a1a2e', marginBottom: '0.5rem', fontWeight: 600 }}>
               No notifications yet
             </h3>

@@ -99,6 +99,9 @@ export default function PostCard({
     setShowComments(!showComments);
   };
 
+  // Hide metrics for non-admin users
+  const showMetrics = false; // Can be controlled by admin role check
+
   const handleCommentAdded = (comment: Comment) => {
     setComments([...comments, comment]);
   };
@@ -225,10 +228,16 @@ export default function PostCard({
               color: '#1ABC9C',
               cursor: 'pointer',
               fontSize: '0.9rem',
-              fontWeight: 500
+              fontWeight: 500,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.375rem'
             }}
           >
-            {commentsCount + comments.length} comments
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
+            {showComments ? 'Hide' : 'Show'} responses
           </button>
         </div>
       )}
@@ -238,12 +247,12 @@ export default function PostCard({
           display: 'flex', 
           gap: '1rem', 
           fontSize: '0.9rem', 
-          color: '#1ABC9C',
+          color: '#9ca3af',
           paddingTop: '0.75rem',
           borderTop: '1px solid #f3f4f6'
         }}>
-          <span>{initialReactions.length} reactions</span>
-          <span>{commentsCount} comments</span>
+          {/* Metrics hidden for healing focus */}
+          <span style={{ fontSize: '0.85rem', fontStyle: 'italic' }}>Anonymous voice</span>
         </div>
       )}
 

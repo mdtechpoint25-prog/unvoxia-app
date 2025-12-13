@@ -9,14 +9,14 @@ Emails: info@nomaworld.co.ke, support@nomaworld.co.ke, admin@nomaworld.co.ke
 Phones: 0701066845 / 0702794172
 
 ## Features
-- ?? Smart Feed for Work & Creativity
-- ?? Task & Project Management
-- ?? Private Messaging with Confidentiality
-- ?? Media Reels & Creative Content
-- ?? Daily Prompts for Growth
-- ?? Notifications System
-- ?? User Profiles & Stats
-- ??? Admin Moderation Dashboard
+- 📰 Smart Feed for Work & Creativity
+- ✅ Task & Project Management
+- 💬 Private Messaging with Confidentiality
+- 🎬 Media Reels & Creative Content
+- ✨ Daily Prompts for Growth
+- 🔔 Notifications System
+- 👤 User Profiles & Stats
+- 🛡️ Admin Moderation Dashboard
 
 ## Routes
 - `/` Landing
@@ -122,5 +122,5 @@ Phones: 0701066845 / 0702794172
 5. Open http://localhost:3000
 
 ## License
-� 2024 No Mask World (NOMA). All rights reserved.
+� 2024 No Mask World (NOMA). All rights reserved.
 

@@ -90,7 +90,7 @@ export default function CTASection() {
             <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           <span style={{ color: '#1ABC9C', fontWeight: 600, fontSize: '0.875rem' }}>
-            Start for Free
+            Anonymous & Safe
           </span>
         </div>
 
@@ -98,6 +98,31 @@ export default function CTASection() {
         <h2 style={{
           fontSize: 'clamp(2rem, 5vw, 3.5rem)',
           fontWeight: 800,
+          lineHeight: 1.2,
+          color: '#fff',
+          marginBottom: '1.5rem'
+        }}>
+          Ready to Begin Your{' '}
+          <span style={{
+            background: 'linear-gradient(135deg, #1ABC9C 0%, #9B59B6 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text'
+          }}>
+            Healing Journey?
+          </span>
+        </h2>
+        <p style={{
+          fontSize: '1.25rem',
+          color: 'rgba(255, 255, 255, 0.7)',
+          lineHeight: 1.7,
+          marginBottom: '3rem',
+          maxWidth: '700px',
+          margin: '0 auto 3rem'
+        }}>
+          Join a compassionate community where you can speak your truth without fear. 
+          Your healing starts here, completely anonymous and safe.
+        </p>
           color: '#fff',
           marginBottom: '1.5rem',
           lineHeight: 1.2

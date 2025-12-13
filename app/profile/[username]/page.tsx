@@ -32,11 +32,11 @@ interface Post {
 }
 
 const BADGE_ICONS: Record<string, string> = {
-  'First Post': '??',
-  'Daily Reflection': '??',
-  'Supportive Comment': '??',
-  'Community Helper': '??',
-  'Inspiration': '?'
+  'First Post': '🎯',
+  'Daily Reflection': '📝',
+  'Supportive Comment': '💙',
+  'Community Helper': '🤝',
+  'Inspiration': '✨'
 };
 
 export default function ProfilePage({ params }: { params: Promise<{ username: string }> }) {
@@ -211,7 +211,7 @@ export default function ProfilePage({ params }: { params: Promise<{ username: st
               fontWeight: 600
             }}
           >
-            {startingChat ? 'Starting...' : '?? Message'}
+            {startingChat ? 'Starting...' : '💬 Message'}
           </button>
         )}
 
@@ -224,7 +224,7 @@ export default function ProfilePage({ params }: { params: Promise<{ username: st
                 borderRadius: '16px',
                 fontSize: '0.85rem'
               }}>
-                {BADGE_ICONS[badge] || '??'} {badge}
+                {BADGE_ICONS[badge] || '🏆'} {badge}
               </span>
             ))}
           </div>

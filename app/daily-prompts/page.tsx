@@ -6,20 +6,26 @@ import PostCard from '@/components/PostCard';
 import ReflectionCalendar from '@/components/ReflectionCalendar';
 
 const DAILY_PROMPTS = [
-  'What is one fear you would like to release today?',
-  'List three things that brought you joy this week.',
-  'What small goal can you set for yourself today?',
-  'Write a message of hope to someone who might be struggling.',
-  'What are you grateful for right now?',
-  'Describe a moment when you felt proud of yourself.',
-  'What would you tell your younger self?',
-  'What is one thing you learned about yourself recently?',
-  'What does self-care mean to you?',
-  'Write about a time you overcame a challenge.',
-  'What gives you hope for the future?',
-  'What is something you need to forgive yourself for?',
-  'Who has had a positive impact on your life?',
-  'What would make today a good day?'
+  'What hurt you today that you need to let out?',
+  'What part of yourself needs kindness right now?',
+  'What would you tell a friend feeling this way?',
+  'What emotion are you holding back from expressing?',
+  'What do you need to hear today?',
+  'What fear is weighing on your heart?',
+  'What are you carrying that isn\'t yours to carry?',
+  'What does healing look like for you today?',
+  'What truth are you afraid to speak?',
+  'When did you last feel safe?',
+  'What do you wish someone understood about your pain?',
+  'What small act of self-compassion can you do today?',
+  'What would life feel like without this burden?',
+  'What does your heart need to release?',
+  'What story about yourself needs to change?',
+  'What grief are you not allowing yourself to feel?',
+  'What would you do if you weren\'t afraid of judgment?',
+  'What part of your healing journey are you proud of?',
+  'What support do you need but haven\'t asked for?',
+  'What does freedom from this pain look like?'
 ];
 
 interface Post {
@@ -135,10 +141,10 @@ export default function DailyPromptsPage() {
   };
 
   const getStreakBadge = () => {
-    if (streakCount >= 30) return { icon: '?', label: 'Month Streak!', color: '#FFD700' };
-    if (streakCount >= 7) return { icon: '??', label: 'Week Streak!', color: '#FF6B35' };
-    if (streakCount >= 3) return { icon: '?', label: 'Building Momentum', color: '#9B59B6' };
-    if (streakCount >= 1) return { icon: '??', label: 'Started!', color: '#1ABC9C' };
+    if (streakCount >= 30) return { icon: '🏆', label: 'Month Streak!', color: '#FFD700' };
+    if (streakCount >= 7) return { icon: '🔥', label: 'Week Streak!', color: '#FF6B35' };
+    if (streakCount >= 3) return { icon: '⚡', label: 'Building Momentum', color: '#9B59B6' };
+    if (streakCount >= 1) return { icon: '✨', label: 'Started!', color: '#1ABC9C' };
     return null;
   };
 
@@ -222,7 +228,7 @@ export default function DailyPromptsPage() {
                 fontWeight: 500
               }}
             >
-              ?? {showCalendar ? 'Hide' : 'Calendar'}
+              📅 {showCalendar ? 'Hide' : 'Calendar'}
             </button>
           </div>
         </div>
@@ -290,7 +296,7 @@ export default function DailyPromptsPage() {
             textAlign: 'center',
             border: '1px solid #e5e7eb'
           }}>
-            <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>??</div>
+            <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>📝</div>
             <p style={{ color: '#6b7280' }}>No reflections yet. Be the first to share your thoughts!</p>
           </div>
         ) : (

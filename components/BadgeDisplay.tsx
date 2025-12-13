@@ -13,28 +13,28 @@ const ALL_BADGES: Badge[] = [
   {
     id: 'first-post',
     name: 'First Post',
-    icon: '??',
+    icon: '🎯',
     description: 'Created your first post',
     earned: false
   },
   {
     id: 'daily-reflection',
     name: 'Daily Reflection',
-    icon: '??',
+    icon: '📝',
     description: 'Completed 7 daily reflections',
     earned: false
   },
   {
     id: 'supportive-comment',
     name: 'Supportive Comment',
-    icon: '??',
+    icon: '💙',
     description: 'Left 10 supportive comments',
     earned: false
   },
   {
     id: 'community-helper',
     name: 'Community Helper',
-    icon: '??',
+    icon: '🤝',
     description: 'Helped 5 community members',
     earned: false
   },
@@ -48,21 +48,21 @@ const ALL_BADGES: Badge[] = [
   {
     id: 'week-streak',
     name: 'Week Streak',
-    icon: '??',
+    icon: '🔥',
     description: 'Posted for 7 days in a row',
     earned: false
   },
   {
     id: 'month-streak',
     name: 'Month Streak',
-    icon: '??',
+    icon: '⭐',
     description: 'Active for 30 consecutive days',
     earned: false
   },
   {
     id: 'storyteller',
     name: 'Storyteller',
-    icon: '??',
+    icon: '📖',
     description: 'Shared 10 stories',
     earned: false
   }

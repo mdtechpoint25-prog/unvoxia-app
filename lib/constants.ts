@@ -1,9 +1,9 @@
 export const SITE = {
-  name: 'No Mask World',
+  name: 'NOMA',
   shortName: 'NOMA',
   domain: 'nomaworld.co.ke',
-  tagline: 'Be Real. Be You. No Masks.',
-  description: 'A digital space built for people who want to live authentically - without the pressure to fake perfection or hide behind filters.'
+  tagline: 'Speak Without Fear. Heal Without Judgement.',
+  description: 'A safe, anonymous healing platform where you can freely express your true feelings, receive emotional support, and find healing without fear of judgement. You are heard. You are safe. You are not alone.'
 };
 
 export const CONTACT = {
@@ -12,12 +12,12 @@ export const CONTACT = {
 };
 
 export const CATEGORIES = [
-  'Feelings',
-  'Thoughts', 
-  'Creativity',
-  'Life',
-  'Anonymous',
-  'Support'
+  'Emotional Pain',
+  'Mental Health',
+  'Life Struggles',
+  'Dreams & Goals',
+  'Anonymous Confessions',
+  'Seeking Support'
 ];
 
 export const REACTIONS = {
@@ -36,14 +36,14 @@ export const FEELINGS = [
 ];
 
 export const BADGES = {
-  'First Post': { icon: 'pencil', description: 'Created your first post' },
-  'Daily Reflection': { icon: 'sunrise', description: 'Completed a daily prompt' },
-  'Week Streak': { icon: 'fire', description: '7 day prompt streak' },
-  'Month Streak': { icon: 'star', description: '30 day prompt streak' },
-  'Supportive': { icon: 'heart', description: 'Gave 10 support reactions' },
-  'Connector': { icon: 'handshake', description: 'Started 5 conversations' },
-  'Authentic Voice': { icon: 'target', description: '50 posts shared' },
-  'Inspiration': { icon: 'sparkle', description: 'Received 100 inspire reactions' }
+  'First Voice': { icon: 'microphone', description: 'Shared your voice for the first time' },
+  'Healing Journey': { icon: 'heart', description: 'Completed 7 daily reflections' },
+  'Week Healer': { icon: 'fire', description: '7 day healing streak' },
+  'Month Warrior': { icon: 'star', description: '30 day courage streak' },
+  'Compassionate Soul': { icon: 'hands', description: 'Gave 10 supportive responses' },
+  'Safe Space Creator': { icon: 'shield', description: 'Helped 5 people feel heard' },
+  'Brave Heart': { icon: 'courage', description: 'Shared 20 vulnerable moments' },
+  'Light Bringer': { icon: 'sun', description: 'Brought hope to 50 people' }
 };
 
 export const REPORT_REASONS = [

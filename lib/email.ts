@@ -31,7 +31,7 @@ function createTransporter() {
   const user = EMAIL_ADDRESSES.default;
   const pass = process.env.SMTP_PASS || '';
 
-  console.log(`?? SMTP: ${host}:${port} | User: ${user}`);
+  console.log(`üìß SMTP: ${host}:${port} | User: ${user}`);
 
   return nodemailer.createTransport({
     host,
@@ -77,9 +77,9 @@ async function sendEmail(options: {
   const { to, subject, html, sender = 'noreply', senderName, customReplyTo } = options;
 
   if (!isEmailConfigured()) {
-    console.warn('?? SMTP_PASS not configured');
+    console.warn('‚ö†Ô∏è SMTP_PASS not configured');
     if (process.env.NODE_ENV === 'development') {
-      console.log(`?? [DEV] To: ${to} | From: ${sender} | Subject: ${subject}`);
+      console.log(`üîß [DEV] To: ${to} | From: ${sender} | Subject: ${subject}`);
       return;
     }
     throw new Error('Email service not configured');
@@ -91,7 +91,7 @@ async function sendEmail(options: {
   // Set Reply-To based on sender type
   const replyTo = customReplyTo || (sender === 'noreply' ? EMAIL_ADDRESSES.support : fromEmail);
 
-  console.log(`?? Sending to ${to} from ${fromEmail} (Reply-To: ${replyTo})...`);
+  console.log(`üì§ Sending to ${to} from ${fromEmail} (Reply-To: ${replyTo})...`);
 
   try {
     const info = await transporter.sendMail({
@@ -116,7 +116,7 @@ async function sendEmail(options: {
 // ============================================
 
 export async function sendVerificationEmail(to: string, code: string): Promise<void> {
-  console.log(`?? Verification code for ${to}: ${code}`);
+  console.log(`üîë Verification code for ${to}: ${code}`);
   
   await sendEmail({
     to,
@@ -139,7 +139,7 @@ export async function sendVerificationEmail(to: string, code: string): Promise<v
           <p style="color: #999; font-size: 12px;">If you didn't create an account, please ignore this email.</p>
         </div>
         <div style="background: #f8f9fa; padding: 15px; text-align: center;">
-          <p style="color: #999; font-size: 11px; margin: 0;">© ${new Date().getFullYear()} NOMA - No Mask World | nomaworld.co.ke</p>
+          <p style="color: #999; font-size: 11px; margin: 0;">ÔøΩ ${new Date().getFullYear()} NOMA - No Mask World | nomaworld.co.ke</p>
         </div>
       </div>
     `
@@ -204,7 +204,7 @@ export async function sendOTPEmail(to: string, code: string): Promise<void> {
 export async function sendWelcomeEmail(to: string, username: string): Promise<void> {
   await sendEmail({
     to,
-    subject: 'Welcome to NOMA! ??',
+    subject: 'Welcome to NOMA! üéâ',
     sender: 'info',
     senderName: 'NOMA Team',
     html: `
@@ -214,7 +214,7 @@ export async function sendWelcomeEmail(to: string, username: string): Promise<vo
           <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0;">No Mask World</p>
         </div>
         <div style="padding: 30px; background: #fff;">
-          <p style="color: #333; font-size: 18px;">Hey <strong>@${username}</strong>! ??</p>
+          <p style="color: #333; font-size: 18px;">Hey <strong>@${username}</strong>! üëã</p>
           <p style="color: #555; font-size: 16px; line-height: 1.6;">
             Welcome to <strong>No Mask World</strong> - a place where real stories meet real connections. 
             We're excited to have you join our community!
@@ -234,7 +234,7 @@ export async function sendWelcomeEmail(to: string, username: string): Promise<vo
         </div>
         <div style="background: #f8f9fa; padding: 15px; text-align: center;">
           <p style="color: #999; font-size: 12px; margin: 0;">Questions? Reply to this email or contact us at support@nomaworld.co.ke</p>
-          <p style="color: #999; font-size: 11px; margin: 10px 0 0;">© ${new Date().getFullYear()} NOMA - No Mask World | nomaworld.co.ke</p>
+          <p style="color: #999; font-size: 11px; margin: 10px 0 0;">ÔøΩ ${new Date().getFullYear()} NOMA - No Mask World | nomaworld.co.ke</p>
         </div>
       </div>
     `
@@ -244,13 +244,13 @@ export async function sendWelcomeEmail(to: string, username: string): Promise<vo
 export async function sendAnnouncementEmail(to: string, title: string, content: string): Promise<void> {
   await sendEmail({
     to,
-    subject: `?? ${title}`,
+    subject: `üì¢ ${title}`,
     sender: 'info',
     senderName: 'NOMA Announcements',
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: linear-gradient(135deg, #1ABC9C, #9B59B6); padding: 30px; text-align: center;">
-          <h1 style="color: #fff; margin: 0;">?? Announcement</h1>
+          <h1 style="color: #fff; margin: 0;">üì¢ Announcement</h1>
         </div>
         <div style="padding: 30px; background: #fff;">
           <h2 style="color: #1a1a2e; margin: 0 0 20px;">${title}</h2>
@@ -259,7 +259,7 @@ export async function sendAnnouncementEmail(to: string, title: string, content: 
           </div>
         </div>
         <div style="background: #f8f9fa; padding: 15px; text-align: center;">
-          <p style="color: #999; font-size: 11px; margin: 0;">© ${new Date().getFullYear()} NOMA - No Mask World | nomaworld.co.ke</p>
+          <p style="color: #999; font-size: 11px; margin: 0;">ÔøΩ ${new Date().getFullYear()} NOMA - No Mask World | nomaworld.co.ke</p>
         </div>
       </div>
     `
@@ -295,7 +295,7 @@ export async function sendSupportEmail(to: string, subject: string, message: str
           </p>
         </div>
         <div style="background: #f8f9fa; padding: 15px; text-align: center;">
-          <p style="color: #999; font-size: 11px; margin: 0;">© ${new Date().getFullYear()} NOMA - No Mask World | nomaworld.co.ke</p>
+          <p style="color: #999; font-size: 11px; margin: 0;">ÔøΩ ${new Date().getFullYear()} NOMA - No Mask World | nomaworld.co.ke</p>
         </div>
       </div>
     `
@@ -330,7 +330,7 @@ export async function sendReportConfirmationEmail(to: string, reportType: string
           </p>
         </div>
         <div style="background: #f8f9fa; padding: 15px; text-align: center;">
-          <p style="color: #999; font-size: 11px; margin: 0;">© ${new Date().getFullYear()} NOMA - No Mask World | nomaworld.co.ke</p>
+          <p style="color: #999; font-size: 11px; margin: 0;">ÔøΩ ${new Date().getFullYear()} NOMA - No Mask World | nomaworld.co.ke</p>
         </div>
       </div>
     `
@@ -364,7 +364,7 @@ export async function sendAccountWarningEmail(to: string, reason: string): Promi
           </p>
         </div>
         <div style="background: #f8f9fa; padding: 15px; text-align: center;">
-          <p style="color: #999; font-size: 11px; margin: 0;">© ${new Date().getFullYear()} NOMA - No Mask World | nomaworld.co.ke</p>
+          <p style="color: #999; font-size: 11px; margin: 0;">ÔøΩ ${new Date().getFullYear()} NOMA - No Mask World | nomaworld.co.ke</p>
         </div>
       </div>
     `

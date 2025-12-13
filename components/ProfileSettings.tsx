@@ -10,8 +10,8 @@ interface ProfileSettingsProps {
 }
 
 const AVATAR_OPTIONS = [
-  '??', '??', '??', '??', '??', '??', '??', '??',
-  '??', '??', '??', '??', '??', '??', '??', '??'
+  '😊', '😎', '🤗', '🥳', '🤓', '😇', '🌟', '✨',
+  '🎨', '🎭', '🦄', '🐱', '🐶', '🦊', '🐼', '🦁'
 ];
 
 export default function ProfileSettings({ username, avatarUrl, bio, onSave }: ProfileSettingsProps) {
@@ -118,7 +118,7 @@ export default function ProfileSettings({ username, avatarUrl, bio, onSave }: Pr
         border: '1px solid #e5e7eb'
       }}>
         <h4 style={{ color: '#1a1a2e', marginBottom: '1rem', fontWeight: 600 }}>
-          ?? Your Profile
+          👤 Your Profile
         </h4>
         
         {/* Avatar Selection */}
@@ -225,7 +225,7 @@ export default function ProfileSettings({ username, avatarUrl, bio, onSave }: Pr
         border: '1px solid #e5e7eb'
       }}>
         <h4 style={{ color: '#1a1a2e', marginBottom: '1rem', fontWeight: 600 }}>
-          ?? Change Password
+          🔐 Change Password
         </h4>
         <form onSubmit={handlePasswordChange}>
           <input
@@ -298,7 +298,7 @@ export default function ProfileSettings({ username, avatarUrl, bio, onSave }: Pr
         border: '1px solid #e5e7eb'
       }}>
         <h4 style={{ color: '#1a1a2e', marginBottom: '1rem', fontWeight: 600 }}>
-          ?? Notifications
+          🔔 Notifications
         </h4>
         {Object.entries({
           emailNotifications: 'Email Notifications',
@@ -360,7 +360,7 @@ export default function ProfileSettings({ username, avatarUrl, bio, onSave }: Pr
         border: '1px solid #e5e7eb'
       }}>
         <h4 style={{ color: '#1a1a2e', marginBottom: '1rem', fontWeight: 600 }}>
-          ??? Privacy
+          🔒 Privacy
         </h4>
         <div style={{ 
           display: 'flex', 

@@ -17,7 +17,7 @@ export default function ContactPage() {
           padding: '2rem',
           textAlign: 'center'
         }}>
-          <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>??</div>
+          <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>📧</div>
           <h3 style={{ color: '#2C3E50', marginBottom: '1rem' }}>Email Us</h3>
           {CONTACT.emails.map((email, i) => (
             <a key={i} href={`mailto:${email}`} style={{
@@ -37,7 +37,7 @@ export default function ContactPage() {
           padding: '2rem',
           textAlign: 'center'
         }}>
-          <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>??</div>
+          <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>📞</div>
           <h3 style={{ color: '#2C3E50', marginBottom: '1rem' }}>Call Us</h3>
           {CONTACT.phones.map((phone, i) => (
             <a key={i} href={`tel:${phone}`} style={{
@@ -57,7 +57,7 @@ export default function ContactPage() {
           padding: '2rem',
           textAlign: 'center'
         }}>
-          <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>??</div>
+          <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🌐</div>
           <h3 style={{ color: '#2C3E50', marginBottom: '1rem' }}>Website</h3>
           <a href={`https://${SITE.domain}`} style={{
             color: '#1ABC9C',
