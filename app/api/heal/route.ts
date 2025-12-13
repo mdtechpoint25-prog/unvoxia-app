@@ -1,10 +1,9 @@
 import { NextResponse } from 'next/server';
-import { getDb } from '@/lib/turso';
+import { db } from '@/lib/turso';
 import { getCompassionateResponse, type EmotionType } from '@/lib/compassionate-responses';
 
 export async function GET() {
   try {
-    const db = getDb();
 
     // Fetch recent anonymous posts (where user_id is NULL)
     // Show most recent first, limit to 50 posts

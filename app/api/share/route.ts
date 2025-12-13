@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb } from '@/lib/turso';
+import { db } from '@/lib/turso';
 
 export async function POST(req: NextRequest) {
   try {
@@ -18,8 +18,6 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-
-    const db = getDb();
 
     // For anonymous submissions, we create a post with no user_id
     // or use a special "anonymous" user ID
