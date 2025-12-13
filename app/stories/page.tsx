@@ -1,225 +1,332 @@
 'use client';
 
 import { useState } from 'react';
-
-const healingStories = [
-  {
-    id: 1,
-    title: 'Finding Light in Darkness',
-    content: 'After months of feeling lost, I finally reached out for help. It wasn\'t easy, but taking that first step changed everything. You don\'t have to suffer alone.',
-    mood: '🌅',
-    category: 'Hope',
-    date: '2 days ago'
-  },
-  {
-    id: 2,
-    title: 'Learning to Be Kind to Myself',
-    content: 'I used to be my own worst critic. Slowly, I\'m learning that self-compassion isn\'t weakness—it\'s strength. Be gentle with yourself.',
-    mood: '💚',
-    category: 'Self-Love',
-    date: '5 days ago'
-  },
-  {
-    id: 3,
-    title: 'It\'s Okay to Not Be Okay',
-    content: 'Society tells us to always be strong, but it\'s okay to struggle. It\'s okay to cry. It\'s okay to ask for support. Your feelings are valid.',
-    mood: '🕊️',
-    category: 'Validation',
-    date: '1 week ago'
-  },
-  {
-    id: 4,
-    title: 'Small Steps Forward',
-    content: 'Progress isn\'t always linear. Some days are harder than others. But each small step counts, even when it doesn\'t feel like it.',
-    mood: '🌱',
-    category: 'Progress',
-    date: '1 week ago'
-  },
-  {
-    id: 5,
-    title: 'The Power of Being Heard',
-    content: 'Someone finally listened without judgment. They didn\'t try to fix me—they just heard me. Sometimes that\'s all we need.',
-    mood: '👂',
-    category: 'Connection',
-    date: '2 weeks ago'
-  },
-  {
-    id: 6,
-    title: 'Healing Takes Time',
-    content: 'There\'s no timeline for healing. Don\'t rush yourself. Don\'t compare your journey to others. You\'re exactly where you need to be.',
-    mood: '⏳',
-    category: 'Patience',
-    date: '2 weeks ago'
-  }
-];
+import Link from 'next/link';
+import { STORIES, STORY_CATEGORIES } from '@/lib/stories-data';
 
 export default function StoriesPage() {
-  const [filter, setFilter] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<'latest' | 'popular'>('latest');
 
-  const categories = ['Hope', 'Self-Love', 'Validation', 'Progress', 'Connection', 'Patience'];
-
-  const filteredStories = filter === 'all' 
-    ? healingStories 
-    : healingStories.filter(s => s.category === filter);
+  // Filter and sort stories
+  const filteredStories = STORIES
+    .filter(story => !selectedCategory || story.categoryId === selectedCategory)
+    .sort((a, b) => {
+      if (sortBy === 'popular') {
+        return b.reactions - a.reactions;
+      }
+      return 0; // Keep original order for 'latest'
+    });
 
   return (
     <main style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%)',
-      padding: '6rem 1rem 3rem'
+      background: '#f8f9fa',
+      padding: '5rem 1rem 3rem'
     }}>
       <div style={{
-        maxWidth: '900px',
+        maxWidth: '1100px',
         margin: '0 auto'
       }}>
         {/* Header */}
         <div style={{
           textAlign: 'center',
-          marginBottom: '3rem'
+          marginBottom: '2.5rem'
         }}>
           <h1 style={{
             fontSize: 'clamp(2rem, 5vw, 3rem)',
-            fontWeight: 700,
-            color: '#2C3E50',
+            fontWeight: 800,
+            color: '#1a1a2e',
             marginBottom: '0.75rem'
           }}>
-            Healing Stories
+            All Stories
           </h1>
           <p style={{
             fontSize: '1.125rem',
-            color: '#7a8a9a',
+            color: '#6b7280',
             maxWidth: '600px',
             margin: '0 auto',
             lineHeight: 1.6
           }}>
-            Real stories of hope, resilience, and healing. You are not alone.
+            {STORIES.length} real stories of healing, struggle, and hope. Every voice matters.
           </p>
         </div>
 
-        {/* Category Filter */}
+        {/* Filters */}
         <div style={{
           display: 'flex',
           flexWrap: 'wrap',
-          gap: '0.75rem',
+          gap: '1rem',
           justifyContent: 'center',
-          marginBottom: '2.5rem'
+          marginBottom: '2rem',
+          padding: '1.5rem',
+          background: '#fff',
+          borderRadius: '16px',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
         }}>
-          <button
-            onClick={() => setFilter('all')}
-            style={{
-              padding: '0.625rem 1.25rem',
-              borderRadius: '50px',
-              border: filter === 'all' ? '2px solid #1ABC9C' : '2px solid #e5e7eb',
-              background: filter === 'all' ? 'rgba(26, 188, 156, 0.1)' : '#fff',
-              color: filter === 'all' ? '#1ABC9C' : '#6b7280',
-              fontWeight: 600,
-              fontSize: '0.9rem',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease'
-            }}
-          >
-            All Stories
-          </button>
-          {categories.map(cat => (
+          {/* Category Filter */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center' }}>
             <button
-              key={cat}
-              onClick={() => setFilter(cat)}
+              onClick={() => setSelectedCategory(null)}
               style={{
-                padding: '0.625rem 1.25rem',
-                borderRadius: '50px',
-                border: filter === cat ? '2px solid #1ABC9C' : '2px solid #e5e7eb',
-                background: filter === cat ? 'rgba(26, 188, 156, 0.1)' : '#fff',
-                color: filter === cat ? '#1ABC9C' : '#6b7280',
+                padding: '0.5rem 1rem',
+                borderRadius: '20px',
+                border: !selectedCategory ? '2px solid #1ABC9C' : '1px solid #e5e7eb',
+                background: !selectedCategory ? 'rgba(26, 188, 156, 0.1)' : '#fff',
+                color: !selectedCategory ? '#1ABC9C' : '#6b7280',
                 fontWeight: 600,
-                fontSize: '0.9rem',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease'
+                fontSize: '0.85rem',
+                cursor: 'pointer'
               }}
             >
-              {cat}
+              All ({STORIES.length})
             </button>
-          ))}
+            {STORY_CATEGORIES.map(cat => {
+              const count = STORIES.filter(s => s.categoryId === cat.id).length;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.id)}
+                  style={{
+                    padding: '0.5rem 1rem',
+                    borderRadius: '20px',
+                    border: selectedCategory === cat.id ? '2px solid #1ABC9C' : '1px solid #e5e7eb',
+                    background: selectedCategory === cat.id ? 'rgba(26, 188, 156, 0.1)' : '#fff',
+                    color: selectedCategory === cat.id ? '#1ABC9C' : '#6b7280',
+                    fontWeight: 600,
+                    fontSize: '0.85rem',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                  }}
+                >
+                  <span>{cat.emoji}</span>
+                  <span>{cat.name} ({count})</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Sort Controls */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '1.5rem',
+          flexWrap: 'wrap',
+          gap: '1rem'
+        }}>
+          <p style={{ color: '#6b7280', margin: 0 }}>
+            Showing {filteredStories.length} {filteredStories.length === 1 ? 'story' : 'stories'}
+          </p>
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <button
+              onClick={() => setSortBy('latest')}
+              style={{
+                padding: '0.5rem 1rem',
+                borderRadius: '8px',
+                border: 'none',
+                background: sortBy === 'latest' ? '#1ABC9C' : '#e5e7eb',
+                color: sortBy === 'latest' ? '#fff' : '#6b7280',
+                fontWeight: 500,
+                cursor: 'pointer'
+              }}
+            >
+              Latest
+            </button>
+            <button
+              onClick={() => setSortBy('popular')}
+              style={{
+                padding: '0.5rem 1rem',
+                borderRadius: '8px',
+                border: 'none',
+                background: sortBy === 'popular' ? '#1ABC9C' : '#e5e7eb',
+                color: sortBy === 'popular' ? '#fff' : '#6b7280',
+                fontWeight: 500,
+                cursor: 'pointer'
+              }}
+            >
+              Most Popular
+            </button>
+          </div>
         </div>
 
         {/* Stories Grid */}
         <div style={{
           display: 'grid',
           gap: '1.5rem',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))'
+          gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))'
         }}>
           {filteredStories.map((story) => (
-            <article
+            <Link
               key={story.id}
+              href={`/story/${story.id}`}
               style={{
                 background: '#fff',
-                borderRadius: '20px',
-                padding: '2rem',
-                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.06)',
-                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                cursor: 'pointer'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-4px)';
-                e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.1)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.06)';
+                borderRadius: '16px',
+                padding: '1.5rem',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+                border: '1px solid #e5e7eb',
+                textDecoration: 'none',
+                transition: 'all 0.2s ease',
+                display: 'block'
               }}
             >
-              {/* Header */}
+              {/* Category & Time */}
               <div style={{
                 display: 'flex',
-                justifyContent: 'space-between',
                 alignItems: 'center',
-                marginBottom: '1rem'
+                gap: '0.5rem',
+                marginBottom: '0.75rem'
               }}>
+                <span style={{ fontSize: '1.5rem' }}>{story.emoji}</span>
                 <span style={{
-                  fontSize: '2rem'
-                }}>
-                  {story.mood}
-                </span>
-                <span style={{
-                  fontSize: '0.8rem',
-                  color: '#9ca3af',
-                  textTransform: 'uppercase',
-                  fontWeight: 600,
-                  letterSpacing: '0.05em'
+                  color: '#1ABC9C',
+                  fontSize: '0.85rem',
+                  fontWeight: 600
                 }}>
                   {story.category}
+                </span>
+                <span style={{
+                  marginLeft: 'auto',
+                  color: '#9ca3af',
+                  fontSize: '0.8rem'
+                }}>
+                  {story.timeAgo}
                 </span>
               </div>
 
               {/* Title */}
               <h3 style={{
-                fontSize: '1.25rem',
+                fontSize: '1.125rem',
                 fontWeight: 700,
-                color: '#2C3E50',
+                color: '#1a1a2e',
                 marginBottom: '0.75rem',
-                lineHeight: 1.3
+                lineHeight: 1.4
               }}>
                 {story.title}
               </h3>
 
-              {/* Content */}
+              {/* Excerpt */}
               <p style={{
-                fontSize: '1rem',
-                lineHeight: 1.7,
-                color: '#5a6c7d',
-                marginBottom: '1.25rem'
+                color: '#4b5563',
+                fontSize: '0.95rem',
+                lineHeight: 1.6,
+                marginBottom: '1rem'
               }}>
-                {story.content}
+                {story.excerpt}
               </p>
 
-              {/* Footer */}
+              {/* Author */}
               <div style={{
-                fontSize: '0.85rem',
-                color: '#9ca3af'
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                marginBottom: '1rem',
+                paddingTop: '1rem',
+                borderTop: '1px solid #f3f4f6'
               }}>
-                {story.date}
+                <div style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #1ABC9C, #9B59B6)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '0.9rem'
+                }}>
+                  {story.emoji}
+                </div>
+                <span style={{
+                  fontWeight: 600,
+                  color: '#374151',
+                  fontSize: '0.9rem'
+                }}>
+                  {story.anonymous}
+                </span>
               </div>
-            </article>
+
+              {/* Stats */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1.5rem',
+                color: '#6b7280',
+                fontSize: '0.85rem'
+              }}>
+                <span>💚 {story.reactions}</span>
+                <span>💬 {story.comments}</span>
+                <span>👁️ {story.views.toLocaleString()}</span>
+                <span style={{ 
+                  marginLeft: 'auto', 
+                  color: '#1ABC9C',
+                  fontWeight: 600
+                }}>
+                  Read Story →
+                </span>
+              </div>
+            </Link>
           ))}
+        </div>
+
+        {/* Empty State */}
+        {filteredStories.length === 0 && (
+          <div style={{
+            textAlign: 'center',
+            padding: '4rem 2rem',
+            background: '#fff',
+            borderRadius: '16px'
+          }}>
+            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📭</div>
+            <h3 style={{ color: '#1a1a2e', marginBottom: '0.5rem' }}>No stories found</h3>
+            <p style={{ color: '#6b7280' }}>Try selecting a different category</p>
+          </div>
+        )}
+
+        {/* Share CTA */}
+        <div style={{
+          marginTop: '3rem',
+          background: 'linear-gradient(135deg, #1ABC9C, #9B59B6)',
+          borderRadius: '20px',
+          padding: '3rem 2rem',
+          textAlign: 'center',
+          color: '#fff'
+        }}>
+          <h2 style={{
+            fontSize: '1.75rem',
+            fontWeight: 700,
+            marginBottom: '1rem'
+          }}>
+            Your Story Could Help Someone
+          </h2>
+          <p style={{
+            fontSize: '1.1rem',
+            opacity: 0.9,
+            maxWidth: '500px',
+            margin: '0 auto 1.5rem',
+            lineHeight: 1.6
+          }}>
+            Sharing your experience anonymously can bring healing to both you and others who may be going through the same thing.
+          </p>
+          <Link
+            href="/share"
+            style={{
+              display: 'inline-block',
+              padding: '1rem 2.5rem',
+              background: '#fff',
+              color: '#1ABC9C',
+              fontWeight: 700,
+              fontSize: '1.1rem',
+              borderRadius: '12px',
+              textDecoration: 'none',
+              boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)'
+            }}
+          >
+            ✍️ Share Your Story
+          </Link>
         </div>
       </div>
     </main>

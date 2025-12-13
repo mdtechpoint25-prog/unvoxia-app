@@ -7,12 +7,8 @@ import { STORIES, STORY_CATEGORIES, getFeaturedStories, getTrendingStories } fro
 // Get the stories from the data file
 const FEATURED_STORIES = getFeaturedStories();
 const TRENDING_STORIES = getTrendingStories();
-const LATEST_STORIES = STORIES.filter(s => !s.featured).slice(0, 10);
-const CATEGORIES = STORY_CATEGORIES.map(cat => ({
-  ...cat,
-  // Add some realistic counts
-  count: Math.floor(Math.random() * 800) + 200
-}));
+const ALL_STORIES = STORIES.filter(s => !s.featured); // All non-featured stories
+const CATEGORIES = STORY_CATEGORIES;
 
 export default function ExperiencesPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -349,7 +345,7 @@ export default function ExperiencesPage() {
 
             {/* Story Cards */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              {LATEST_STORIES.map((story) => (
+              {ALL_STORIES.map((story) => (
                 <article
                   key={story.id}
                   style={{
