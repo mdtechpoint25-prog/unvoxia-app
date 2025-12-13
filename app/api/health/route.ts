@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { isDatabaseConfigured } from '@/lib/turso';
 import { SITE } from '@/lib/constants';
 
 type HealthStatus = {
@@ -12,12 +12,12 @@ type HealthStatus = {
   };
   checks: {
     database: {
-      status: 'ok' | 'error' | 'unknown';
-      latency: number;
+      status: 'ok' | 'error' | 'not_configured';
+      latency?: number;
       error?: string;
     };
     environment: {
-      status: 'ok' | 'warning' | 'unknown';
+      status: 'ok' | 'warning';
       missing?: string[];
     };
   };
@@ -33,45 +33,51 @@ export async function GET() {
       domain: SITE.domain
     },
     checks: {
-      database: { status: 'unknown', latency: 0 },
-      environment: { status: 'unknown' }
+      database: { status: 'not_configured' },
+      environment: { status: 'ok' }
     }
   };
 
-  // Check database connectivity
-  const dbStart = Date.now();
-  try {
-    const { error } = await supabase.from('users').select('id').limit(1);
+  // Check database configuration
+  if (isDatabaseConfigured()) {
+    const dbStart = Date.now();
+    try {
+      // Import db dynamically to avoid errors when not configured
+      const { db } = await import('@/lib/turso');
+      await db.execute({ sql: 'SELECT 1', args: [] });
+      health.checks.database = {
+        status: 'ok',
+        latency: Date.now() - dbStart
+      };
+    } catch (err: any) {
+      health.checks.database = {
+        status: 'error',
+        latency: Date.now() - dbStart,
+        error: err.message
+      };
+    }
+  } else {
     health.checks.database = {
-      status: error ? 'error' : 'ok',
-      latency: Date.now() - dbStart,
-      error: error?.message
-    };
-  } catch (err: any) {
-    health.checks.database = {
-      status: 'error',
-      latency: Date.now() - dbStart,
-      error: err.message
+      status: 'not_configured',
+      error: 'TURSO_DATABASE_URL not set'
     };
   }
 
-  // Check environment variables
-  const requiredEnvVars = [
-    'NEXT_PUBLIC_SUPABASE_URL',
-    'NEXT_PUBLIC_SUPABASE_ANON_KEY'
+  // Check optional environment variables
+  const optionalEnvVars = [
+    'SMTP_HOST',
+    'SMTP_USER'
   ];
   
-  const missingEnvVars = requiredEnvVars.filter(v => !process.env[v]);
+  const missingEnvVars = optionalEnvVars.filter(v => !process.env[v]);
   health.checks.environment = {
     status: missingEnvVars.length === 0 ? 'ok' : 'warning',
     missing: missingEnvVars.length > 0 ? missingEnvVars : undefined
   };
 
-  // Overall status
-  const allChecksOk = Object.values(health.checks).every(
-    (check: any) => check.status === 'ok'
-  );
-  health.status = allChecksOk ? 'ok' : 'degraded';
+  // Overall status - ok if database is ok or not_configured (platform works without it)
+  const dbOk = health.checks.database.status === 'ok' || health.checks.database.status === 'not_configured';
+  health.status = dbOk ? 'ok' : 'degraded';
 
   return NextResponse.json(health, {
     status: health.status === 'ok' ? 200 : 503
