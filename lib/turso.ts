@@ -7,7 +7,7 @@ const tursoToken = process.env.TURSO_AUTH_TOKEN || '';
 // Lazy initialization of database client
 let _db: Client | null = null;
 
-function getDb(): Client {
+export function getDb(): Client {
   if (!_db) {
     if (!tursoUrl) {
       // Return a mock client that throws helpful errors

@@ -1,15 +1,16 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { STORIES, getStoryById, STORY_CATEGORIES } from '@/lib/stories-data';
+import StoryReactions from '@/components/StoryReactions';
+import StoryComments from '@/components/StoryComments';
+import ShareButton from '@/components/ShareButton';
 
-// Generate static params for all stories
 export async function generateStaticParams() {
   return STORIES.map((story) => ({
     id: story.id.toString(),
   }));
 }
 
-// Generate metadata for each story
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const story = getStoryById(parseInt(id));
@@ -37,145 +38,42 @@ export default async function StoryPage({ params }: { params: Promise<{ id: stri
     notFound();
   }
 
-  // Get related stories from same category
   const relatedStories = STORIES
     .filter(s => s.categoryId === story.categoryId && s.id !== story.id)
     .slice(0, 3);
 
-  // Format content paragraphs
   const paragraphs = story.content.split('\n\n');
 
   return (
-    <main style={{ 
-      minHeight: '100vh',
-      background: '#f8f9fa'
-    }}>
-      {/* Hero Header */}
-      <section style={{
-        background: 'linear-gradient(135deg, #1a1a2e 0%, #2C3E50 50%, #1ABC9C 100%)',
-        padding: '5rem 1rem 3rem',
-        marginBottom: '2rem'
-      }}>
-        <div style={{
-          maxWidth: '800px',
-          margin: '0 auto'
-        }}>
-          {/* Breadcrumb */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            marginBottom: '1.5rem',
-            flexWrap: 'wrap'
-          }}>
-            <Link 
-              href="/experiences" 
-              style={{ 
-                color: 'rgba(255,255,255,0.7)', 
-                textDecoration: 'none',
-                fontSize: '0.9rem'
-              }}
-            >
-              Experiences
-            </Link>
-            <span style={{ color: 'rgba(255,255,255,0.5)' }}>›</span>
-            <Link 
-              href={`/experiences?category=${story.categoryId}`}
-              style={{ 
-                color: 'rgba(255,255,255,0.7)', 
-                textDecoration: 'none',
-                fontSize: '0.9rem'
-              }}
-            >
-              {story.category}
-            </Link>
-            <span style={{ color: 'rgba(255,255,255,0.5)' }}>›</span>
-            <span style={{ color: 'rgba(255,255,255,0.9)', fontSize: '0.9rem' }}>Story</span>
+    <main className="story-page">
+      {/* Hero */}
+      <section className="hero">
+        <div className="hero-content">
+          <div className="breadcrumb">
+            <Link href="/experiences">Experiences</Link>
+            <span>›</span>
+            <Link href={`/experiences?category=${story.categoryId}`}>{story.category}</Link>
+            <span>›</span>
+            <span className="current">Story</span>
           </div>
 
-          {/* Category Badge */}
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            background: 'rgba(255,255,255,0.1)',
-            padding: '0.5rem 1rem',
-            borderRadius: '20px',
-            marginBottom: '1.5rem'
-          }}>
-            <span style={{ fontSize: '1.25rem' }}>{story.emoji}</span>
-            <span style={{ 
-              color: '#1ABC9C', 
-              fontWeight: 600,
-              fontSize: '0.9rem'
-            }}>
-              {story.category}
-            </span>
+          <div className="category-badge">
+            <span className="badge-emoji">{story.emoji}</span>
+            <span className="badge-text">{story.category}</span>
           </div>
 
-          {/* Title */}
-          <h1 style={{
-            fontSize: 'clamp(1.75rem, 4vw, 2.5rem)',
-            fontWeight: 800,
-            color: '#fff',
-            marginBottom: '1.5rem',
-            lineHeight: 1.3
-          }}>
-            {story.title}
-          </h1>
+          <h1 className="title">{story.title}</h1>
 
-          {/* Meta Info */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '1.5rem',
-            flexWrap: 'wrap'
-          }}>
-            {/* Author */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.75rem'
-            }}>
-              <div style={{
-                width: '44px',
-                height: '44px',
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg, #1ABC9C, #9B59B6)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '1.25rem'
-              }}>
-                {story.emoji}
-              </div>
-              <div>
-                <div style={{
-                  color: '#fff',
-                  fontWeight: 600,
-                  fontSize: '1rem'
-                }}>
-                  {story.anonymous}
-                </div>
-                <div style={{
-                  color: 'rgba(255,255,255,0.6)',
-                  fontSize: '0.85rem'
-                }}>
-                  {story.timeAgo}
-                </div>
+          <div className="meta">
+            <div className="author">
+              <div className="avatar">{story.emoji}</div>
+              <div className="author-info">
+                <div className="author-name">{story.anonymous}</div>
+                <div className="author-time">{story.timeAgo}</div>
               </div>
             </div>
-
-            {/* Stats */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '1rem',
-              color: 'rgba(255,255,255,0.7)',
-              fontSize: '0.9rem',
-              marginLeft: 'auto'
-            }}>
-              <span>👁️ {story.views.toLocaleString()} views</span>
+            <div className="stats">
+              <span>👁️ {story.views.toLocaleString()}</span>
               <span>💚 {story.reactions}</span>
               <span>💬 {story.comments}</span>
             </div>
@@ -183,435 +81,363 @@ export default async function StoryPage({ params }: { params: Promise<{ id: stri
         </div>
       </section>
 
-      {/* Content Area */}
-      <div style={{
-        maxWidth: '1100px',
-        margin: '0 auto',
-        padding: '0 1rem 3rem',
-        display: 'grid',
-        gridTemplateColumns: '1fr 320px',
-        gap: '2rem'
-      }}>
-        {/* Main Content */}
-        <article style={{
-          background: '#fff',
-          borderRadius: '20px',
-          padding: '2.5rem',
-          boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
-          border: '1px solid #e5e7eb'
-        }}>
-          {/* Story Content */}
-          <div style={{
-            fontSize: '1.1rem',
-            lineHeight: 1.9,
-            color: '#374151'
-          }}>
+      {/* Content */}
+      <div className="content-wrapper">
+        <article className="article">
+          <div className="story-content">
             {paragraphs.map((paragraph, index) => (
-              <p key={index} style={{
-                marginBottom: '1.5rem',
-                textAlign: 'justify'
-              }}>
-                {paragraph}
-              </p>
+              <p key={index}>{paragraph}</p>
             ))}
           </div>
 
-          {/* Tags */}
-          <div style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '0.5rem',
-            marginTop: '2rem',
-            paddingTop: '2rem',
-            borderTop: '1px solid #e5e7eb'
-          }}>
-            {story.tags.map((tag) => (
-              <span
-                key={tag}
-                style={{
-                  background: '#f3f4f6',
-                  color: '#6b7280',
-                  padding: '0.5rem 1rem',
-                  borderRadius: '20px',
-                  fontSize: '0.85rem',
-                  fontWeight: 500
-                }}
-              >
-                #{tag}
-              </span>
-            ))}
-          </div>
-
-          {/* Actions */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '1rem',
-            marginTop: '2rem',
-            paddingTop: '2rem',
-            borderTop: '1px solid #e5e7eb',
-            flexWrap: 'wrap'
-          }}>
-            <button
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                padding: '0.75rem 1.5rem',
-                background: 'linear-gradient(135deg, #1ABC9C, #16a085)',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '10px',
-                fontWeight: 600,
-                cursor: 'pointer',
-                fontSize: '1rem',
-                boxShadow: '0 4px 15px rgba(26, 188, 156, 0.3)'
-              }}
-            >
-              💚 Support ({story.reactions})
-            </button>
-            <button
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                padding: '0.75rem 1.5rem',
-                background: '#f3f4f6',
-                color: '#374151',
-                border: 'none',
-                borderRadius: '10px',
-                fontWeight: 600,
-                cursor: 'pointer',
-                fontSize: '1rem'
-              }}
-            >
-              💬 Comment ({story.comments})
-            </button>
-            <button
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                padding: '0.75rem 1.5rem',
-                background: '#f3f4f6',
-                color: '#374151',
-                border: 'none',
-                borderRadius: '10px',
-                fontWeight: 600,
-                cursor: 'pointer',
-                fontSize: '1rem'
-              }}
-            >
-              🔗 Share
-            </button>
-          </div>
-
-          {/* Comment Section Placeholder */}
-          <div style={{
-            marginTop: '2rem',
-            paddingTop: '2rem',
-            borderTop: '1px solid #e5e7eb'
-          }}>
-            <h3 style={{
-              fontSize: '1.25rem',
-              fontWeight: 700,
-              color: '#1a1a2e',
-              marginBottom: '1rem'
-            }}>
-              💬 Comments ({story.comments})
-            </h3>
-            
-            {/* Comment Input */}
-            <div style={{
-              background: '#f9fafb',
-              borderRadius: '12px',
-              padding: '1rem',
-              marginBottom: '1.5rem'
-            }}>
-              <textarea
-                placeholder="Share words of support or your own experience..."
-                style={{
-                  width: '100%',
-                  padding: '1rem',
-                  borderRadius: '10px',
-                  border: '1px solid #e5e7eb',
-                  fontSize: '1rem',
-                  resize: 'vertical',
-                  minHeight: '100px',
-                  marginBottom: '1rem'
-                }}
-              />
-              <button
-                style={{
-                  padding: '0.75rem 1.5rem',
-                  background: 'linear-gradient(135deg, #1ABC9C, #16a085)',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '8px',
-                  fontWeight: 600,
-                  cursor: 'pointer'
-                }}
-              >
-                Post Comment
-              </button>
-            </div>
-
-            {/* Sample Comments */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              {[
-                { name: 'Compassionate Soul', time: '2 hours ago', text: 'Thank you for sharing this. Your courage to speak about this will help so many others. You are not alone. 💚' },
-                { name: 'Fellow Traveler', time: '4 hours ago', text: 'I went through something similar. It gets better, I promise. Sending you strength and healing.' },
-                { name: 'Hopeful Heart', time: '6 hours ago', text: 'This resonated with me so deeply. Thank you for putting into words what I could never express.' }
-              ].map((comment, i) => (
-                <div
-                  key={i}
-                  style={{
-                    background: '#f9fafb',
-                    borderRadius: '12px',
-                    padding: '1rem'
-                  }}
-                >
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    marginBottom: '0.5rem'
-                  }}>
-                    <div style={{
-                      width: '32px',
-                      height: '32px',
-                      borderRadius: '50%',
-                      background: 'linear-gradient(135deg, #9B59B6, #1ABC9C)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: '#fff',
-                      fontSize: '0.75rem',
-                      fontWeight: 600
-                    }}>
-                      {comment.name.charAt(0)}
-                    </div>
-                    <span style={{ fontWeight: 600, color: '#1a1a2e', fontSize: '0.9rem' }}>
-                      {comment.name}
-                    </span>
-                    <span style={{ color: '#9ca3af', fontSize: '0.8rem' }}>
-                      • {comment.time}
-                    </span>
-                  </div>
-                  <p style={{
-                    color: '#4b5563',
-                    fontSize: '0.95rem',
-                    lineHeight: 1.6,
-                    margin: 0
-                  }}>
-                    {comment.text}
-                  </p>
-                </div>
+          {story.tags && story.tags.length > 0 && (
+            <div className="tags">
+              {story.tags.map((tag) => (
+                <span key={tag} className="tag">#{tag}</span>
               ))}
             </div>
+          )}
 
-            <button
-              style={{
-                width: '100%',
-                padding: '1rem',
-                marginTop: '1rem',
-                background: 'transparent',
-                border: '2px solid #e5e7eb',
-                borderRadius: '10px',
-                color: '#6b7280',
-                fontWeight: 600,
-                cursor: 'pointer'
-              }}
-            >
-              View All {story.comments} Comments
-            </button>
+          <div className="actions">
+            <StoryReactions 
+              storyId={story.id} 
+              initialReactions={story.reactions} 
+              isStatic={true}
+            />
+            <a href="#comments" className="comment-btn">
+              💬 Comment ({story.comments})
+            </a>
+            <ShareButton storyId={story.id} title={story.title} />
+          </div>
+
+          <div id="comments">
+            <StoryComments 
+              storyId={story.id} 
+              initialCount={story.comments}
+              isStatic={false}
+            />
           </div>
         </article>
 
-        {/* Sidebar */}
-        <aside style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          {/* Share CTA */}
-          <div style={{
-            background: 'linear-gradient(135deg, #1ABC9C, #9B59B6)',
-            borderRadius: '16px',
-            padding: '1.5rem',
-            textAlign: 'center',
-            color: '#fff'
-          }}>
-            <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>✍️</div>
-            <h3 style={{
-              fontSize: '1.125rem',
-              fontWeight: 700,
-              marginBottom: '0.5rem'
-            }}>
-              Have a Similar Story?
-            </h3>
-            <p style={{
-              fontSize: '0.9rem',
-              opacity: 0.9,
-              marginBottom: '1rem',
-              lineHeight: 1.5
-            }}>
-              Your experience could help someone else feel less alone.
-            </p>
-            <Link
-              href="/share"
-              style={{
-                display: 'inline-block',
-                padding: '0.75rem 1.5rem',
-                background: '#fff',
-                color: '#1ABC9C',
-                fontWeight: 600,
-                borderRadius: '8px',
-                textDecoration: 'none'
-              }}
-            >
-              Share Your Story
-            </Link>
-          </div>
-
-          {/* Related Stories */}
-          {relatedStories.length > 0 && (
-            <div style={{
-              background: '#fff',
-              borderRadius: '16px',
-              padding: '1.5rem',
-              border: '1px solid #e5e7eb'
-            }}>
-              <h3 style={{
-                fontSize: '1rem',
-                fontWeight: 700,
-                color: '#1a1a2e',
-                marginBottom: '1rem'
-              }}>
-                Related Stories
-              </h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <aside className="sidebar">
+          <div className="sidebar-card">
+            <h3>Related Stories</h3>
+            {relatedStories.length > 0 ? (
+              <div className="related-list">
                 {relatedStories.map((related) => (
-                  <Link
-                    key={related.id}
-                    href={`/story/${related.id}`}
-                    style={{
-                      display: 'block',
-                      padding: '1rem',
-                      background: '#f9fafb',
-                      borderRadius: '10px',
-                      textDecoration: 'none',
-                      transition: 'all 0.2s ease'
-                    }}
-                  >
-                    <h4 style={{
-                      fontSize: '0.9rem',
-                      fontWeight: 600,
-                      color: '#1a1a2e',
-                      marginBottom: '0.5rem',
-                      lineHeight: 1.4
-                    }}>
-                      {related.title}
-                    </h4>
-                    <div style={{
-                      fontSize: '0.8rem',
-                      color: '#6b7280'
-                    }}>
-                      💚 {related.reactions} • 💬 {related.comments}
+                  <Link href={`/story/${related.id}`} key={related.id} className="related-item">
+                    <span className="related-emoji">{related.emoji}</span>
+                    <div className="related-info">
+                      <div className="related-title">{related.title}</div>
+                      <div className="related-meta">by {related.anonymous}</div>
                     </div>
                   </Link>
                 ))}
               </div>
-            </div>
-          )}
+            ) : (
+              <p className="no-related">No related stories yet</p>
+            )}
+          </div>
 
-          {/* Browse Categories */}
-          <div style={{
-            background: '#fff',
-            borderRadius: '16px',
-            padding: '1.5rem',
-            border: '1px solid #e5e7eb'
-          }}>
-            <h3 style={{
-              fontSize: '1rem',
-              fontWeight: 700,
-              color: '#1a1a2e',
-              marginBottom: '1rem'
-            }}>
-              Browse Categories
-            </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <div className="sidebar-card">
+            <h3>Categories</h3>
+            <div className="category-list">
               {STORY_CATEGORIES.map((cat) => (
-                <Link
+                <Link 
+                  href={`/experiences?category=${cat.id}`} 
                   key={cat.id}
-                  href={`/experiences?category=${cat.id}`}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.75rem',
-                    padding: '0.75rem',
-                    borderRadius: '8px',
-                    textDecoration: 'none',
-                    background: cat.id === story.categoryId ? 'rgba(26, 188, 156, 0.1)' : 'transparent',
-                    transition: 'all 0.2s ease'
-                  }}
+                  className="category-link"
                 >
-                  <span style={{ fontSize: '1.25rem' }}>{cat.emoji}</span>
-                  <span style={{
-                    flex: 1,
-                    color: cat.id === story.categoryId ? '#1ABC9C' : '#374151',
-                    fontWeight: cat.id === story.categoryId ? 600 : 500,
-                    fontSize: '0.9rem'
-                  }}>
-                    {cat.name}
-                  </span>
-                  <span style={{
-                    color: '#9ca3af',
-                    fontSize: '0.8rem'
-                  }}>
-                    {cat.count}
-                  </span>
+                  <span>{cat.emoji}</span>
+                  <span>{cat.name}</span>
                 </Link>
               ))}
             </div>
           </div>
 
-          {/* Support Resources */}
-          <div style={{
-            background: '#fef3c7',
-            borderRadius: '16px',
-            padding: '1.25rem',
-            border: '1px solid #fcd34d'
-          }}>
-            <h3 style={{
-              fontSize: '0.9rem',
-              fontWeight: 600,
-              color: '#92400e',
-              marginBottom: '0.5rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem'
-            }}>
-              🆘 Need Support?
-            </h3>
-            <p style={{
-              fontSize: '0.8rem',
-              color: '#92400e',
-              lineHeight: 1.5,
-              marginBottom: '0.75rem'
-            }}>
-              If you're in crisis or need immediate help, please reach out to a crisis helpline.
-            </p>
-            <Link
-              href="/safety"
-              style={{
-                fontSize: '0.8rem',
-                color: '#92400e',
-                fontWeight: 600,
-                textDecoration: 'none'
-              }}
-            >
-              View Resources →
-            </Link>
+          <div className="sidebar-card cta-card">
+            <h3>Share Your Story</h3>
+            <p>Have a story to share? Your experience could help someone else.</p>
+            <Link href="/share" className="cta-btn">Share Anonymously →</Link>
           </div>
         </aside>
       </div>
+
+      <style>{`
+        .story-page {
+          min-height: 100vh;
+          background: #f8fafc;
+        }
+
+        .hero {
+          background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #1ABC9C 100%);
+          padding: 4rem 1rem 2.5rem;
+        }
+        .hero-content {
+          max-width: 800px;
+          margin: 0 auto;
+        }
+        .breadcrumb {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin-bottom: 1.25rem;
+          flex-wrap: wrap;
+          font-size: 0.813rem;
+        }
+        .breadcrumb a {
+          color: rgba(255,255,255,0.7);
+          text-decoration: none;
+        }
+        .breadcrumb a:hover {
+          color: #fff;
+        }
+        .breadcrumb span {
+          color: rgba(255,255,255,0.5);
+        }
+        .breadcrumb .current {
+          color: rgba(255,255,255,0.9);
+        }
+        .category-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          background: rgba(255,255,255,0.1);
+          padding: 0.4rem 0.875rem;
+          border-radius: 20px;
+          margin-bottom: 1rem;
+        }
+        .badge-emoji {
+          font-size: 1.125rem;
+        }
+        .badge-text {
+          color: #1ABC9C;
+          font-weight: 600;
+          font-size: 0.813rem;
+        }
+        .title {
+          font-size: clamp(1.5rem, 4vw, 2.25rem);
+          font-weight: 800;
+          color: #fff;
+          margin-bottom: 1.25rem;
+          line-height: 1.3;
+        }
+        .meta {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          gap: 1rem;
+        }
+        .author {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+        }
+        .avatar {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #1ABC9C, #9B59B6);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.125rem;
+        }
+        .author-name {
+          color: #fff;
+          font-weight: 600;
+          font-size: 0.938rem;
+        }
+        .author-time {
+          color: rgba(255,255,255,0.6);
+          font-size: 0.813rem;
+        }
+        .stats {
+          display: flex;
+          gap: 1rem;
+          color: rgba(255,255,255,0.7);
+          font-size: 0.813rem;
+        }
+
+        .content-wrapper {
+          max-width: 1100px;
+          margin: 0 auto;
+          padding: 2rem 1rem 3rem;
+          display: grid;
+          grid-template-columns: 1fr 300px;
+          gap: 2rem;
+        }
+        @media (max-width: 900px) {
+          .content-wrapper {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        .article {
+          background: #fff;
+          border-radius: 14px;
+          padding: 2rem;
+          box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+          border: 1px solid #e2e8f0;
+        }
+        .story-content {
+          font-size: 0.975rem;
+          line-height: 1.85;
+          color: #374151;
+        }
+        .story-content p {
+          margin-bottom: 1.25rem;
+          text-align: justify;
+        }
+        .tags {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          margin-top: 1.5rem;
+          padding-top: 1.5rem;
+          border-top: 1px solid #e5e7eb;
+        }
+        .tag {
+          background: #f3f4f6;
+          color: #6b7280;
+          padding: 0.375rem 0.875rem;
+          border-radius: 16px;
+          font-size: 0.813rem;
+          font-weight: 500;
+        }
+        .actions {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          margin-top: 1.5rem;
+          padding-top: 1.5rem;
+          border-top: 1px solid #e5e7eb;
+          flex-wrap: wrap;
+        }
+        .comment-btn {
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
+          padding: 0.6rem 1rem;
+          background: #f3f4f6;
+          color: #374151;
+          border: none;
+          border-radius: 8px;
+          font-weight: 600;
+          cursor: pointer;
+          font-size: 0.875rem;
+          text-decoration: none;
+          transition: all 0.2s;
+        }
+        .comment-btn:hover {
+          background: #e5e7eb;
+        }
+
+        .sidebar {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+        .sidebar-card {
+          background: #fff;
+          border-radius: 12px;
+          padding: 1.25rem;
+          border: 1px solid #e2e8f0;
+        }
+        .sidebar-card h3 {
+          font-size: 0.938rem;
+          font-weight: 700;
+          color: #1e293b;
+          margin-bottom: 1rem;
+        }
+        .related-list {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+        .related-item {
+          display: flex;
+          gap: 0.75rem;
+          padding: 0.625rem;
+          background: #f8fafc;
+          border-radius: 8px;
+          text-decoration: none;
+          transition: background 0.2s;
+        }
+        .related-item:hover {
+          background: #f1f5f9;
+        }
+        .related-emoji {
+          font-size: 1.25rem;
+          flex-shrink: 0;
+        }
+        .related-title {
+          font-size: 0.813rem;
+          font-weight: 600;
+          color: #1e293b;
+          line-height: 1.4;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+        .related-meta {
+          font-size: 0.75rem;
+          color: #64748b;
+          margin-top: 0.25rem;
+        }
+        .no-related {
+          font-size: 0.813rem;
+          color: #64748b;
+        }
+        .category-list {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+        .category-link {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.5rem 0.75rem;
+          background: #f8fafc;
+          border-radius: 6px;
+          text-decoration: none;
+          font-size: 0.813rem;
+          color: #475569;
+          transition: all 0.2s;
+        }
+        .category-link:hover {
+          background: #f0fdf4;
+          color: #166534;
+        }
+        .cta-card {
+          background: linear-gradient(135deg, rgba(26, 188, 156, 0.1), rgba(155, 89, 182, 0.1));
+          border-color: rgba(26, 188, 156, 0.3);
+        }
+        .cta-card p {
+          font-size: 0.813rem;
+          color: #64748b;
+          line-height: 1.5;
+          margin-bottom: 1rem;
+        }
+        .cta-btn {
+          display: block;
+          text-align: center;
+          padding: 0.625rem 1rem;
+          background: #1ABC9C;
+          color: #fff;
+          border-radius: 6px;
+          text-decoration: none;
+          font-weight: 600;
+          font-size: 0.875rem;
+          transition: background 0.2s;
+        }
+        .cta-btn:hover {
+          background: #16a085;
+        }
+      `}</style>
     </main>
   );
 }
