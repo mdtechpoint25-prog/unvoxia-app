@@ -115,20 +115,20 @@ export function BottomNav() {
         }
 
         .nav-item:hover {
-          color: #888;
+          color: #c49a4a;
         }
 
         .nav-item.active {
-          color: #1ABC9C;
+          color: #d4a855;
         }
 
         .nav-item.special {
           transform: scale(1.1);
-          color: #1ABC9C;
+          color: #d4a855;
         }
 
         .nav-item.special.active {
-          background: linear-gradient(135deg, rgba(26, 188, 156, 0.1), rgba(155, 89, 182, 0.1));
+          background: linear-gradient(135deg, rgba(212, 168, 85, 0.1), rgba(196, 154, 74, 0.1));
         }
 
         .nav-label {

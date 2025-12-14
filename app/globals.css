@@ -4,15 +4,19 @@
    ROOT DEFAULTS (Dark Theme - Default)
    ======================================== */
 :root {
-  /* Primary Theme Colors */
-  --bg-primary: #000000;
-  --bg-surface: #0a0a0a;
-  --bg-surface-elevated: #1a1a1a;
-  --accent: #1ABC9C;
-  --accent-hover: #16a085;
-  --text-primary: #ffffff;
-  --text-secondary: #cccccc;
-  --text-muted: #999999;
+/* Primary Theme Colors - Dark with Yellow/Gold Accent */
+--bg-primary: #1a1a1a;
+--bg-surface: #242424;
+--bg-surface-elevated: #2d2d2d;
+--bg-sidebar: #1a1a1a;
+--bg-chat: #242424;
+--bg-panel: #1f1f1f;
+--accent: #d4a855;
+--accent-hover: #c49a4a;
+--accent-bright: #e8c06a;
+--text-primary: #ffffff;
+--text-secondary: #b3b3b3;
+--text-muted: #808080;
   
   /* Overlay & Border */
   --overlay-low: rgba(255, 255, 255, 0.05);
@@ -47,11 +51,11 @@
   --noma-pain: var(--error);
   --noma-primary: var(--accent);
   --noma-primary-dark: var(--accent-hover);
-  --noma-primary-light: #f9ffcc;
-  --noma-accent: #7c3aed;
-  --noma-accent-light: #a78bfa;
+  --noma-primary-light: #f5e6c4;
+  --noma-accent: #d4a855;
+  --noma-accent-light: #e8c06a;
   --noma-charcoal: #1e1e1e;
-  --noma-dark: #040404;
+  --noma-dark: #121212;
   --noma-white: #ffffff;
   
   /* Gray Scale */
@@ -67,9 +71,9 @@
   --gray-900: #171717;
   
   /* Gradients */
-  --gradient-primary: linear-gradient(135deg, var(--accent) 0%, #e8f090 100%);
+  --gradient-primary: linear-gradient(135deg, var(--accent) 0%, #e8c06a 100%);
   --gradient-surface: linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-primary) 100%);
-  --gradient-overlay: linear-gradient(to bottom, rgba(4,4,4,0.6), rgba(4,4,4,0.95));
+  --gradient-overlay: linear-gradient(to bottom, rgba(26,26,26,0.6), rgba(26,26,26,0.95));
   
   /* Typography */
   --font-sans: 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -112,26 +116,30 @@
    DARK THEME (Explicit)
    ======================================== */
 [data-theme="dark"] {
-  /* Core backgrounds - deep, rich blacks */
-  --bg-primary: #050505;
-  --bg-surface: #0c0c0c;
-  --bg-surface-elevated: #161616;
+  /* Core backgrounds - sleek dark with depth */
+  --bg-primary: #1a1a1a;
+  --bg-surface: #242424;
+  --bg-surface-elevated: #2d2d2d;
+  --bg-sidebar: #1a1a1a;
+  --bg-chat: #242424;
+  --bg-panel: #1f1f1f;
   
-  /* Accent - teal that pops on dark */
-  --accent: #14b8a6;
-  --accent-hover: #0d9488;
+  /* Accent - warm yellow/gold that pops on dark */
+  --accent: #d4a855;
+  --accent-hover: #c49a4a;
+  --accent-bright: #e8c06a;
   
   /* Text - clean whites with good contrast */
   --text-primary: #fafafa;
-  --text-secondary: #a3a3a3;
-  --text-muted: #6b6b6b;
+  --text-secondary: #b3b3b3;
+  --text-muted: #808080;
   
   /* Overlays & borders - subtle glow effects */
   --overlay-low: rgba(255, 255, 255, 0.04);
   --overlay-medium: rgba(255, 255, 255, 0.08);
   --overlay-high: rgba(255, 255, 255, 0.12);
-  --border-subtle: rgba(255, 255, 255, 0.06);
-  --border-medium: rgba(255, 255, 255, 0.12);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-medium: rgba(255, 255, 255, 0.15);
   
   /* Shadows - deeper for dark mode */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
@@ -141,20 +149,20 @@
   --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.6);
   
   /* Status colors - vibrant on dark */
-  --success: #34d399;
-  --success-hover: #10b981;
+  --success: #4ade80;
+  --success-hover: #22c55e;
   --error: #f87171;
   --error-hover: #ef4444;
-  --warning: #fbbf24;
+  --warning: #d4a855;
   --info: #38bdf8;
   
   /* Gradients */
-  --gradient-overlay: linear-gradient(to bottom, rgba(5,5,5,0.6), rgba(5,5,5,0.98));
-  --gradient-primary: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+  --gradient-overlay: linear-gradient(to bottom, rgba(26,26,26,0.6), rgba(26,26,26,0.98));
+  --gradient-primary: linear-gradient(135deg, #d4a855 0%, #c49a4a 100%);
   
   /* Dark mode legacy */
-  --noma-primary: #14b8a6;
-  --noma-primary-dark: #0d9488;
+  --noma-primary: #d4a855;
+  --noma-primary-dark: #c49a4a;
 }
 
 /* ========================================

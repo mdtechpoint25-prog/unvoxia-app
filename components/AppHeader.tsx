@@ -389,12 +389,12 @@ export function AppHeader() {
         .avatar {
           width: 32px;
           height: 32px;
-          background: linear-gradient(135deg, var(--accent, #f4ffac), #a8e6a1);
+          background: linear-gradient(135deg, var(--accent, #d4a855), #c49a4a);
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          color: var(--bg-primary, #000);
+          color: var(--bg-primary, #1a1a1a);
         }
 
         .dropdown-container {
