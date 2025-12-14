@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import ActionStack from './ActionStack';
 
@@ -13,18 +12,17 @@ export interface TextReelData {
   tags: string[];
   reactionCount: number;
   commentCount: number;
-  shareCount: number;
   createdAt: string;
   hasReacted: boolean;
-  isFollowing: boolean;
+  hasSaved: boolean;
 }
 
 interface TextReelProps {
   post: TextReelData;
   onReact: (postId: string) => void;
-  onFollow: (username: string) => void;
   onComment: (postId: string) => void;
-  onShare: (postId: string) => void;
+  onSave: (postId: string) => void;
+  onReport: (postId: string) => void;
 }
 
 // Format relative time
@@ -51,8 +49,16 @@ const postTypeStyles: Record<string, { bg: string; text: string }> = {
   release: { bg: 'rgba(239, 68, 68, 0.2)', text: '#ef4444' },
 };
 
-export default function TextReel({ post, onReact, onFollow, onComment, onShare }: TextReelProps) {
+// Avatar emoji mapping
+const AVATAR_EMOJIS: Record<string, string> = {
+  spiral: '🌀', butterfly: '🦋', wave: '🌊', flower: '🌸', moon: '🌙', star: '⭐',
+  flame: '🔥', sparkle: '💫', leaf: '🌿', mask: '🎭', gem: '💎', rainbow: '🌈',
+  cloud: '☁️', heart: '💜', feather: '🪶', lotus: '🪷', default: '👤',
+};
+
+export default function TextReel({ post, onReact, onComment, onSave, onReport }: TextReelProps) {
   const typeStyle = postTypeStyles[post.postType] || postTypeStyles.experience;
+  const avatarEmoji = AVATAR_EMOJIS[post.avatarIcon] || AVATAR_EMOJIS.default;
 
   return (
     <div
@@ -72,89 +78,85 @@ export default function TextReel({ post, onReact, onFollow, onComment, onShare }
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'flex-end',
+          justifyContent: 'center',
           padding: '24px',
-          paddingBottom: '100px',
           paddingRight: '80px',
         }}
       >
-        {/* Post Type Badge */}
-        <div
-          style={{
-            display: 'inline-flex',
-            alignSelf: 'flex-start',
-            padding: '6px 12px',
-            borderRadius: '16px',
-            background: typeStyle.bg,
-            marginBottom: '16px',
-          }}
-        >
-          <span style={{ fontSize: '0.75rem', color: typeStyle.text, fontWeight: 500, textTransform: 'capitalize' }}>
-            {post.postType}
-          </span>
-        </div>
-
-        {/* Author Info */}
-        <Link
-          href={`/profile/${post.username}`}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px',
-            marginBottom: '16px',
-            textDecoration: 'none',
-          }}
-        >
-          {/* Avatar */}
-          <div
-            style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, #0d9488, #7c3aed)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '1.2rem',
-            }}
-          >
-            {post.avatarIcon === 'default' ? '👤' : post.avatarIcon}
-          </div>
-
-          <div>
-            <span style={{ color: '#fff', fontWeight: 600, fontSize: '0.95rem' }}>
-              @{post.username}
-            </span>
-            <span style={{ color: 'rgba(255,255,255,0.5)', marginLeft: '8px', fontSize: '0.85rem' }}>
-              · {formatTime(post.createdAt)}
-            </span>
-          </div>
-        </Link>
-
-        {/* Post Content */}
+        {/* Post Content - Large centered text */}
         <p
           style={{
             color: 'rgba(255, 255, 255, 0.95)',
-            fontSize: '1.25rem',
+            fontSize: 'clamp(1.25rem, 4vw, 1.75rem)',
             lineHeight: 1.6,
             fontFamily: 'Georgia, serif',
-            marginBottom: '20px',
+            marginBottom: '24px',
             maxWidth: '600px',
           }}
         >
           {post.content}
         </p>
 
+        {/* Bottom info bar */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            flexWrap: 'wrap',
+          }}
+        >
+          {/* Author */}
+          <Link
+            href={`/profile/${post.username}`}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              textDecoration: 'none',
+            }}
+          >
+            <span style={{ fontSize: '1.25rem' }}>{avatarEmoji}</span>
+            <span style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.9rem' }}>
+              @{post.username}
+            </span>
+          </Link>
+
+          <span style={{ color: 'rgba(255, 255, 255, 0.3)' }}>·</span>
+
+          {/* Post type */}
+          <span
+            style={{
+              padding: '4px 10px',
+              borderRadius: '12px',
+              background: typeStyle.bg,
+              color: typeStyle.text,
+              fontSize: '0.75rem',
+              fontWeight: 500,
+              textTransform: 'capitalize',
+            }}
+          >
+            {post.postType}
+          </span>
+
+          <span style={{ color: 'rgba(255, 255, 255, 0.3)' }}>·</span>
+
+          {/* Time */}
+          <span style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.85rem' }}>
+            {formatTime(post.createdAt)}
+          </span>
+        </div>
+
         {/* Tags */}
         {post.tags.length > 0 && (
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '12px' }}>
             {post.tags.map((tag) => (
               <Link
                 key={tag}
                 href={`/explore?tag=${tag}`}
                 style={{
-                  color: '#0d9488',
-                  fontSize: '0.9rem',
+                  color: 'rgba(13, 148, 136, 0.9)',
+                  fontSize: '0.85rem',
                   textDecoration: 'none',
                 }}
               >
@@ -171,13 +173,12 @@ export default function TextReel({ post, onReact, onFollow, onComment, onShare }
         username={post.username}
         reactionCount={post.reactionCount}
         commentCount={post.commentCount}
-        shareCount={post.shareCount}
         hasReacted={post.hasReacted}
-        isFollowing={post.isFollowing}
+        hasSaved={post.hasSaved}
         onReact={onReact}
-        onFollow={onFollow}
         onComment={onComment}
-        onShare={onShare}
+        onSave={onSave}
+        onReport={onReport}
       />
     </div>
   );

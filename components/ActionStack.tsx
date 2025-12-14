@@ -7,13 +7,12 @@ interface ActionStackProps {
   username: string;
   reactionCount: number;
   commentCount: number;
-  shareCount: number;
   hasReacted: boolean;
-  isFollowing: boolean;
+  hasSaved: boolean;
   onReact: (postId: string) => void;
-  onFollow: (username: string) => void;
   onComment: (postId: string) => void;
-  onShare: (postId: string) => void;
+  onSave: (postId: string) => void;
+  onReport: (postId: string) => void;
 }
 
 // Format count for display
@@ -26,23 +25,28 @@ function formatCount(count: number): string {
 
 export default function ActionStack({
   postId,
-  username,
   reactionCount,
   commentCount,
-  shareCount,
   hasReacted,
-  isFollowing,
+  hasSaved,
   onReact,
-  onFollow,
   onComment,
-  onShare,
+  onSave,
+  onReport,
 }: ActionStackProps) {
   const [animateHeart, setAnimateHeart] = useState(false);
+  const [animateSave, setAnimateSave] = useState(false);
 
   const handleReact = () => {
     setAnimateHeart(true);
     onReact(postId);
     setTimeout(() => setAnimateHeart(false), 300);
+  };
+
+  const handleSave = () => {
+    setAnimateSave(true);
+    onSave(postId);
+    setTimeout(() => setAnimateSave(false), 300);
   };
 
   const buttonStyle = {
@@ -58,20 +62,22 @@ export default function ActionStack({
   };
 
   const iconStyle = {
-    width: '32px',
-    height: '32px',
+    width: '44px',
+    height: '44px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: '50%',
-    fontSize: '1.4rem',
+    fontSize: '1.5rem',
     transition: 'all 0.2s ease',
+    background: 'rgba(0, 0, 0, 0.3)',
+    backdropFilter: 'blur(8px)',
   };
 
   const countStyle = {
-    fontSize: '0.75rem',
-    color: 'rgba(255, 255, 255, 0.7)',
-    fontWeight: 500,
+    fontSize: '0.8rem',
+    color: 'rgba(255, 255, 255, 0.8)',
+    fontWeight: 600,
   };
 
   return (
@@ -79,63 +85,14 @@ export default function ActionStack({
       style={{
         position: 'absolute',
         right: '12px',
-        bottom: '120px',
+        bottom: '100px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: '20px',
+        gap: '16px',
         zIndex: 10,
       }}
     >
-      {/* Profile + Follow */}
-      <div style={{ position: 'relative', marginBottom: '8px' }}>
-        <button
-          onClick={() => onFollow(username)}
-          style={{
-            ...buttonStyle,
-            position: 'relative',
-          }}
-          aria-label={isFollowing ? 'Unfollow' : 'Follow'}
-        >
-          <div
-            style={{
-              width: '48px',
-              height: '48px',
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, #0d9488, #7c3aed)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '1.5rem',
-              border: isFollowing ? '2px solid #0d9488' : '2px solid transparent',
-            }}
-          >
-            👤
-          </div>
-          {/* Follow indicator */}
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '-4px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              width: '20px',
-              height: '20px',
-              borderRadius: '50%',
-              background: isFollowing ? '#0d9488' : '#ef4444',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '0.75rem',
-              color: '#fff',
-              fontWeight: 'bold',
-            }}
-          >
-            {isFollowing ? '✓' : '+'}
-          </div>
-        </button>
-      </div>
-
       {/* I Feel This (Like) */}
       <button
         onClick={handleReact}
@@ -146,7 +103,8 @@ export default function ActionStack({
           style={{
             ...iconStyle,
             color: hasReacted ? '#ef4444' : 'rgba(255, 255, 255, 0.9)',
-            transform: animateHeart ? 'scale(1.3)' : 'scale(1)',
+            transform: animateHeart ? 'scale(1.2)' : 'scale(1)',
+            background: hasReacted ? 'rgba(239, 68, 68, 0.2)' : 'rgba(0, 0, 0, 0.3)',
           }}
         >
           {hasReacted ? '❤️' : '🤍'}
@@ -154,11 +112,11 @@ export default function ActionStack({
         <span style={countStyle}>{formatCount(reactionCount)}</span>
       </button>
 
-      {/* Comment */}
+      {/* Support (Comment) */}
       <button
         onClick={() => onComment(postId)}
         style={buttonStyle}
-        aria-label="Comment"
+        aria-label="Support"
       >
         <div style={{ ...iconStyle, color: 'rgba(255, 255, 255, 0.9)' }}>
           💬
@@ -166,26 +124,38 @@ export default function ActionStack({
         <span style={countStyle}>{formatCount(commentCount)}</span>
       </button>
 
-      {/* Share */}
-      <button
-        onClick={() => onShare(postId)}
-        style={buttonStyle}
-        aria-label="Share"
-      >
-        <div style={{ ...iconStyle, color: 'rgba(255, 255, 255, 0.9)' }}>
-          🔁
-        </div>
-        <span style={countStyle}>{formatCount(shareCount)}</span>
-      </button>
-
       {/* Save/Bookmark */}
       <button
-        onClick={() => {}}
+        onClick={handleSave}
         style={buttonStyle}
         aria-label="Save"
       >
-        <div style={{ ...iconStyle, color: 'rgba(255, 255, 255, 0.9)' }}>
-          🔖
+        <div
+          style={{
+            ...iconStyle,
+            color: hasSaved ? '#0d9488' : 'rgba(255, 255, 255, 0.9)',
+            transform: animateSave ? 'scale(1.2)' : 'scale(1)',
+            background: hasSaved ? 'rgba(13, 148, 136, 0.2)' : 'rgba(0, 0, 0, 0.3)',
+          }}
+        >
+          {hasSaved ? '🔖' : '📑'}
+        </div>
+      </button>
+
+      {/* Report */}
+      <button
+        onClick={() => onReport(postId)}
+        style={buttonStyle}
+        aria-label="Report"
+      >
+        <div
+          style={{
+            ...iconStyle,
+            color: 'rgba(255, 255, 255, 0.5)',
+            fontSize: '1.25rem',
+          }}
+        >
+          🚩
         </div>
       </button>
     </div>

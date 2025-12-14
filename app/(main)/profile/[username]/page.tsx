@@ -9,9 +9,8 @@ interface ProfileData {
   bio: string;
   avatarIcon: string;
   postCount: number;
-  followerCount: number;
-  followingCount: number;
-  isFollowing: boolean;
+  feelsGiven: number;
+  supportSent: number;
   isOwnProfile: boolean;
 }
 
@@ -23,16 +22,22 @@ interface Post {
   createdAt: string;
 }
 
+// Avatar emoji mapping
+const AVATAR_EMOJIS: Record<string, string> = {
+  spiral: '🌀', butterfly: '🦋', wave: '🌊', flower: '🌸', moon: '🌙', star: '⭐',
+  flame: '🔥', sparkle: '💫', leaf: '🌿', mask: '🎭', gem: '💎', rainbow: '🌈',
+  cloud: '☁️', heart: '💜', feather: '🪶', lotus: '🪷', default: '👤',
+};
+
 // Mock data
 const mockProfile: ProfileData = {
   username: 'silentvoice_83',
   bio: 'Learning to speak honestly. One word at a time.',
-  avatarIcon: 'default',
+  avatarIcon: 'spiral',
   postCount: 47,
-  followerCount: 1234,
-  followingCount: 89,
-  isFollowing: false,
-  isOwnProfile: false,
+  feelsGiven: 234,
+  supportSent: 89,
+  isOwnProfile: true,
 };
 
 const mockPosts: Post[] = [
@@ -70,17 +75,10 @@ export default function ProfilePage() {
   const params = useParams();
   const username = params.username as string;
 
-  const [profile, setProfile] = useState<ProfileData>(mockProfile);
-  const [posts, setPosts] = useState<Post[]>(mockPosts);
-  const [activeTab, setActiveTab] = useState<'posts' | 'saved' | 'about'>('posts');
+  const [profile] = useState<ProfileData>(mockProfile);
+  const [posts] = useState<Post[]>(mockPosts);
 
-  const handleFollow = () => {
-    setProfile(prev => ({
-      ...prev,
-      isFollowing: !prev.isFollowing,
-      followerCount: prev.isFollowing ? prev.followerCount - 1 : prev.followerCount + 1,
-    }));
-  };
+  const avatarEmoji = AVATAR_EMOJIS[profile.avatarIcon] || AVATAR_EMOJIS.default;
 
   return (
     <div
@@ -127,7 +125,7 @@ export default function ProfilePage() {
             cursor: 'pointer',
           }}
         >
-          {profile.isOwnProfile ? '⚙️' : '⋮'}
+          ⚙️
         </button>
       </header>
 
@@ -143,11 +141,11 @@ export default function ProfilePage() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: '2.5rem',
+            fontSize: '3rem',
             margin: '0 auto 16px',
           }}
         >
-          {profile.avatarIcon === 'default' ? '👤' : profile.avatarIcon}
+          {avatarEmoji}
         </div>
 
         {/* Username */}
@@ -156,264 +154,215 @@ export default function ProfilePage() {
         </h2>
 
         {/* Bio */}
-        <p
-          style={{
-            color: 'rgba(255, 255, 255, 0.7)',
-            fontSize: '0.95rem',
-            lineHeight: 1.5,
-            maxWidth: '300px',
-            margin: '0 auto 20px',
-          }}
-        >
-          {profile.bio}
-        </p>
+        {profile.bio && (
+          <p
+            style={{
+              color: 'rgba(255, 255, 255, 0.7)',
+              fontSize: '0.95rem',
+              lineHeight: 1.5,
+              maxWidth: '300px',
+              margin: '0 auto 24px',
+            }}
+          >
+            {profile.bio}
+          </p>
+        )}
 
-        {/* Stats */}
+        {/* Stats - No vanity metrics, just engagement given */}
         <div
           style={{
             display: 'flex',
             justifyContent: 'center',
-            gap: '40px',
-            marginBottom: '20px',
+            gap: '32px',
+            marginBottom: '24px',
+            padding: '16px',
+            background: 'rgba(255, 255, 255, 0.03)',
+            borderRadius: '12px',
           }}
         >
           <div style={{ textAlign: 'center' }}>
             <div style={{ color: '#fff', fontSize: '1.25rem', fontWeight: 700 }}>
-              {formatCount(profile.postCount)}
+              {profile.postCount}
             </div>
             <div style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.8rem' }}>Posts</div>
           </div>
           <div style={{ textAlign: 'center' }}>
-            <div style={{ color: '#fff', fontSize: '1.25rem', fontWeight: 700 }}>
-              {formatCount(profile.followerCount)}
+            <div style={{ color: '#0d9488', fontSize: '1.25rem', fontWeight: 700 }}>
+              {profile.feelsGiven}
             </div>
-            <div style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.8rem' }}>Followers</div>
+            <div style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.8rem' }}>Feels Given</div>
           </div>
           <div style={{ textAlign: 'center' }}>
-            <div style={{ color: '#fff', fontSize: '1.25rem', fontWeight: 700 }}>
-              {formatCount(profile.followingCount)}
+            <div style={{ color: '#7c3aed', fontSize: '1.25rem', fontWeight: 700 }}>
+              {profile.supportSent}
             </div>
-            <div style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.8rem' }}>Following</div>
+            <div style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.8rem' }}>Support Sent</div>
           </div>
         </div>
+      </div>
 
-        {/* Action Buttons */}
-        {profile.isOwnProfile ? (
-          <button
-            onClick={() => router.push('/settings/profile')}
+      {/* Quick Actions */}
+      <div style={{ padding: '0 20px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <Link
+            href={`/profile/${username}/posts`}
             style={{
-              padding: '10px 40px',
-              background: 'rgba(255, 255, 255, 0.1)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              borderRadius: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '16px',
+              background: 'rgba(255, 255, 255, 0.03)',
+              borderRadius: '12px',
+              textDecoration: 'none',
               color: '#fff',
-              fontSize: '0.95rem',
-              fontWeight: 500,
-              cursor: 'pointer',
             }}
           >
-            Edit Profile
-          </button>
-        ) : (
-          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
-            <button
-              onClick={handleFollow}
-              style={{
-                padding: '10px 32px',
-                background: profile.isFollowing ? 'transparent' : '#0d9488',
-                border: profile.isFollowing ? '1px solid rgba(255, 255, 255, 0.3)' : 'none',
-                borderRadius: '8px',
-                color: '#fff',
-                fontSize: '0.95rem',
-                fontWeight: 500,
-                cursor: 'pointer',
-              }}
-            >
-              {profile.isFollowing ? 'Following' : 'Follow'}
-            </button>
-            <button
-              onClick={() => {}}
-              style={{
-                padding: '10px 20px',
-                background: 'rgba(255, 255, 255, 0.1)',
-                border: 'none',
-                borderRadius: '8px',
-                color: '#fff',
-                fontSize: '0.95rem',
-                cursor: 'pointer',
-              }}
-            >
-              Message
-            </button>
-          </div>
-        )}
-      </div>
+            <span style={{ fontSize: '1.25rem' }}>📝</span>
+            <span style={{ flex: 1 }}>My Posts</span>
+            <span style={{ color: 'rgba(255,255,255,0.4)' }}>→</span>
+          </Link>
 
-      {/* Tabs */}
-      <div
-        style={{
-          display: 'flex',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-        }}
-      >
-        {(['posts', 'saved', 'about'] as const).map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
+          <Link
+            href="/saved"
             style={{
-              flex: 1,
-              padding: '14px',
-              background: 'none',
-              border: 'none',
-              borderBottom: activeTab === tab ? '2px solid #0d9488' : '2px solid transparent',
-              color: activeTab === tab ? '#fff' : 'rgba(255, 255, 255, 0.5)',
-              fontSize: '0.9rem',
-              fontWeight: 500,
-              cursor: 'pointer',
-              textTransform: 'capitalize',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '16px',
+              background: 'rgba(255, 255, 255, 0.03)',
+              borderRadius: '12px',
+              textDecoration: 'none',
+              color: '#fff',
             }}
           >
-            {tab === 'posts' ? '📝' : tab === 'saved' ? '🔖' : 'ℹ️'} {tab}
-          </button>
-        ))}
+            <span style={{ fontSize: '1.25rem' }}>🔖</span>
+            <span style={{ flex: 1 }}>Saved Posts</span>
+            <span style={{ color: 'rgba(255,255,255,0.4)' }}>→</span>
+          </Link>
+
+          <Link
+            href="/circles"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '16px',
+              background: 'rgba(255, 255, 255, 0.03)',
+              borderRadius: '12px',
+              textDecoration: 'none',
+              color: '#fff',
+            }}
+          >
+            <span style={{ fontSize: '1.25rem' }}>🌀</span>
+            <span style={{ flex: 1 }}>My Circles</span>
+            <span style={{ color: 'rgba(255,255,255,0.4)' }}>→</span>
+          </Link>
+
+          <Link
+            href="/settings"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '16px',
+              background: 'rgba(255, 255, 255, 0.03)',
+              borderRadius: '12px',
+              textDecoration: 'none',
+              color: '#fff',
+            }}
+          >
+            <span style={{ fontSize: '1.25rem' }}>⚙️</span>
+            <span style={{ flex: 1 }}>Settings</span>
+            <span style={{ color: 'rgba(255,255,255,0.4)' }}>→</span>
+          </Link>
+        </div>
       </div>
 
-      {/* Content */}
-      <div style={{ padding: '16px' }}>
-        {activeTab === 'posts' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {posts.map((post) => (
-              <Link
-                key={post.id}
-                href={`/post/${post.id}`}
-                style={{
-                  padding: '16px',
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  borderRadius: '12px',
-                  textDecoration: 'none',
-                  display: 'block',
-                }}
-              >
-                <p
-                  style={{
-                    color: 'rgba(255, 255, 255, 0.9)',
-                    fontSize: '0.95rem',
-                    lineHeight: 1.5,
-                    margin: '0 0 12px',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 3,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                  }}
-                >
-                  {post.content}
-                </p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                  <span style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.8rem' }}>
-                    ❤️ {formatCount(post.reactionCount)}
-                  </span>
-                  <span
-                    style={{
-                      padding: '4px 8px',
-                      background: 'rgba(13, 148, 136, 0.2)',
-                      borderRadius: '12px',
-                      color: '#0d9488',
-                      fontSize: '0.7rem',
-                      textTransform: 'capitalize',
-                    }}
-                  >
-                    {post.postType}
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
-
-        {activeTab === 'saved' && (
-          <div style={{ textAlign: 'center', padding: '40px 20px' }}>
-            <span style={{ fontSize: '3rem' }}>🔖</span>
-            <p style={{ color: 'rgba(255, 255, 255, 0.5)', marginTop: '16px' }}>
-              {profile.isOwnProfile ? 'Posts you save will appear here' : 'Saved posts are private'}
-            </p>
-          </div>
-        )}
-
-        {activeTab === 'about' && (
-          <div style={{ padding: '20px' }}>
-            <div style={{ marginBottom: '24px' }}>
-              <h3 style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.8rem', marginBottom: '8px' }}>
-                JOINED
-              </h3>
-              <p style={{ color: '#fff', margin: 0 }}>December 2024</p>
-            </div>
-            <div style={{ marginBottom: '24px' }}>
-              <h3 style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.8rem', marginBottom: '8px' }}>
-                MOST USED TAGS
-              </h3>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {['healing', 'work', 'growth'].map(tag => (
-                  <span
-                    key={tag}
-                    style={{
-                      padding: '6px 12px',
-                      background: 'rgba(13, 148, 136, 0.2)',
-                      borderRadius: '16px',
-                      color: '#0d9488',
-                      fontSize: '0.85rem',
-                    }}
-                  >
-                    #{tag}
-                  </span>
-                ))}
+      {/* Recent Posts Preview */}
+      <div style={{ padding: '24px 20px' }}>
+        <h3 style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          Recent Posts
+        </h3>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {posts.slice(0, 3).map((post) => (
+            <div
+              key={post.id}
+              style={{
+                padding: '12px 16px',
+                background: 'rgba(255, 255, 255, 0.03)',
+                borderRadius: '12px',
+                borderLeft: `3px solid ${
+                  post.postType === 'experience' ? '#0d9488' :
+                  post.postType === 'question' ? '#7c3aed' :
+                  post.postType === 'advice' ? '#3b82f6' : '#ef4444'
+                }`,
+              }}
+            >
+              <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.9rem', margin: 0, lineHeight: 1.4 }}>
+                {post.content.length > 80 ? post.content.slice(0, 80) + '...' : post.content}
+              </p>
+              <div style={{ marginTop: '8px', color: 'rgba(255,255,255,0.4)', fontSize: '0.75rem' }}>
+                🤍 {post.reactionCount}
               </div>
             </div>
-          </div>
-        )}
+          ))}
+        </div>
       </div>
 
       {/* Bottom Nav */}
-      <nav
-        style={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: '60px',
-          background: 'rgba(15, 23, 42, 0.95)',
-          borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-around',
-          zIndex: 100,
-        }}
-      >
-        {[
-          { path: '/foryou', icon: '🏠', label: 'Home' },
-          { path: '/explore', icon: '🔍', label: 'Explore' },
-          { path: '/notifications', icon: '🔔', label: 'Inbox' },
-          { path: '/profile', icon: '👤', label: 'Profile', active: true },
-        ].map((item) => (
-          <button
-            key={item.path}
-            onClick={() => router.push(item.path)}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '4px',
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              padding: '8px 16px',
-              opacity: item.active ? 1 : 0.6,
-            }}
-          >
-            <span style={{ fontSize: '1.3rem' }}>{item.icon}</span>
-            <span style={{ fontSize: '0.65rem', color: '#fff' }}>{item.label}</span>
-          </button>
-        ))}
-      </nav>
+      <BottomNav currentPath="/profile" />
     </div>
+  );
+}
+
+// Bottom Navigation Component
+function BottomNav({ currentPath }: { currentPath: string }) {
+  const router = useRouter();
+
+  const navItems = [
+    { path: '/foryou', icon: '🏠', label: 'Home' },
+    { path: '/explore', icon: '🔍', label: 'Explore' },
+    { path: '/messages', icon: '💬', label: 'Messages' },
+    { path: '/profile', icon: '👤', label: 'Profile' },
+  ];
+
+  return (
+    <nav
+      style={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: '60px',
+        background: 'rgba(15, 23, 42, 0.95)',
+        borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        zIndex: 100,
+        backdropFilter: 'blur(10px)',
+      }}
+    >
+      {navItems.map((item) => (
+        <button
+          key={item.path}
+          onClick={() => router.push(item.path)}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '4px',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            padding: '8px 16px',
+            opacity: currentPath.startsWith(item.path) ? 1 : 0.6,
+          }}
+        >
+          <span style={{ fontSize: '1.3rem' }}>{item.icon}</span>
+          <span style={{ fontSize: '0.65rem', color: '#fff' }}>{item.label}</span>
+        </button>
+      ))}
+    </nav>
   );
 }
