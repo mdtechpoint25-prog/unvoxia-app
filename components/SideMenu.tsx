@@ -3,19 +3,33 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import Logo from './Logo';
 
 interface MenuItem {
   href: string;
   label: string;
   icon: (active: boolean) => JSX.Element;
-  group?: string;
+  badge?: number;
 }
 
 export function SideMenu() {
   const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
+  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
+    shortcuts: true,
+    explore: true,
+  });
 
-  const menuItems: MenuItem[] = [
+  // Hide on certain pages
+  const hiddenPaths = ['/login', '/signup', '/welcome', '/setup', '/breathe', '/release', '/', '/splash'];
+  const shouldHide = hiddenPaths.some(path => pathname === path);
+
+  if (shouldHide) return null;
+
+  const toggleSection = (section: string) => {
+    setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
+  };
+
+  const mainMenuItems: MenuItem[] = [
     {
       href: '/foryou',
       label: 'For You',
@@ -24,7 +38,6 @@ export function SideMenu() {
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
         </svg>
       ),
-      group: 'main'
     },
     {
       href: '/explore',
@@ -35,7 +48,6 @@ export function SideMenu() {
           <path d="m21 21-4.35-4.35"/>
         </svg>
       ),
-      group: 'main'
     },
     {
       href: '/reels',
@@ -45,10 +57,18 @@ export function SideMenu() {
           <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/>
           <line x1="7" y1="2" x2="7" y2="22"/>
           <line x1="17" y1="2" x2="17" y2="22"/>
-          <line x1="2" y1="12" x2="22" y2="12"/>
         </svg>
       ),
-      group: 'main'
+    },
+    {
+      href: '/stories',
+      label: 'Stories',
+      icon: (active) => (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
+          <circle cx="12" cy="12" r="10"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+      ),
     },
     {
       href: '/authentic-feed',
@@ -58,31 +78,10 @@ export function SideMenu() {
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
         </svg>
       ),
-      group: 'main'
     },
-    {
-      href: '/circles',
-      label: 'Communities',
-      icon: (active) => (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
-          <circle cx="12" cy="12" r="10"/>
-          <circle cx="12" cy="12" r="6"/>
-          <circle cx="12" cy="12" r="2"/>
-        </svg>
-      ),
-      group: 'community'
-    },
-    {
-      href: '/experiences',
-      label: 'Experiences',
-      icon: (active) => (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
-          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-        </svg>
-      ),
-      group: 'community'
-    },
+  ];
+
+  const socialItems: MenuItem[] = [
     {
       href: '/messages',
       label: 'Messages',
@@ -91,7 +90,7 @@ export function SideMenu() {
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
         </svg>
       ),
-      group: 'social'
+      badge: 3,
     },
     {
       href: '/notifications',
@@ -102,18 +101,66 @@ export function SideMenu() {
           <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
         </svg>
       ),
-      group: 'social'
+      badge: 5,
+    },
+  ];
+
+  const shortcutItems: MenuItem[] = [
+    {
+      href: '/circles',
+      label: 'Communities',
+      icon: (active) => (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      ),
     },
     {
+      href: '/experiences',
+      label: 'Experiences',
+      icon: (active) => (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+        </svg>
+      ),
+    },
+    {
+      href: '/daily-prompts',
+      label: 'Daily Prompts',
+      icon: (active) => (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+      ),
+    },
+    {
+      href: '/saved',
+      label: 'Saved',
+      icon: (active) => (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
+          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+        </svg>
+      ),
+    },
+  ];
+
+  const accountItems: MenuItem[] = [
+    {
       href: '/profile',
-      label: 'Profile',
+      label: 'My Profile',
       icon: (active) => (
         <svg width="24" height="24" viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
           <circle cx="12" cy="7" r="4"/>
         </svg>
       ),
-      group: 'account'
     },
     {
       href: '/settings',
@@ -121,310 +168,258 @@ export function SideMenu() {
       icon: (active) => (
         <svg width="24" height="24" viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
           <circle cx="12" cy="12" r="3"/>
-          <path d="M12 1v6m0 6v6m9-9h-6m-6 0H3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
         </svg>
       ),
-      group: 'account'
     },
-    {
-      href: '/saved',
-      label: 'Saved Posts',
-      icon: (active) => (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
-          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-        </svg>
-      ),
-      group: 'account'
-    },
-    {
-      href: '/about',
-      label: 'About',
-      icon: (active) => (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
-          <circle cx="12" cy="12" r="10"/>
-          <line x1="12" y1="16" x2="12" y2="12"/>
-          <line x1="12" y1="8" x2="12.01" y2="8"/>
-        </svg>
-      ),
-      group: 'info'
-    },
-    {
-      href: '/privacy',
-      label: 'Privacy',
-      icon: (active) => (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-        </svg>
-      ),
-      group: 'info'
-    },
-    {
-      href: '/terms',
-      label: 'Terms',
-      icon: (active) => (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
-        </svg>
-      ),
-      group: 'info'
-    }
   ];
 
-  const groupedItems = menuItems.reduce((acc, item) => {
-    const group = item.group || 'other';
-    if (!acc[group]) acc[group] = [];
-    acc[group].push(item);
-    return acc;
-  }, {} as Record<string, MenuItem[]>);
-
-  const groupTitles: Record<string, string> = {
-    main: 'Discover',
-    community: 'Community',
-    social: 'Social',
-    account: 'Account',
-    info: 'Information'
+  const renderMenuItem = (item: MenuItem) => {
+    const isActive = pathname === item.href || pathname?.startsWith(item.href + '/');
+    return (
+      <li key={item.href}>
+        <Link href={item.href} className={`menu-item ${isActive ? 'active' : ''}`}>
+          <span className="menu-icon">{item.icon(isActive || false)}</span>
+          <span className="menu-label">{item.label}</span>
+          {item.badge && item.badge > 0 && (
+            <span className="menu-badge">{item.badge}</span>
+          )}
+        </Link>
+      </li>
+    );
   };
 
   return (
     <>
-      {/* Menu Toggle Button - Fixed Top Left */}
-      <button 
-        onClick={() => setIsOpen(!isOpen)}
-        className="menu-toggle"
-        aria-label="Toggle menu"
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          {isOpen ? (
-            <path d="M6 6L18 18M6 18L18 6" />
-          ) : (
-            <path d="M3 12h18M3 6h18M3 18h18" />
-          )}
-        </svg>
-      </button>
-
-      {/* Backdrop */}
-      {isOpen && (
-        <div 
-          className="menu-backdrop"
-          onClick={() => setIsOpen(false)}
-        />
-      )}
-
-      {/* Side Menu */}
-      <aside className={`side-menu ${isOpen ? 'open' : ''}`}>
-        <div className="menu-header">
-          <h2>Menu</h2>
-          <button 
-            onClick={() => setIsOpen(false)}
-            className="close-btn"
-            aria-label="Close menu"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M6 6L18 18M6 18L18 6" />
-            </svg>
-          </button>
+      <aside className="sidebar">
+        {/* Logo */}
+        <div className="sidebar-logo">
+          <Link href="/foryou">
+            <Logo size={32} showText variant="full" />
+          </Link>
         </div>
 
-        <nav className="menu-content">
-          {Object.entries(groupedItems).map(([group, items]) => (
-            <div key={group} className="menu-group">
-              <h3 className="group-title">{groupTitles[group] || group}</h3>
-              <ul className="menu-list">
-                {items.map((item) => {
-                  const isActive = pathname?.startsWith(item.href);
-                  return (
-                    <li key={item.href} onClick={() => setIsOpen(false)}>
-                      <Link
-                        href={item.href}
-                        className={`menu-link ${isActive ? 'active' : ''}`}
-                      >
-                        {item.icon(isActive)}
-                        <span>{item.label}</span>
-                      </Link>
-                    </li>
-                  );
-                })}
+        {/* Main Navigation */}
+        <nav className="sidebar-nav">
+          <ul className="menu-section">
+            {mainMenuItems.map(renderMenuItem)}
+          </ul>
+
+          <div className="section-divider" />
+
+          {/* Social */}
+          <ul className="menu-section">
+            {socialItems.map(renderMenuItem)}
+          </ul>
+
+          <div className="section-divider" />
+
+          {/* Shortcuts - Collapsible */}
+          <div className="collapsible-section">
+            <button 
+              className="section-header" 
+              onClick={() => toggleSection('shortcuts')}
+            >
+              <span>Your Shortcuts</span>
+              <svg 
+                width="16" 
+                height="16" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2"
+                className={`chevron ${expandedSections.shortcuts ? 'expanded' : ''}`}
+              >
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </button>
+            {expandedSections.shortcuts && (
+              <ul className="menu-section">
+                {shortcutItems.map(renderMenuItem)}
               </ul>
-            </div>
-          ))}
+            )}
+          </div>
+
+          <div className="section-divider" />
+
+          {/* Account */}
+          <ul className="menu-section">
+            {accountItems.map(renderMenuItem)}
+          </ul>
         </nav>
+
+        {/* Bottom Section */}
+        <div className="sidebar-footer">
+          <div className="footer-links">
+            <Link href="/about">About</Link>
+            <span>·</span>
+            <Link href="/privacy">Privacy</Link>
+            <span>·</span>
+            <Link href="/terms">Terms</Link>
+          </div>
+          <p className="copyright">© 2025 NOMA</p>
+        </div>
       </aside>
 
       <style jsx>{`
-        .menu-toggle {
+        .sidebar {
           position: fixed;
-          top: 1rem;
-          left: 1rem;
-          z-index: 999;
-          background: rgba(26, 26, 26, 0.9);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 12px;
-          width: 44px;
-          height: 44px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #fff;
-          cursor: pointer;
-          transition: all 0.2s;
-        }
-
-        .menu-toggle:hover {
-          background: rgba(26, 188, 156, 0.2);
-          border-color: #1ABC9C;
-        }
-
-        .menu-backdrop {
-          position: fixed;
-          inset: 0;
-          background: rgba(0, 0, 0, 0.7);
-          backdrop-filter: blur(4px);
-          z-index: 1000;
-          animation: fadeIn 0.2s ease;
-        }
-
-        .side-menu {
-          position: fixed;
-          top: 0;
+          top: 56px;
           left: 0;
           bottom: 0;
-          width: 280px;
-          background: #0a0a0a;
-          border-right: 1px solid rgba(255, 255, 255, 0.08);
-          z-index: 1001;
-          transform: translateX(-100%);
-          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          width: 240px;
+          background: var(--bg-primary, #0a0a0a);
+          border-right: 1px solid var(--border-subtle, #1a1a1a);
           display: flex;
           flex-direction: column;
           overflow-y: auto;
+          z-index: 100;
+          transition: transform 0.3s ease;
         }
 
-        .side-menu.open {
-          transform: translateX(0);
+        .sidebar-logo {
+          display: none;
+          padding: 1rem;
+          border-bottom: 1px solid var(--border-subtle, #1a1a1a);
         }
 
-        .menu-header {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 1.5rem 1.25rem;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .menu-header h2 {
-          font-size: 1.25rem;
-          font-weight: 700;
-          color: #fff;
-          margin: 0;
-        }
-
-        .close-btn {
-          background: none;
-          border: none;
-          color: #999;
-          cursor: pointer;
-          padding: 0.5rem;
-          border-radius: 8px;
-          transition: all 0.2s;
-        }
-
-        .close-btn:hover {
-          background: rgba(255, 255, 255, 0.05);
-          color: #fff;
-        }
-
-        .menu-content {
+        .sidebar-nav {
           flex: 1;
-          padding: 1rem 0;
+          padding: 0.5rem 0;
           overflow-y: auto;
         }
 
-        .menu-group {
-          margin-bottom: 1.5rem;
-        }
-
-        .group-title {
-          font-size: 0.75rem;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 0.1em;
-          color: #666;
-          padding: 0 1.25rem;
-          margin-bottom: 0.5rem;
-        }
-
-        .menu-list {
+        .menu-section {
           list-style: none;
-          padding: 0;
           margin: 0;
+          padding: 0.25rem 0.5rem;
         }
 
-        .menu-link {
+        .menu-item {
           display: flex;
           align-items: center;
           gap: 0.75rem;
-          padding: 0.75rem 1.25rem;
-          color: #ccc;
+          padding: 0.625rem 0.75rem;
+          border-radius: 8px;
+          color: var(--text-secondary, #a0a0a0);
           text-decoration: none;
-          transition: all 0.2s;
-          position: relative;
-        }
-
-        .menu-link::before {
-          content: '';
-          position: absolute;
-          left: 0;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 3px;
-          height: 0;
-          background: #1ABC9C;
-          border-radius: 0 2px 2px 0;
-          transition: height 0.2s;
-        }
-
-        .menu-link:hover {
-          background: rgba(255, 255, 255, 0.05);
-          color: #fff;
-        }
-
-        .menu-link.active {
-          color: #1ABC9C;
-          background: rgba(26, 188, 156, 0.1);
-        }
-
-        .menu-link.active::before {
-          height: 24px;
-        }
-
-        .menu-link span {
+          transition: all 0.15s ease;
           font-size: 0.9375rem;
           font-weight: 500;
         }
 
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
+        .menu-item:hover {
+          background: var(--bg-surface, #1a1a1a);
+          color: var(--text-primary, #fff);
+        }
+
+        .menu-item.active {
+          background: rgba(244, 255, 172, 0.1);
+          color: var(--accent, #f4ffac);
+        }
+
+        .menu-icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 24px;
+          height: 24px;
+          flex-shrink: 0;
+        }
+
+        .menu-label {
+          flex: 1;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .menu-badge {
+          min-width: 20px;
+          height: 20px;
+          padding: 0 6px;
+          background: #ef4444;
+          color: #fff;
+          font-size: 0.75rem;
+          font-weight: 600;
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .section-divider {
+          height: 1px;
+          background: var(--border-subtle, #1a1a1a);
+          margin: 0.5rem 1rem;
+        }
+
+        .collapsible-section {
+          padding: 0 0.5rem;
+        }
+
+        .section-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+          padding: 0.5rem 0.75rem;
+          background: none;
+          border: none;
+          color: var(--text-muted, #666);
+          font-size: 0.8125rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          cursor: pointer;
+          transition: color 0.15s;
+        }
+
+        .section-header:hover {
+          color: var(--text-secondary, #a0a0a0);
+        }
+
+        .chevron {
+          transition: transform 0.2s ease;
+        }
+
+        .chevron.expanded {
+          transform: rotate(180deg);
+        }
+
+        .sidebar-footer {
+          padding: 1rem;
+          border-top: 1px solid var(--border-subtle, #1a1a1a);
+        }
+
+        .footer-links {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.25rem;
+          font-size: 0.75rem;
+          color: var(--text-muted, #666);
+          margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+          color: var(--text-muted, #666);
+          text-decoration: none;
+          transition: color 0.15s;
+        }
+
+        .footer-links a:hover {
+          color: var(--text-secondary, #a0a0a0);
+        }
+
+        .copyright {
+          font-size: 0.6875rem;
+          color: var(--text-muted, #555);
+          margin: 0;
         }
 
         @media (max-width: 768px) {
-          .side-menu {
-            width: 260px;
-          }
-        }
-
-        /* Hide on mobile bottom nav pages */
-        @media (max-width: 767px) {
-          .menu-toggle {
-            display: none;
-          }
-        }
-
-        @media (min-width: 768px) {
-          .menu-toggle {
-            display: flex;
+          .sidebar {
+            transform: translateX(-100%);
           }
         }
       `}</style>
