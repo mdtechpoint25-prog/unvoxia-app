@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -109,6 +109,12 @@ export default function NotificationsPage() {
   const router = useRouter();
   const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
   const [activeTab, setActiveTab] = useState<'all' | 'messages'>('all');
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsVisible(true), 50);
+    return () => clearTimeout(timer);
+  }, []);
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
@@ -146,6 +152,9 @@ export default function NotificationsPage() {
           top: 0,
           background: '#0f172a',
           zIndex: 10,
+          opacity: isVisible ? 1 : 0,
+          transform: isVisible ? 'translateY(0)' : 'translateY(-10px)',
+          transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
         }}
       >
         <h1 style={{ color: '#fff', fontSize: '1.25rem', fontWeight: 600, margin: 0 }}>
@@ -159,6 +168,7 @@ export default function NotificationsPage() {
                 borderRadius: '12px',
                 fontSize: '0.75rem',
                 fontWeight: 500,
+                animation: 'pulse 2s ease-in-out infinite',
               }}
             >
               {unreadCount}
@@ -174,7 +184,10 @@ export default function NotificationsPage() {
               color: '#0d9488',
               fontSize: '0.9rem',
               cursor: 'pointer',
+              transition: 'all 0.2s ease',
             }}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
           >
             Mark all read
           </button>
@@ -186,6 +199,8 @@ export default function NotificationsPage() {
         style={{
           display: 'flex',
           borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          opacity: isVisible ? 1 : 0,
+          transition: 'opacity 0.3s ease 0.1s',
         }}
       >
         {(['all', 'messages'] as const).map((tab) => (
@@ -203,6 +218,7 @@ export default function NotificationsPage() {
               fontWeight: 500,
               cursor: 'pointer',
               textTransform: 'capitalize',
+              transition: 'all 0.2s ease',
             }}
           >
             {tab === 'all' ? 'Activity' : 'Messages'}
@@ -214,13 +230,13 @@ export default function NotificationsPage() {
       <div>
         {filteredNotifications.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '60px 20px' }}>
-            <span style={{ fontSize: '3rem' }}>🔔</span>
+            <span style={{ fontSize: '3rem', display: 'block', animation: 'float 3s ease-in-out infinite' }}>🔔</span>
             <p style={{ color: 'rgba(255, 255, 255, 0.5)', marginTop: '16px' }}>
               {activeTab === 'messages' ? 'No message requests yet' : 'No notifications yet'}
             </p>
           </div>
         ) : (
-          filteredNotifications.map((notification) => (
+          filteredNotifications.map((notification, index) => (
             <button
               key={notification.id}
               onClick={() => {
@@ -242,6 +258,16 @@ export default function NotificationsPage() {
                 borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
                 cursor: 'pointer',
                 textAlign: 'left',
+                transition: 'all 0.2s ease',
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? 'translateX(0)' : 'translateX(-20px)',
+                animation: isVisible ? `slideIn 0.4s ease ${0.1 + index * 0.05}s backwards` : 'none',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = notification.isRead ? 'transparent' : 'rgba(13, 148, 136, 0.05)';
               }}
             >
               {/* Avatar with icon overlay */}
@@ -371,13 +397,38 @@ export default function NotificationsPage() {
               cursor: 'pointer',
               padding: '8px 16px',
               opacity: item.active ? 1 : 0.6,
+              transition: 'all 0.2s ease',
             }}
+            onMouseDown={(e) => (e.currentTarget.style.transform = 'scale(0.9)')}
+            onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
           >
             <span style={{ fontSize: '1.3rem' }}>{item.icon}</span>
             <span style={{ fontSize: '0.65rem', color: '#fff' }}>{item.label}</span>
           </button>
         ))}
       </nav>
+
+      <style jsx>{`
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateX(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.1); }
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-5px); }
+        }
+      `}</style>
     </div>
   );
 }

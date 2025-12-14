@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 // Mock saved posts
@@ -34,9 +34,20 @@ const MOCK_SAVED = [
 export default function SavedPostsPage() {
   const router = useRouter();
   const [saved, setSaved] = useState(MOCK_SAVED);
+  const [isVisible, setIsVisible] = useState(false);
+  const [removingId, setRemovingId] = useState<number | null>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsVisible(true), 50);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleUnsave = (postId: number) => {
-    setSaved(saved.filter((p) => p.id !== postId));
+    setRemovingId(postId);
+    setTimeout(() => {
+      setSaved(saved.filter((p) => p.id !== postId));
+      setRemovingId(null);
+    }, 300);
   };
 
   return (
@@ -60,6 +71,9 @@ export default function SavedPostsPage() {
           display: 'flex',
           alignItems: 'center',
           gap: '12px',
+          opacity: isVisible ? 1 : 0,
+          transform: isVisible ? 'translateY(0)' : 'translateY(-20px)',
+          transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
         }}
       >
         <button
@@ -71,7 +85,11 @@ export default function SavedPostsPage() {
             fontSize: '1.5rem',
             cursor: 'pointer',
             padding: '4px',
+            transition: 'transform 0.2s ease',
           }}
+          onMouseDown={(e) => (e.currentTarget.style.transform = 'scale(0.9)')}
+          onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+          onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
         >
           ←
         </button>
@@ -97,6 +115,10 @@ export default function SavedPostsPage() {
           display: 'flex',
           alignItems: 'center',
           gap: '8px',
+          opacity: isVisible ? 1 : 0,
+          transform: isVisible ? 'translateX(0)' : 'translateX(-20px)',
+          transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+          transitionDelay: '0.1s',
         }}
       >
         <span>🔒</span>
@@ -117,9 +139,11 @@ export default function SavedPostsPage() {
           style={{
             textAlign: 'center',
             padding: '60px 20px',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.4s ease 0.2s',
           }}
         >
-          <span style={{ fontSize: '4rem' }}>🔖</span>
+          <span style={{ fontSize: '4rem', display: 'block', animation: 'float 3s ease-in-out infinite' }}>🔖</span>
           <h2
             style={{
               color: '#fff',
@@ -150,6 +174,16 @@ export default function SavedPostsPage() {
               fontSize: '0.95rem',
               fontWeight: 500,
               cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              boxShadow: '0 4px 15px rgba(13, 148, 136, 0.3)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.05)';
+              e.currentTarget.style.boxShadow = '0 6px 20px rgba(13, 148, 136, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.boxShadow = '0 4px 15px rgba(13, 148, 136, 0.3)';
             }}
           >
             Explore Feed
@@ -164,7 +198,7 @@ export default function SavedPostsPage() {
             padding: '0 20px',
           }}
         >
-          {saved.map((post) => (
+          {saved.map((post, index) => (
             <div
               key={post.id}
               style={{
@@ -172,6 +206,10 @@ export default function SavedPostsPage() {
                 background: 'rgba(255, 255, 255, 0.03)',
                 borderRadius: '16px',
                 border: '1px solid rgba(255, 255, 255, 0.06)',
+                opacity: removingId === post.id ? 0 : (isVisible ? 1 : 0),
+                transform: removingId === post.id ? 'translateX(-100%)' : (isVisible ? 'translateY(0)' : 'translateY(20px)'),
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                animation: isVisible ? `fadeInUp 0.4s ease ${0.15 + index * 0.08}s backwards` : 'none',
               }}
             >
               {/* Content */}
@@ -249,6 +287,23 @@ export default function SavedPostsPage() {
 
       {/* Bottom Nav */}
       <BottomNav />
+
+      <style jsx>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-5px); }
+        }
+      `}</style>
     </div>
   );
 }
@@ -292,7 +347,11 @@ function BottomNav() {
             cursor: 'pointer',
             padding: '8px 16px',
             opacity: 0.6,
+            transition: 'all 0.2s ease',
           }}
+          onMouseDown={(e) => (e.currentTarget.style.transform = 'scale(0.9)')}
+          onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+          onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
         >
           <span style={{ fontSize: '1.3rem' }}>{item.icon}</span>
           <span style={{ fontSize: '0.65rem', color: '#fff' }}>{item.label}</span>

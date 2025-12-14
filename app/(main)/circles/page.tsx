@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // Circle data
 const CIRCLES = [
@@ -23,9 +23,18 @@ function formatCount(n: number): string {
 export default function CirclesPage() {
   const router = useRouter();
   const [joinedCircles, setJoinedCircles] = useState<Set<string>>(new Set());
+  const [isVisible, setIsVisible] = useState(false);
+  const [animatingJoin, setAnimatingJoin] = useState<string | null>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsVisible(true), 50);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleJoin = (circleId: string, e: React.MouseEvent) => {
     e.stopPropagation();
+    setAnimatingJoin(circleId);
+    
     setJoinedCircles((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(circleId)) {
@@ -35,6 +44,8 @@ export default function CirclesPage() {
       }
       return newSet;
     });
+    
+    setTimeout(() => setAnimatingJoin(null), 400);
   };
 
   return (
@@ -55,6 +66,9 @@ export default function CirclesPage() {
           background: 'rgba(15, 23, 42, 0.95)',
           backdropFilter: 'blur(8px)',
           borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          transform: isVisible ? 'translateY(0)' : 'translateY(-20px)',
+          opacity: isVisible ? 1 : 0,
+          transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
         }}
       >
         <h1
@@ -88,6 +102,10 @@ export default function CirclesPage() {
           background: 'rgba(13, 148, 136, 0.1)',
           borderRadius: '12px',
           borderLeft: '3px solid #0d9488',
+          opacity: isVisible ? 1 : 0,
+          transform: isVisible ? 'translateX(0)' : 'translateX(-20px)',
+          transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+          transitionDelay: '0.1s',
         }}
       >
         <p
@@ -100,7 +118,7 @@ export default function CirclesPage() {
             gap: '8px',
           }}
         >
-          <span>🔒</span>
+          <span style={{ animation: 'pulse 2s ease-in-out infinite' }}>🔒</span>
           Everything shared in Circles is anonymous
         </p>
       </div>
@@ -114,8 +132,9 @@ export default function CirclesPage() {
           padding: '0 20px',
         }}
       >
-        {CIRCLES.map((circle) => {
+        {CIRCLES.map((circle, index) => {
           const isJoined = joinedCircles.has(circle.id);
+          const isAnimating = animatingJoin === circle.id;
           return (
             <button
               key={circle.id}
@@ -131,6 +150,20 @@ export default function CirclesPage() {
                 cursor: 'pointer',
                 textAlign: 'left',
                 width: '100%',
+                transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+                animation: isVisible ? `fadeInUp 0.4s ease ${0.15 + index * 0.05}s backwards` : 'none',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.06)';
+                e.currentTarget.style.borderColor = 'rgba(13, 148, 136, 0.3)';
+                e.currentTarget.style.transform = 'translateX(4px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                e.currentTarget.style.transform = 'translateX(0)';
               }}
             >
               {/* Circle Icon */}
@@ -145,6 +178,8 @@ export default function CirclesPage() {
                   justifyContent: 'center',
                   fontSize: '1.5rem',
                   flexShrink: 0,
+                  animation: 'float 3s ease-in-out infinite',
+                  animationDelay: `${index * 0.2}s`,
                 }}
               >
                 {circle.emoji}
@@ -186,9 +221,22 @@ export default function CirclesPage() {
                   fontWeight: 500,
                   cursor: 'pointer',
                   flexShrink: 0,
+                  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                  transform: isAnimating ? 'scale(1.15)' : 'scale(1)',
+                  boxShadow: !isJoined ? '0 4px 12px rgba(13, 148, 136, 0.3)' : 'none',
+                }}
+                onMouseEnter={(e) => {
+                  if (!isJoined) {
+                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(13, 148, 136, 0.4)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isJoined) {
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(13, 148, 136, 0.3)';
+                  }
                 }}
               >
-                {isJoined ? 'Joined' : 'Join'}
+                {isJoined ? '✓ Joined' : 'Join'}
               </button>
             </button>
           );
@@ -197,6 +245,27 @@ export default function CirclesPage() {
 
       {/* Bottom Nav */}
       <BottomNav />
+
+      <style jsx>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-3px); }
+        }
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.1); opacity: 0.9; }
+        }
+      `}</style>
     </div>
   );
 }
