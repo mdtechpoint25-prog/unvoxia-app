@@ -1,973 +1,817 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Link from "next/link";
 import Image from "next/image";
 
 export default function LandingPage() {
-  const [activeChat, setActiveChat] = useState("ICG chat");
+  const [isVisible, setIsVisible] = useState(false);
 
-  const conversations = [
-    { id: 1, name: "Richard Wilson", message: "I will add you to our team, we...", avatar: "/images/avatar1.jpg", online: true },
-    { id: 2, name: "ICG chat", message: "Jaden: Let's discuss this tom...", avatar: "/images/avatar2.jpg", group: true },
-    { id: 3, name: "Sarah Parker", message: "You: Ok, see you soon!", avatar: "/images/avatar3.jpg", online: true },
-    { id: 4, name: "Abubakar Campbell", message: "You: Do you think we can do it?", avatar: "/images/avatar4.jpg", online: false },
-    { id: 5, name: "Nathanael Jordan", message: "I'm busy", avatar: "/images/avatar5.jpg", online: true },
-    { id: 6, name: "Conner Garcia", message: "You: Hey, maybe we can meet...", avatar: "/images/avatar6.jpg", online: false },
-    { id: 7, name: "Cynthia Mckay", message: "You: Maybe", avatar: "/images/avatar7.jpg", online: true },
-    { id: 8, name: "Cora Richards", message: "Will you go play?", avatar: "/images/avatar8.jpg", online: false },
-    { id: 9, name: "Lawrence Patterson", message: "I miss the guys what they think", avatar: "/images/avatar9.jpg", online: true },
-    { id: 10, name: "Lukas Mcgowan", message: "You: We can try this strategy I...", avatar: "/images/avatar10.jpg", online: false },
-    { id: 11, name: "Alia Bonner", message: "I had a great time yesterday", avatar: "/images/avatar11.jpg", online: true },
-    { id: 12, name: "Fletcher Morse", message: "You: I need to work, sorry", avatar: "/images/avatar12.jpg", online: true },
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  const features = [
+    {
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
+      ),
+      title: "Real Conversations",
+      description: "Connect with others who understand. Share your story anonymously or openly."
+    },
+    {
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        </svg>
+      ),
+      title: "Supportive Community",
+      description: "A safe space for healing, growth, and genuine human connection."
+    },
+    {
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+        </svg>
+      ),
+      title: "Private & Secure",
+      description: "Your privacy matters. Share at your own pace with full control."
+    },
+    {
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+      ),
+      title: "Daily Prompts",
+      description: "Guided prompts to help you reflect, express, and grow each day."
+    }
   ];
 
-  const members = [
-    { id: 1, name: "Richard Wilson", role: "Admin", avatar: "/images/avatar1.jpg", online: true },
-    { id: 2, name: "You", avatar: "/images/avatar-you.jpg", online: true },
-    { id: 3, name: "Jaden Parker", avatar: "/images/avatar-jaden.jpg", online: false },
-    { id: 4, name: "Conner Garcia", avatar: "/images/avatar-conner.jpg", online: true },
-    { id: 5, name: "Lawrence Patterson", avatar: "/images/avatar-lawrence.jpg", online: false },
-  ];
-
-  const messages = [
-    { id: 1, author: "Richard Wilson", text: "added You", time: "6:15 pm", system: true, date: "9 Sep 2024" },
-    { id: 2, author: "Conner Garcia", text: "Hey guys! Don't forget about our meeting next week! I'll be waiting for you at the 'Cozy Corner' cafe at 6:00 PM. Don't be late!", time: "6:25 pm", avatar: "/images/avatar-conner.jpg" },
-    { id: 3, author: "Richard Wilson", text: "Absolutely, I'll be there! Looking forward to catching up and discussing everything.", time: "6:25 pm", avatar: "/images/avatar1.jpg", date: "10 Sep 2024" },
-    { id: 4, author: "Lawrence Patterson", text: "@wilson @jparker I have a new game plan", time: "6:25 pm", avatar: "/images/avatar-lawrence.jpg" },
-    { id: 5, author: "Jaden Parker", text: "Let's discuss this tomorrow", time: "6:25 pm", avatar: "/images/avatar-jaden.jpg" },
+  const stats = [
+    { value: "50K+", label: "Stories Shared" },
+    { value: "100K+", label: "Connections Made" },
+    { value: "4.9", label: "App Rating" },
+    { value: "24/7", label: "Community Support" }
   ];
 
   return (
-    <div className="chat-app">
-      {/* LEFT SIDEBAR */}
-      <aside className="left-sidebar">
-        <div className="logo">
-          <div className="logo-circle">
-            <span className="logo-letter">S</span>
+    <div className="landing-page">
+      {/* Navigation */}
+      <nav className="nav">
+        <div className="nav-container">
+          <Link href="/" className="nav-logo">
+            <div className="logo-icon">
+              <span>U</span>
+            </div>
+            <span className="logo-text">Unvoxia</span>
+          </Link>
+          
+          <div className="nav-links">
+            <Link href="/about" className="nav-link">About</Link>
+            <Link href="/blog" className="nav-link">Blog</Link>
+            <Link href="/safety" className="nav-link">Safety</Link>
+            <Link href="/contact" className="nav-link">Contact</Link>
           </div>
+          
+          <div className="nav-actions">
+            <Link href="/login" className="btn-ghost">Sign In</Link>
+            <Link href="/signup" className="btn-primary">Get Started</Link>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section className={`hero ${isVisible ? 'visible' : ''}`}>
+        <div className="hero-bg">
+          <div className="hero-gradient" />
+          <div className="hero-pattern" />
         </div>
         
-        <nav className="sidebar-nav">
-          <button className="nav-circle active">Work</button>
-          <button className="nav-circle highlight">IC</button>
-          <button className="nav-circle">SP</button>
-          <button className="nav-circle">BFF</button>
-          <button className="nav-circle">MJ</button>
-          <button className="nav-circle">GI</button>
-        </nav>
-
-        <div className="sidebar-bottom">
-          <button className="nav-circle settings">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="12" cy="12" r="3"/>
-              <path d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24"/>
-            </svg>
-          </button>
-          <button className="add-circle">+</button>
-        </div>
-      </aside>
-
-      {/* CONVERSATIONS PANEL */}
-      <aside className="conversations-panel">
-        <div className="conversations-header">
-          <h2>Messages</h2>
-          <button className="search-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="11" cy="11" r="8"/>
-              <path d="m21 21-4.35-4.35"/>
-            </svg>
-          </button>
-        </div>
-
-        <div className="conversations-list">
-          {conversations.map((conv) => (
-            <div 
-              key={conv.id} 
-              className={`conversation-item ${activeChat === conv.name ? 'active' : ''}`}
-              onClick={() => setActiveChat(conv.name)}
-            >
-              <div className="conv-avatar">
-                <div className="avatar-placeholder" style={{ background: `hsl(${conv.id * 35}, 70%, 60%)` }}>
-                  {conv.name.charAt(0)}
-                </div>
-                {conv.online && <span className="status-dot"></span>}
-              </div>
-              <div className="conv-info">
-                <div className="conv-header">
-                  <h3>{conv.name}</h3>
-                </div>
-                <p className="conv-message">{conv.message}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </aside>
-
-      {/* MAIN CHAT AREA */}
-      <main className="main-chat">
-        <header className="chat-header">
-          <div className="chat-title-area">
-            <h1 className="chat-title">{activeChat}</h1>
+        <div className="hero-content">
+          <div className="hero-badge">
+            <span className="badge-dot" />
+            <span>Trusted by 100,000+ people worldwide</span>
           </div>
-          <div className="chat-actions">
-            <button className="icon-btn">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="8"/>
-                <path d="m21 21-4.35-4.35"/>
+          
+          <h1 className="hero-title">
+            A Space to <span className="highlight">Be Heard</span>,<br />
+            <span className="highlight">Heal</span>, and <span className="highlight">Connect</span>
+          </h1>
+          
+          <p className="hero-subtitle">
+            Share your authentic story with a community that truly understands. 
+            No judgment, just genuine human connection and support.
+          </p>
+          
+          <div className="hero-cta">
+            <Link href="/signup" className="btn-primary btn-lg">
+              Join the Community
+              <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
-            </button>
-            <button className="icon-btn">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="3"/>
-                <path d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24"/>
-              </svg>
-            </button>
-            <div className="avatar-group">
-              <div className="small-avatar" style={{ background: 'linear-gradient(135deg, #10b981, #06b6d4)' }}>R</div>
-            </div>
+            </Link>
+            <Link href="/about" className="btn-secondary btn-lg">
+              Learn More
+            </Link>
           </div>
-        </header>
-
-        <div className="chat-hero">
-          <div className="hero-image">
-            <div className="hero-placeholder"></div>
-          </div>
-        </div>
-
-        <div className="messages-container">
-          {messages.map((msg) => (
-            <div key={msg.id} className="message-wrapper">
-              {msg.date && <div className="date-separator">{msg.date}</div>}
-              
-              {msg.system ? (
-                <div className="system-message">
-                  <span className="sys-icon">→</span>
-                  <span><strong>{msg.author}</strong> {msg.text}</span>
-                  <span className="msg-time">{msg.time}</span>
-                </div>
-              ) : (
-                <div className="message">
-                  <div className="msg-avatar">
-                    <div className="avatar-placeholder" style={{ background: `hsl(${msg.id * 40}, 65%, 55%)` }}>
-                      {msg.author.charAt(0)}
-                    </div>
-                    <span className="status-indicator"></span>
-                  </div>
-                  <div className="msg-content">
-                    <div className="msg-header">
-                      <strong className="msg-author">{msg.author}</strong>
-                      <span className="msg-time">{msg.time}</span>
-                    </div>
-                    <p className="msg-text">{msg.text}</p>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
-
-          <div className="video-call-banner">
-            <span className="call-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polygon points="23 7 16 12 23 17 23 7"/>
-                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
-              </svg>
-            </span>
-            <span><strong>Richard Wilson</strong> started a video call</span>
-            <button className="join-btn">Join</button>
-          </div>
-        </div>
-
-        <div className="message-input-area">
-          <button className="attach-btn">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
-            </svg>
-          </button>
-          <input type="text" placeholder="Write a message..." className="message-input" />
-          <button className="voice-btn">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-              <path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/>
-            </svg>
-          </button>
-          <button className="send-btn">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="22" y1="2" x2="11" y2="13"/>
-              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-            </svg>
-          </button>
-        </div>
-      </main>
-
-      {/* RIGHT SIDEBAR */}
-      <aside className="right-sidebar">
-        <div className="sidebar-actions">
-          <button className="action-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-            </svg>
-          </button>
-          <button className="action-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <polygon points="23 7 16 12 23 17 23 7"/>
-              <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
-            </svg>
-          </button>
-          <button className="action-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/>
-              <circle cx="4" cy="4" r="2"/>
-            </svg>
-          </button>
-          <button className="action-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-              <circle cx="9" cy="7" r="4"/>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
-            </svg>
-          </button>
-        </div>
-
-        <div className="members-section">
-          <h3 className="section-title">Members</h3>
-          <div className="members-list">
-            {members.map((member) => (
-              <div key={member.id} className="member-item">
-                <div className="member-avatar">
-                  <div className="avatar-placeholder" style={{ background: `hsl(${member.id * 50}, 60%, 55%)` }}>
-                    {member.name.charAt(0)}
-                  </div>
-                  {member.online && <span className="online-dot"></span>}
-                </div>
-                <span className="member-name">{member.name}</span>
-                {member.role && <span className="member-role">{member.role}</span>}
+          
+          <div className="hero-stats">
+            {stats.map((stat, index) => (
+              <div key={index} className="stat-item">
+                <span className="stat-value">{stat.value}</span>
+                <span className="stat-label">{stat.label}</span>
               </div>
             ))}
           </div>
         </div>
-
-        <div className="files-section">
-          <div className="section-header">
-            <h3 className="section-title">Files</h3>
-          </div>
-          
-          <div className="files-item">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-              <circle cx="8.5" cy="8.5" r="1.5"/>
-              <polyline points="21 15 16 10 5 21"/>
-            </svg>
-            <span>116 photos</span>
-            <button className="expand-btn">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polyline points="18 15 12 9 6 15"/>
-              </svg>
-            </button>
-          </div>
-
-          <div className="files-preview">
-            <div className="preview-grid">
-              <div className="preview-img"></div>
-              <div className="preview-img"></div>
+        
+        <div className="hero-visual">
+          <div className="phone-mockup">
+            <div className="phone-screen">
+              <div className="app-preview">
+                <div className="preview-header">
+                  <div className="preview-avatar" />
+                  <div className="preview-info">
+                    <div className="preview-name" />
+                    <div className="preview-status" />
+                  </div>
+                </div>
+                <div className="preview-messages">
+                  <div className="preview-msg received" />
+                  <div className="preview-msg sent" />
+                  <div className="preview-msg received long" />
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div className="files-item">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
-              <polyline points="13 2 13 9 20 9"/>
-            </svg>
-            <span>208 files</span>
-            <button className="expand-btn">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polyline points="6 9 12 15 18 9"/>
-              </svg>
-            </button>
+      {/* Features Section */}
+      <section className="features">
+        <div className="section-container">
+          <div className="section-header">
+            <span className="section-tag">Features</span>
+            <h2 className="section-title">Everything You Need to Connect</h2>
+            <p className="section-subtitle">
+              Designed with care for your mental wellness and authentic self-expression
+            </p>
           </div>
-
-          <div className="files-item">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-            </svg>
-            <span>47 shared links</span>
-            <button className="expand-btn">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polyline points="6 9 12 15 18 9"/>
-              </svg>
-            </button>
+          
+          <div className="features-grid">
+            {features.map((feature, index) => (
+              <div key={index} className="feature-card">
+                <div className="feature-icon">{feature.icon}</div>
+                <h3 className="feature-title">{feature.title}</h3>
+                <p className="feature-desc">{feature.description}</p>
+              </div>
+            ))}
           </div>
         </div>
-      </aside>
+      </section>
+
+      {/* CTA Section */}
+      <section className="cta-section">
+        <div className="cta-container">
+          <div className="cta-content">
+            <h2 className="cta-title">Ready to Share Your Story?</h2>
+            <p className="cta-subtitle">
+              Join thousands of people finding connection, support, and healing.
+            </p>
+            <div className="cta-actions">
+              <Link href="/signup" className="btn-primary btn-lg">
+                Create Free Account
+              </Link>
+              <Link href="/feed" className="btn-ghost btn-lg">
+                Browse Stories
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="footer">
+        <div className="footer-container">
+          <div className="footer-brand">
+            <div className="logo-icon">
+              <span>U</span>
+            </div>
+            <p className="footer-tagline">A safe space for authentic connection</p>
+          </div>
+          
+          <div className="footer-links">
+            <div className="footer-col">
+              <h4>Product</h4>
+              <Link href="/feed">Feed</Link>
+              <Link href="/messages">Messages</Link>
+              <Link href="/daily-prompts">Daily Prompts</Link>
+              <Link href="/circles">Circles</Link>
+            </div>
+            <div className="footer-col">
+              <h4>Company</h4>
+              <Link href="/about">About</Link>
+              <Link href="/blog">Blog</Link>
+              <Link href="/contact">Contact</Link>
+              <Link href="/faq">FAQ</Link>
+            </div>
+            <div className="footer-col">
+              <h4>Legal</h4>
+              <Link href="/privacy">Privacy</Link>
+              <Link href="/terms">Terms</Link>
+              <Link href="/safety">Safety</Link>
+            </div>
+          </div>
+        </div>
+        
+        <div className="footer-bottom">
+          <p>© 2024 Unvoxia. All rights reserved.</p>
+        </div>
+      </footer>
 
       <style jsx>{`
-        .chat-app {
-          display: grid;
-          grid-template-columns: 80px 320px 1fr 280px;
-          height: 100vh;
-          background: #0a0a0a;
-          color: #ffffff;
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-          overflow: hidden;
+        .landing-page {
+          min-height: 100vh;
+          background: var(--bg-primary);
+          color: var(--text-primary);
         }
 
-        /* LEFT SIDEBAR */
-        .left-sidebar {
-          background: #000000;
+        /* Navigation */
+        .nav {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 100;
+          backdrop-filter: blur(20px);
+          background: rgba(26, 26, 26, 0.8);
+          border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .nav-container {
+          max-width: 1400px;
+          margin: 0 auto;
+          padding: 16px 24px;
           display: flex;
-          flex-direction: column;
           align-items: center;
-          padding: 24px 0;
+          justify-content: space-between;
+        }
+
+        .nav-logo {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          text-decoration: none;
+        }
+
+        .logo-icon {
+          width: 40px;
+          height: 40px;
+          background: var(--accent);
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 700;
+          font-size: 1.25rem;
+          color: var(--bg-primary);
+        }
+
+        .logo-text {
+          font-size: 1.25rem;
+          font-weight: 700;
+          color: var(--text-primary);
+        }
+
+        .nav-links {
+          display: flex;
           gap: 32px;
         }
 
-        .logo {
-          margin-bottom: 8px;
-        }
-
-        .logo-circle {
-          width: 52px;
-          height: 52px;
-          background: linear-gradient(135deg, #c4e84b, #b8e62d);
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .logo-letter {
-          font-size: 24px;
-          font-weight: 700;
-          color: #000;
-        }
-
-        .sidebar-nav {
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-          flex: 1;
-        }
-
-        .nav-circle {
-          width: 48px;
-          height: 48px;
-          border-radius: 50%;
-          background: #1a1a1a;
-          color: #888;
-          border: none;
-          font-size: 11px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.2s;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .nav-circle.active {
-          background: #2a2a2a;
-          color: #fff;
-        }
-
-        .nav-circle.highlight {
-          background: #1a1a1a;
-          color: #fff;
-          border: 2px solid #888;
-        }
-
-        .nav-circle.settings {
-          background: transparent;
-          color: #666;
-        }
-
-        .sidebar-bottom {
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-          margin-top: auto;
-        }
-
-        .add-circle {
-          width: 48px;
-          height: 48px;
-          border-radius: 50%;
-          background: #c4e84b;
-          color: #000;
-          border: none;
-          font-size: 24px;
-          font-weight: 300;
-          cursor: pointer;
-          transition: all 0.2s;
-        }
-
-        /* CONVERSATIONS PANEL */
-        .conversations-panel {
-          background: #141414;
-          border-right: 1px solid #1f1f1f;
-          display: flex;
-          flex-direction: column;
-        }
-
-        .conversations-header {
-          padding: 20px 20px 16px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          border-bottom: 1px solid #1f1f1f;
-        }
-
-        .conversations-header h2 {
-          font-size: 18px;
-          font-weight: 600;
-          margin: 0;
-        }
-
-        .search-icon {
-          width: 36px;
-          height: 36px;
-          background: transparent;
-          border: none;
-          color: #888;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 8px;
-          transition: all 0.2s;
-        }
-
-        .search-icon:hover {
-          background: #1f1f1f;
-          color: #fff;
-        }
-
-        .conversations-list {
-          flex: 1;
-          overflow-y: auto;
-          padding: 8px 0;
-        }
-
-        .conversation-item {
-          display: flex;
-          gap: 12px;
-          padding: 12px 20px;
-          cursor: pointer;
-          transition: all 0.2s;
-          position: relative;
-        }
-
-        .conversation-item:hover {
-          background: #1a1a1a;
-        }
-
-        .conversation-item.active {
-          background: #1f1f1f;
-        }
-
-        .conv-avatar {
-          position: relative;
-          flex-shrink: 0;
-        }
-
-        .avatar-placeholder {
-          width: 44px;
-          height: 44px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-weight: 600;
-          font-size: 16px;
-          color: #fff;
-        }
-
-        .status-dot {
-          position: absolute;
-          bottom: 2px;
-          right: 2px;
-          width: 10px;
-          height: 10px;
-          background: #10b981;
-          border: 2px solid #141414;
-          border-radius: 50%;
-        }
-
-        .conv-info {
-          flex: 1;
-          min-width: 0;
-        }
-
-        .conv-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 4px;
-        }
-
-        .conv-header h3 {
-          font-size: 14px;
-          font-weight: 600;
-          margin: 0;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-
-        .conv-message {
-          font-size: 13px;
-          color: #888;
-          margin: 0;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-
-        /* MAIN CHAT */
-        .main-chat {
-          background: #0a0a0a;
-          display: flex;
-          flex-direction: column;
-        }
-
-        .chat-header {
-          background: #000;
-          padding: 16px 24px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          border-bottom: 1px solid #1f1f1f;
-        }
-
-        .chat-title {
-          font-size: 18px;
-          font-weight: 600;
-          margin: 0;
-        }
-
-        .chat-actions {
-          display: flex;
-          gap: 12px;
-          align-items: center;
-        }
-
-        .icon-btn {
-          width: 36px;
-          height: 36px;
-          background: #1a1a1a;
-          border: none;
-          color: #888;
-          border-radius: 8px;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.2s;
-        }
-
-        .icon-btn:hover {
-          background: #2a2a2a;
-          color: #fff;
-        }
-
-        .avatar-group {
-          display: flex;
-          margin-left: 8px;
-        }
-
-        .small-avatar {
-          width: 36px;
-          height: 36px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-weight: 600;
-          font-size: 14px;
-          color: #fff;
-          border: 2px solid #000;
-        }
-
-        .chat-hero {
-          padding: 20px 24px;
-          background: #000;
-          border-bottom: 1px solid #1f1f1f;
-        }
-
-        .hero-image {
-          border-radius: 16px;
-          overflow: hidden;
-          height: 200px;
-        }
-
-        .hero-placeholder {
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(135deg, #3a2a1a 0%, #1a1a0a 50%, #2a3a1a 100%);
-          position: relative;
-        }
-
-        .messages-container {
-          flex: 1;
-          overflow-y: auto;
-          padding: 20px 24px;
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-        }
-
-        .date-separator {
-          text-align: center;
-          color: #666;
-          font-size: 12px;
+        .nav-link {
+          color: var(--text-secondary);
+          text-decoration: none;
+          font-size: 0.9rem;
           font-weight: 500;
-          margin: 12px 0;
+          transition: color 0.2s;
         }
 
-        .system-message {
+        .nav-link:hover {
+          color: var(--text-primary);
+        }
+
+        .nav-actions {
           display: flex;
+          gap: 12px;
+          align-items: center;
+        }
+
+        .btn-ghost {
+          padding: 10px 20px;
+          background: transparent;
+          color: var(--text-secondary);
+          border: none;
+          border-radius: 100px;
+          font-weight: 600;
+          font-size: 0.9rem;
+          cursor: pointer;
+          text-decoration: none;
+          transition: all 0.2s;
+        }
+
+        .btn-ghost:hover {
+          color: var(--text-primary);
+          background: var(--overlay-low);
+        }
+
+        .btn-primary {
+          padding: 10px 24px;
+          background: var(--accent);
+          color: var(--bg-primary);
+          border: none;
+          border-radius: 100px;
+          font-weight: 600;
+          font-size: 0.9rem;
+          cursor: pointer;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+          background: var(--accent-hover);
+          transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+          padding: 10px 24px;
+          background: var(--overlay-medium);
+          color: var(--text-primary);
+          border: 1px solid var(--border-subtle);
+          border-radius: 100px;
+          font-weight: 600;
+          font-size: 0.9rem;
+          cursor: pointer;
+          text-decoration: none;
+          transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+          background: var(--overlay-high);
+          border-color: var(--accent);
+        }
+
+        .btn-lg {
+          padding: 14px 32px;
+          font-size: 1rem;
+        }
+
+        /* Hero Section */
+        .hero {
+          min-height: 100vh;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          align-items: center;
+          gap: 60px;
+          padding: 120px 60px 60px;
+          max-width: 1400px;
+          margin: 0 auto;
+          position: relative;
+          opacity: 0;
+          transform: translateY(20px);
+          transition: all 0.8s ease-out;
+        }
+
+        .hero.visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .hero-bg {
+          position: absolute;
+          inset: 0;
+          overflow: hidden;
+          z-index: -1;
+        }
+
+        .hero-gradient {
+          position: absolute;
+          top: -50%;
+          right: -20%;
+          width: 800px;
+          height: 800px;
+          background: radial-gradient(circle, rgba(212, 168, 85, 0.15) 0%, transparent 70%);
+          border-radius: 50%;
+        }
+
+        .hero-pattern {
+          position: absolute;
+          inset: 0;
+          background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+          background-size: 40px 40px;
+        }
+
+        .hero-content {
+          max-width: 600px;
+        }
+
+        .hero-badge {
+          display: inline-flex;
           align-items: center;
           gap: 8px;
-          font-size: 13px;
-          color: #888;
-          padding: 8px 0;
+          padding: 8px 16px;
+          background: var(--overlay-low);
+          border-radius: 100px;
+          font-size: 0.85rem;
+          color: var(--text-secondary);
+          margin-bottom: 24px;
         }
 
-        .sys-icon {
-          color: #666;
-        }
-
-        .message {
-          display: flex;
-          gap: 12px;
-        }
-
-        .msg-avatar {
-          position: relative;
-          flex-shrink: 0;
-        }
-
-        .msg-avatar .avatar-placeholder {
-          width: 40px;
-          height: 40px;
-          font-size: 15px;
-        }
-
-        .status-indicator {
-          position: absolute;
-          bottom: 0;
-          right: 0;
-          width: 10px;
-          height: 10px;
-          background: #10b981;
-          border: 2px solid #0a0a0a;
+        .badge-dot {
+          width: 8px;
+          height: 8px;
+          background: #4ade80;
           border-radius: 50%;
+          animation: pulse 2s infinite;
         }
 
-        .msg-content {
-          flex: 1;
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
         }
 
-        .msg-header {
+        .hero-title {
+          font-size: clamp(2.5rem, 5vw, 4rem);
+          font-weight: 700;
+          line-height: 1.1;
+          margin-bottom: 24px;
+          letter-spacing: -0.02em;
+        }
+
+        .highlight {
+          color: var(--accent);
+        }
+
+        .hero-subtitle {
+          font-size: 1.2rem;
+          color: var(--text-secondary);
+          line-height: 1.7;
+          margin-bottom: 32px;
+        }
+
+        .hero-cta {
           display: flex;
-          gap: 12px;
-          align-items: baseline;
-          margin-bottom: 4px;
+          gap: 16px;
+          margin-bottom: 48px;
         }
 
-        .msg-author {
-          font-size: 14px;
-          font-weight: 600;
-        }
-
-        .msg-time {
-          font-size: 12px;
-          color: #666;
-        }
-
-        .msg-text {
-          font-size: 14px;
-          color: #ccc;
-          line-height: 1.5;
-          margin: 0;
-        }
-
-        .video-call-banner {
-          background: #1a1a1a;
-          padding: 14px 20px;
-          border-radius: 12px;
+        .hero-stats {
           display: flex;
-          align-items: center;
-          gap: 12px;
-          font-size: 13px;
-          margin-top: 8px;
+          gap: 40px;
         }
 
-        .call-icon {
-          color: #fff;
+        .stat-item {
           display: flex;
+          flex-direction: column;
         }
 
-        .join-btn {
-          margin-left: auto;
-          padding: 8px 20px;
-          background: #c4e84b;
-          color: #000;
-          border: none;
-          border-radius: 8px;
-          font-weight: 600;
-          font-size: 13px;
-          cursor: pointer;
-          transition: all 0.2s;
+        .stat-value {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: var(--accent);
         }
 
-        .join-btn:hover {
-          background: #b8d840;
+        .stat-label {
+          font-size: 0.85rem;
+          color: var(--text-muted);
         }
 
-        .message-input-area {
-          padding: 16px 24px;
-          background: #000;
-          border-top: 1px solid #1f1f1f;
+        .hero-visual {
           display: flex;
-          gap: 12px;
-          align-items: center;
-        }
-
-        .attach-btn, .voice-btn, .send-btn {
-          width: 40px;
-          height: 40px;
-          background: transparent;
-          border: none;
-          color: #888;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
           justify-content: center;
-          border-radius: 8px;
-          transition: all 0.2s;
+          align-items: center;
         }
 
-        .attach-btn:hover, .voice-btn:hover {
-          background: #1a1a1a;
-          color: #fff;
+        .phone-mockup {
+          width: 320px;
+          height: 650px;
+          background: linear-gradient(145deg, #2d2d2d 0%, #1a1a1a 100%);
+          border-radius: 40px;
+          padding: 12px;
+          box-shadow: 0 50px 100px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1);
         }
 
-        .send-btn {
-          background: #1a1a1a;
-          color: #fff;
+        .phone-screen {
+          width: 100%;
+          height: 100%;
+          background: var(--bg-surface);
+          border-radius: 32px;
+          overflow: hidden;
         }
 
-        .send-btn:hover {
-          background: #2a2a2a;
-        }
-
-        .message-input {
-          flex: 1;
-          background: #1a1a1a;
-          border: none;
-          padding: 12px 16px;
-          border-radius: 10px;
-          color: #fff;
-          font-size: 14px;
-          outline: none;
-        }
-
-        .message-input::placeholder {
-          color: #666;
-        }
-
-        /* RIGHT SIDEBAR */
-        .right-sidebar {
-          background: #000;
-          border-left: 1px solid #1f1f1f;
+        .app-preview {
           padding: 20px;
-          overflow-y: auto;
-          display: flex;
-          flex-direction: column;
-          gap: 24px;
         }
 
-        .sidebar-actions {
-          display: flex;
-          justify-content: space-around;
-          padding: 12px 0;
-        }
-
-        .action-icon {
-          width: 44px;
-          height: 44px;
-          background: #1a1a1a;
-          border: none;
-          color: #888;
-          border-radius: 50%;
-          cursor: pointer;
+        .preview-header {
           display: flex;
           align-items: center;
-          justify-content: center;
-          transition: all 0.2s;
+          gap: 12px;
+          margin-bottom: 24px;
         }
 
-        .action-icon:hover {
-          background: #2a2a2a;
-          color: #fff;
+        .preview-avatar {
+          width: 48px;
+          height: 48px;
+          background: var(--accent);
+          border-radius: 50%;
         }
 
-        .members-section {
-          background: #0a0a0a;
-          border-radius: 12px;
-          padding: 16px;
+        .preview-info {
+          flex: 1;
         }
 
-        .section-title {
-          font-size: 15px;
-          font-weight: 600;
-          margin: 0 0 16px 0;
+        .preview-name {
+          height: 14px;
+          width: 120px;
+          background: var(--overlay-medium);
+          border-radius: 4px;
+          margin-bottom: 6px;
         }
 
-        .members-list {
+        .preview-status {
+          height: 10px;
+          width: 80px;
+          background: var(--overlay-low);
+          border-radius: 4px;
+        }
+
+        .preview-messages {
           display: flex;
           flex-direction: column;
           gap: 12px;
         }
 
-        .member-item {
-          display: flex;
-          align-items: center;
-          gap: 10px;
+        .preview-msg {
+          height: 48px;
+          border-radius: 16px;
+          background: var(--overlay-low);
         }
 
-        .member-avatar {
-          position: relative;
-        }
-
-        .member-avatar .avatar-placeholder {
-          width: 36px;
-          height: 36px;
-          font-size: 14px;
-        }
-
-        .online-dot {
-          position: absolute;
-          bottom: 0;
-          right: 0;
-          width: 9px;
-          height: 9px;
-          background: #10b981;
-          border: 2px solid #000;
-          border-radius: 50%;
-        }
-
-        .member-name {
-          font-size: 14px;
-          font-weight: 500;
-        }
-
-        .member-role {
+        .preview-msg.sent {
+          width: 70%;
           margin-left: auto;
-          font-size: 12px;
-          color: #888;
-          background: #1a1a1a;
-          padding: 4px 10px;
-          border-radius: 6px;
+          background: rgba(212, 168, 85, 0.2);
         }
 
-        .files-section {
-          background: #0a0a0a;
-          border-radius: 12px;
-          padding: 16px;
+        .preview-msg.received {
+          width: 80%;
+        }
+
+        .preview-msg.long {
+          height: 72px;
+        }
+
+        /* Features Section */
+        .features {
+          padding: 100px 24px;
+          background: var(--bg-surface);
+        }
+
+        .section-container {
+          max-width: 1200px;
+          margin: 0 auto;
         }
 
         .section-header {
+          text-align: center;
+          margin-bottom: 60px;
+        }
+
+        .section-tag {
+          display: inline-block;
+          padding: 6px 16px;
+          background: rgba(212, 168, 85, 0.1);
+          color: var(--accent);
+          border-radius: 100px;
+          font-size: 0.85rem;
+          font-weight: 600;
           margin-bottom: 16px;
         }
 
-        .files-item {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          padding: 12px 0;
-          border-bottom: 1px solid #1a1a1a;
-          font-size: 13px;
-          color: #ccc;
+        .section-title {
+          font-size: clamp(1.75rem, 3vw, 2.5rem);
+          font-weight: 700;
+          margin-bottom: 16px;
         }
 
-        .files-item:last-child {
-          border-bottom: none;
+        .section-subtitle {
+          font-size: 1.1rem;
+          color: var(--text-secondary);
+          max-width: 600px;
+          margin: 0 auto;
         }
 
-        .files-item svg {
-          color: #888;
+        .features-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+          gap: 24px;
         }
 
-        .expand-btn {
-          margin-left: auto;
-          background: transparent;
-          border: none;
-          color: #888;
-          cursor: pointer;
-          padding: 4px;
+        .feature-card {
+          background: var(--bg-primary);
+          border: 1px solid var(--border-subtle);
+          border-radius: 20px;
+          padding: 32px;
+          transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+          border-color: var(--accent);
+          transform: translateY(-4px);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-icon {
+          width: 56px;
+          height: 56px;
+          background: rgba(212, 168, 85, 0.1);
+          border-radius: 16px;
           display: flex;
           align-items: center;
           justify-content: center;
+          color: var(--accent);
+          margin-bottom: 20px;
         }
 
-        .files-preview {
-          padding: 12px 0 8px;
+        .feature-title {
+          font-size: 1.2rem;
+          font-weight: 600;
+          margin-bottom: 12px;
         }
 
-        .preview-grid {
+        .feature-desc {
+          font-size: 0.95rem;
+          color: var(--text-secondary);
+          line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+          padding: 100px 24px;
+        }
+
+        .cta-container {
+          max-width: 800px;
+          margin: 0 auto;
+          text-align: center;
+        }
+
+        .cta-title {
+          font-size: clamp(1.75rem, 3vw, 2.5rem);
+          font-weight: 700;
+          margin-bottom: 16px;
+        }
+
+        .cta-subtitle {
+          font-size: 1.1rem;
+          color: var(--text-secondary);
+          margin-bottom: 32px;
+        }
+
+        .cta-actions {
+          display: flex;
+          justify-content: center;
+          gap: 16px;
+        }
+
+        /* Footer */
+        .footer {
+          background: var(--bg-surface);
+          border-top: 1px solid var(--border-subtle);
+          padding: 60px 24px 24px;
+        }
+
+        .footer-container {
+          max-width: 1200px;
+          margin: 0 auto;
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 8px;
+          grid-template-columns: 1fr 2fr;
+          gap: 60px;
+          margin-bottom: 40px;
         }
 
-        .preview-img {
-          aspect-ratio: 16/9;
-          background: linear-gradient(135deg, #2a3a1a 0%, #1a2a0a 100%);
-          border-radius: 8px;
+        .footer-brand {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
         }
 
-        @media (max-width: 1400px) {
-          .right-sidebar {
-            display: none;
-          }
-          .chat-app {
-            grid-template-columns: 80px 320px 1fr;
-          }
+        .footer-tagline {
+          color: var(--text-muted);
+          font-size: 0.9rem;
         }
 
+        .footer-links {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 40px;
+        }
+
+        .footer-col {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .footer-col h4 {
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: var(--text-primary);
+          margin-bottom: 8px;
+        }
+
+        .footer-col a {
+          color: var(--text-muted);
+          text-decoration: none;
+          font-size: 0.9rem;
+          transition: color 0.2s;
+        }
+
+        .footer-col a:hover {
+          color: var(--accent);
+        }
+
+        .footer-bottom {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding-top: 24px;
+          border-top: 1px solid var(--border-subtle);
+        }
+
+        .footer-bottom p {
+          color: var(--text-muted);
+          font-size: 0.85rem;
+        }
+
+        /* Responsive */
         @media (max-width: 1024px) {
-          .conversations-panel {
+          .hero {
+            grid-template-columns: 1fr;
+            text-align: center;
+            padding: 120px 24px 60px;
+          }
+
+          .hero-content {
+            max-width: 100%;
+          }
+
+          .hero-cta {
+            justify-content: center;
+          }
+
+          .hero-stats {
+            justify-content: center;
+          }
+
+          .hero-visual {
             display: none;
           }
-          .chat-app {
-            grid-template-columns: 80px 1fr;
+
+          .nav-links {
+            display: none;
+          }
+
+          .footer-container {
+            grid-template-columns: 1fr;
+            gap: 40px;
+          }
+
+          .footer-links {
+            grid-template-columns: repeat(2, 1fr);
           }
         }
 
-        @media (max-width: 768px) {
-          .left-sidebar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            flex-direction: row;
-            height: 64px;
-            padding: 0 20px;
-            z-index: 100;
-            border-top: 1px solid #1f1f1f;
+        @media (max-width: 640px) {
+          .hero-cta {
+            flex-direction: column;
           }
-          .chat-app {
+
+          .hero-stats {
+            flex-wrap: wrap;
+            gap: 24px;
+          }
+
+          .cta-actions {
+            flex-direction: column;
+          }
+
+          .footer-links {
             grid-template-columns: 1fr;
-            padding-bottom: 64px;
-          }
-          .sidebar-nav {
-            flex-direction: row;
-          }
-          .sidebar-bottom {
-            flex-direction: row;
-            margin-top: 0;
-            margin-left: auto;
           }
         }
       `}</style>

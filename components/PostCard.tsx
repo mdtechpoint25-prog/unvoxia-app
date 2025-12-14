@@ -30,7 +30,6 @@ interface Comment {
   };
 }
 
-// SVG Icons
 const UserIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -99,37 +98,34 @@ export default function PostCard({
     setShowComments(!showComments);
   };
 
-  // Hide metrics for non-admin users
-  const showMetrics = false; // Can be controlled by admin role check
-
   const handleCommentAdded = (comment: Comment) => {
     setComments([...comments, comment]);
   };
 
   return (
     <div style={{
-      background: '#fff',
-      borderRadius: '16px',
-      padding: '1.25rem',
-      boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
-      border: '1px solid #e5e7eb',
-      marginBottom: '1rem'
+      background: 'var(--bg-surface)',
+      borderRadius: '20px',
+      padding: '1.5rem',
+      boxShadow: 'var(--shadow-card)',
+      border: '1px solid var(--border-subtle)',
+      marginBottom: '1rem',
+      transition: 'all 0.3s ease'
     }}>
-      {/* Header */}
       <div style={{ 
         display: 'flex', 
         alignItems: 'center', 
         justifyContent: 'space-between',
-        marginBottom: '0.75rem' 
+        marginBottom: '1rem' 
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <span style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '50%',
+            width: '44px',
+            height: '44px',
+            borderRadius: '14px',
             background: isAnonymous 
-              ? 'linear-gradient(135deg, #7f8c8d 0%, #95a5a6 100%)' 
-              : 'linear-gradient(135deg, #9B59B6 0%, #1ABC9C 100%)',
+              ? 'linear-gradient(135deg, #6b7280 0%, #9ca3af 100%)' 
+              : 'linear-gradient(135deg, var(--accent) 0%, var(--accent-bright) 100%)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -140,27 +136,36 @@ export default function PostCard({
             {isAnonymous ? <UserIcon /> : displayAvatar}
           </span>
           <div>
-            <strong style={{ color: '#1a1a2e' }}>
+            <strong style={{ color: 'var(--text-primary)', fontSize: '0.95rem' }}>
               {isAnonymous ? 'Anonymous' : `@${displayName}`}
             </strong>
-            <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>
-              {formatTime(timestamp)} - <span style={{ color: '#1ABC9C' }}>{category}</span>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '2px' }}>
+              <span>{formatTime(timestamp)}</span>
+              <span style={{ opacity: 0.5 }}>-</span>
+              <span style={{ 
+                color: 'var(--accent)', 
+                background: 'rgba(212, 168, 85, 0.1)',
+                padding: '2px 8px',
+                borderRadius: '100px',
+                fontSize: '0.75rem'
+              }}>{category}</span>
             </div>
           </div>
         </div>
         
-        {/* More Menu */}
         {interactive && (
           <div style={{ position: 'relative' }}>
             <button
               onClick={() => setShowMenu(!showMenu)}
               style={{
-                background: 'none',
+                background: 'var(--overlay-low)',
                 border: 'none',
-                color: '#9ca3af',
+                color: 'var(--text-muted)',
                 cursor: 'pointer',
                 padding: '0.5rem',
-                fontSize: '1.25rem'
+                fontSize: '1.25rem',
+                borderRadius: '10px',
+                transition: 'all 0.2s'
               }}
             >
               <MoreIcon />
@@ -170,10 +175,10 @@ export default function PostCard({
                 position: 'absolute',
                 top: '100%',
                 right: 0,
-                background: '#fff',
-                borderRadius: '8px',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
-                border: '1px solid #e5e7eb',
+                background: 'var(--bg-surface-elevated)',
+                borderRadius: '12px',
+                boxShadow: 'var(--shadow-lg)',
+                border: '1px solid var(--border-subtle)',
                 overflow: 'hidden',
                 zIndex: 10
               }}>
@@ -184,36 +189,34 @@ export default function PostCard({
         )}
       </div>
 
-      {/* Content */}
       <p style={{ 
-        color: '#4a5568', 
-        marginBottom: '0.75rem', 
+        color: 'var(--text-secondary)', 
+        marginBottom: '1rem', 
         whiteSpace: 'pre-wrap',
-        lineHeight: 1.6 
+        lineHeight: 1.7,
+        fontSize: '1rem'
       }}>
         {content}
       </p>
 
-      {/* Media */}
       {mediaUrl && (
-        <div style={{ marginBottom: '0.75rem' }}>
+        <div style={{ marginBottom: '1rem' }}>
           <img 
             src={mediaUrl} 
             alt="post media" 
-            style={{ width: '100%', borderRadius: '12px' }} 
+            style={{ width: '100%', borderRadius: '16px' }} 
           />
         </div>
       )}
       
-      {/* Actions */}
       {interactive && (
         <div style={{ 
           display: 'flex', 
-          gap: '1rem', 
+          gap: '0.75rem', 
           alignItems: 'center', 
           flexWrap: 'wrap',
-          paddingTop: '0.75rem',
-          borderTop: '1px solid #f3f4f6'
+          paddingTop: '1rem',
+          borderTop: '1px solid var(--border-subtle)'
         }}>
           <ReactionButton
             postId={id}
@@ -223,15 +226,18 @@ export default function PostCard({
           <button
             onClick={handleToggleComments}
             style={{
-              background: 'none',
+              background: 'var(--overlay-low)',
               border: 'none',
-              color: '#1ABC9C',
+              color: 'var(--text-secondary)',
               cursor: 'pointer',
-              fontSize: '0.9rem',
+              fontSize: '0.875rem',
               fontWeight: 500,
               display: 'flex',
               alignItems: 'center',
-              gap: '0.375rem'
+              gap: '0.5rem',
+              padding: '0.5rem 0.75rem',
+              borderRadius: '10px',
+              transition: 'all 0.2s'
             }}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -246,19 +252,18 @@ export default function PostCard({
         <div style={{ 
           display: 'flex', 
           gap: '1rem', 
-          fontSize: '0.9rem', 
-          color: '#9ca3af',
-          paddingTop: '0.75rem',
-          borderTop: '1px solid #f3f4f6'
+          fontSize: '0.875rem', 
+          color: 'var(--text-muted)',
+          paddingTop: '1rem',
+          borderTop: '1px solid var(--border-subtle)'
         }}>
-          {/* Metrics hidden for healing focus */}
           <span style={{ fontSize: '0.85rem', fontStyle: 'italic' }}>Anonymous voice</span>
         </div>
       )}
 
       {showComments && interactive && (
         loadingComments ? (
-          <p style={{ color: '#9ca3af', marginTop: '1rem' }}>Loading comments...</p>
+          <p style={{ color: 'var(--text-muted)', marginTop: '1rem' }}>Loading comments...</p>
         ) : (
           <CommentSection
             postId={id}

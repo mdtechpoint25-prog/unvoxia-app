@@ -6,64 +6,13 @@ import Link from 'next/link';
 
 interface Notification {
   id: string;
-  type: 'reaction' | 'comment' | 'follow' | 'message';
-  actorUsername: string;
-  postPreview?: string;
-  message?: string;
-  isRead: boolean;
-  createdAt: string;
+  type: string;
+  title: string;
+  message: string;
+  read: boolean;
+  created_at: string;
+  data?: any;
 }
-
-// Mock notifications
-const mockNotifications: Notification[] = [
-  {
-    id: '1',
-    type: 'reaction',
-    actorUsername: 'healingjourney_21',
-    postPreview: 'I smile at work every day...',
-    isRead: false,
-    createdAt: new Date(Date.now() - 10 * 60000).toISOString(),
-  },
-  {
-    id: '2',
-    type: 'comment',
-    actorUsername: 'kindspirit_22',
-    postPreview: 'I smile at work every day...',
-    message: 'This hits so close to home. You\'re not alone...',
-    isRead: false,
-    createdAt: new Date(Date.now() - 30 * 60000).toISOString(),
-  },
-  {
-    id: '3',
-    type: 'follow',
-    actorUsername: 'quietmind_402',
-    isRead: false,
-    createdAt: new Date(Date.now() - 2 * 3600000).toISOString(),
-  },
-  {
-    id: '4',
-    type: 'reaction',
-    actorUsername: 'gentlesoul_91',
-    postPreview: 'Sometimes the hardest thing is admitting...',
-    isRead: true,
-    createdAt: new Date(Date.now() - 5 * 3600000).toISOString(),
-  },
-  {
-    id: '5',
-    type: 'message',
-    actorUsername: 'anonymous_heart',
-    message: 'Sent you a message request',
-    isRead: true,
-    createdAt: new Date(Date.now() - 12 * 3600000).toISOString(),
-  },
-  {
-    id: '6',
-    type: 'follow',
-    actorUsername: 'broken_but_breathing',
-    isRead: true,
-    createdAt: new Date(Date.now() - 24 * 3600000).toISOString(),
-  },
-];
 
 function formatTime(dateString: string): string {
   const date = new Date(dateString);
@@ -86,46 +35,80 @@ function getNotificationIcon(type: string): string {
     case 'comment': return '💬';
     case 'follow': return '👤';
     case 'message': return '✉️';
+    case 'warning': return '⚠️';
+    case 'system': return '🔔';
     default: return '🔔';
-  }
-}
-
-function getNotificationText(notification: Notification): string {
-  switch (notification.type) {
-    case 'reaction':
-      return `felt your post`;
-    case 'comment':
-      return `responded to your post`;
-    case 'follow':
-      return `started following you`;
-    case 'message':
-      return `wants to send you a message`;
-    default:
-      return '';
   }
 }
 
 export default function NotificationsPage() {
   const router = useRouter();
-  const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState<'all' | 'messages'>('all');
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    fetchNotifications();
     const timer = setTimeout(() => setIsVisible(true), 50);
     return () => clearTimeout(timer);
   }, []);
 
-  const unreadCount = notifications.filter(n => !n.isRead).length;
-
-  const markAsRead = (id: string) => {
-    setNotifications(prev =>
-      prev.map(n => (n.id === id ? { ...n, isRead: true } : n))
-    );
+  const fetchNotifications = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch('/api/notifications');
+      if (!res.ok) {
+        if (res.status === 401) {
+          router.push('/login');
+          return;
+        }
+        throw new Error('Failed to fetch notifications');
+      }
+      const data = await res.json();
+      setNotifications(data.notifications || []);
+    } catch (err) {
+      setError('Failed to load notifications');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const markAllRead = () => {
-    setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+  const unreadCount = notifications.filter(n => !n.read).length;
+
+  const markAsRead = async (id: string) => {
+    try {
+      await fetch(`/api/notifications/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ read: true }),
+      });
+      setNotifications(prev =>
+        prev.map(n => (n.id === id ? { ...n, read: true } : n))
+      );
+    } catch (err) {
+      console.error('Failed to mark as read:', err);
+    }
+  };
+
+  const markAllRead = async () => {
+    try {
+      await fetch('/api/notifications/mark-all-read', { method: 'POST' });
+      setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+    } catch (err) {
+      console.error('Failed to mark all as read:', err);
+    }
+  };
+
+  const deleteNotification = async (id: string) => {
+    try {
+      await fetch(`/api/notifications/${id}`, { method: 'DELETE' });
+      setNotifications(prev => prev.filter(n => n.id !== id));
+    } catch (err) {
+      console.error('Failed to delete notification:', err);
+    }
   };
 
   const filteredNotifications = activeTab === 'messages'
@@ -136,7 +119,7 @@ export default function NotificationsPage() {
     <div
       style={{
         minHeight: '100vh',
-        background: '#0f172a',
+        background: 'var(--bg-primary)',
         paddingBottom: '80px',
       }}
     >
@@ -147,28 +130,29 @@ export default function NotificationsPage() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          borderBottom: '1px solid var(--border-subtle)',
           position: 'sticky',
           top: 0,
-          background: '#0f172a',
+          background: 'rgba(26, 26, 26, 0.9)',
+          backdropFilter: 'blur(20px)',
           zIndex: 10,
           opacity: isVisible ? 1 : 0,
           transform: isVisible ? 'translateY(0)' : 'translateY(-10px)',
           transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
         }}
       >
-        <h1 style={{ color: '#fff', fontSize: '1.25rem', fontWeight: 600, margin: 0 }}>
+        <h1 style={{ color: 'var(--text-primary)', fontSize: '1.5rem', fontWeight: 700, margin: 0 }}>
           Inbox
           {unreadCount > 0 && (
             <span
               style={{
-                marginLeft: '8px',
-                padding: '2px 8px',
-                background: '#ef4444',
-                borderRadius: '12px',
+                marginLeft: '10px',
+                padding: '4px 10px',
+                background: 'var(--accent)',
+                color: 'var(--bg-primary)',
+                borderRadius: '100px',
                 fontSize: '0.75rem',
-                fontWeight: 500,
-                animation: 'pulse 2s ease-in-out infinite',
+                fontWeight: 600,
               }}
             >
               {unreadCount}
@@ -179,15 +163,16 @@ export default function NotificationsPage() {
           <button
             onClick={markAllRead}
             style={{
-              background: 'none',
+              background: 'var(--overlay-low)',
               border: 'none',
-              color: '#0d9488',
-              fontSize: '0.9rem',
+              color: 'var(--accent)',
+              fontSize: '0.875rem',
               cursor: 'pointer',
+              padding: '8px 16px',
+              borderRadius: '100px',
+              fontWeight: 500,
               transition: 'all 0.2s ease',
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
           >
             Mark all read
           </button>
@@ -198,9 +183,10 @@ export default function NotificationsPage() {
       <div
         style={{
           display: 'flex',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          borderBottom: '1px solid var(--border-subtle)',
           opacity: isVisible ? 1 : 0,
           transition: 'opacity 0.3s ease 0.1s',
+          padding: '0 16px',
         }}
       >
         {(['all', 'messages'] as const).map((tab) => (
@@ -212,8 +198,8 @@ export default function NotificationsPage() {
               padding: '14px',
               background: 'none',
               border: 'none',
-              borderBottom: activeTab === tab ? '2px solid #0d9488' : '2px solid transparent',
-              color: activeTab === tab ? '#fff' : 'rgba(255, 255, 255, 0.5)',
+              borderBottom: activeTab === tab ? '2px solid var(--accent)' : '2px solid transparent',
+              color: activeTab === tab ? 'var(--text-primary)' : 'var(--text-muted)',
               fontSize: '0.9rem',
               fontWeight: 500,
               cursor: 'pointer',
@@ -227,61 +213,71 @@ export default function NotificationsPage() {
       </div>
 
       {/* Notifications List */}
-      <div>
-        {filteredNotifications.length === 0 ? (
+      <div style={{ padding: '12px' }}>
+        {loading ? (
           <div style={{ textAlign: 'center', padding: '60px 20px' }}>
-            <span style={{ fontSize: '3rem', display: 'block', animation: 'float 3s ease-in-out infinite' }}>🔔</span>
-            <p style={{ color: 'rgba(255, 255, 255, 0.5)', marginTop: '16px' }}>
+            <div className="animate-spin" style={{ width: '32px', height: '32px', border: '3px solid var(--overlay-medium)', borderTopColor: 'var(--accent)', borderRadius: '50%', margin: '0 auto' }} />
+            <p style={{ color: 'var(--text-muted)', marginTop: '16px' }}>Loading notifications...</p>
+          </div>
+        ) : error ? (
+          <div style={{ textAlign: 'center', padding: '60px 20px' }}>
+            <span style={{ fontSize: '3rem', display: 'block' }}>⚠️</span>
+            <p style={{ color: 'var(--error)', marginTop: '16px' }}>{error}</p>
+            <button onClick={fetchNotifications} style={{ marginTop: '12px', padding: '10px 20px', background: 'var(--accent)', border: 'none', borderRadius: '100px', color: 'var(--bg-primary)', cursor: 'pointer', fontWeight: 600 }}>
+              Retry
+            </button>
+          </div>
+        ) : filteredNotifications.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '60px 20px' }}>
+            <span style={{ fontSize: '4rem', display: 'block', marginBottom: '16px' }}>🔔</span>
+            <p style={{ color: 'var(--text-muted)', fontSize: '1rem' }}>
               {activeTab === 'messages' ? 'No message requests yet' : 'No notifications yet'}
+            </p>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: '8px' }}>
+              When you get notifications, they'll show up here
             </p>
           </div>
         ) : (
           filteredNotifications.map((notification, index) => (
-            <button
+            <div
               key={notification.id}
-              onClick={() => {
-                markAsRead(notification.id);
-                // Navigate based on type
-                if (notification.type === 'follow') {
-                  router.push(`/profile/${notification.actorUsername}`);
-                } else if (notification.type === 'message') {
-                  router.push('/messages');
-                }
-              }}
               style={{
                 width: '100%',
                 display: 'flex',
-                gap: '12px',
-                padding: '16px 20px',
-                background: notification.isRead ? 'transparent' : 'rgba(13, 148, 136, 0.05)',
-                border: 'none',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+                gap: '14px',
+                padding: '16px',
+                background: notification.read ? 'var(--bg-surface)' : 'rgba(212, 168, 85, 0.05)',
+                borderRadius: '16px',
+                marginBottom: '8px',
                 cursor: 'pointer',
                 textAlign: 'left',
                 transition: 'all 0.2s ease',
+                border: '1px solid var(--border-subtle)',
                 opacity: isVisible ? 1 : 0,
                 transform: isVisible ? 'translateX(0)' : 'translateX(-20px)',
                 animation: isVisible ? `slideIn 0.4s ease ${0.1 + index * 0.05}s backwards` : 'none',
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = notification.isRead ? 'transparent' : 'rgba(13, 148, 136, 0.05)';
+              onClick={() => {
+                markAsRead(notification.id);
+                if (notification.type === 'follow' && notification.data?.username) {
+                  router.push(`/profile/${notification.data.username}`);
+                } else if (notification.type === 'message') {
+                  router.push('/messages');
+                }
               }}
             >
               {/* Avatar with icon overlay */}
               <div style={{ position: 'relative' }}>
                 <div
                   style={{
-                    width: '48px',
-                    height: '48px',
-                    borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #0d9488, #7c3aed)',
+                    width: '50px',
+                    height: '50px',
+                    borderRadius: '16px',
+                    background: 'linear-gradient(135deg, var(--accent), var(--accent-bright))',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '1.3rem',
+                    fontSize: '1.5rem',
                   }}
                 >
                   👤
@@ -289,12 +285,13 @@ export default function NotificationsPage() {
                 <div
                   style={{
                     position: 'absolute',
-                    bottom: '-2px',
-                    right: '-2px',
-                    width: '20px',
-                    height: '20px',
+                    bottom: '-4px',
+                    right: '-4px',
+                    width: '22px',
+                    height: '22px',
                     borderRadius: '50%',
-                    background: '#1e293b',
+                    background: 'var(--bg-surface)',
+                    border: '2px solid var(--bg-primary)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -308,56 +305,52 @@ export default function NotificationsPage() {
               {/* Content */}
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                  <span style={{ color: '#fff', fontWeight: 600, fontSize: '0.9rem' }}>
-                    @{notification.actorUsername}
+                  <span style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: '0.95rem' }}>
+                    {notification.title}
                   </span>
-                  <span style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.8rem' }}>
-                    {formatTime(notification.createdAt)}
-                  </span>
-                  {!notification.isRead && (
+                  {!notification.read && (
                     <div
                       style={{
                         width: '8px',
                         height: '8px',
                         borderRadius: '50%',
-                        background: '#0d9488',
+                        background: 'var(--accent)',
                       }}
                     />
                   )}
                 </div>
-                <p style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.9rem', margin: 0 }}>
-                  {getNotificationText(notification)}
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', margin: 0, lineHeight: 1.5 }}>
+                  {notification.message}
                 </p>
-                {notification.postPreview && (
-                  <p
-                    style={{
-                      color: 'rgba(255, 255, 255, 0.4)',
-                      fontSize: '0.85rem',
-                      margin: '4px 0 0',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    "{notification.postPreview}"
-                  </p>
-                )}
-                {notification.message && notification.type === 'comment' && (
-                  <p
-                    style={{
-                      color: 'rgba(255, 255, 255, 0.6)',
-                      fontSize: '0.85rem',
-                      margin: '4px 0 0',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    "{notification.message}"
-                  </p>
-                )}
+                <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: '6px', display: 'block' }}>
+                  {formatTime(notification.created_at)}
+                </span>
               </div>
-            </button>
+
+              {/* Delete button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  deleteNotification(notification.id);
+                }}
+                style={{
+                  background: 'var(--overlay-low)',
+                  border: 'none',
+                  color: 'var(--text-muted)',
+                  cursor: 'pointer',
+                  padding: '8px',
+                  fontSize: '1rem',
+                  borderRadius: '10px',
+                  width: '32px',
+                  height: '32px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                ×
+              </button>
+            </div>
           ))
         )}
       </div>
@@ -369,13 +362,15 @@ export default function NotificationsPage() {
           bottom: 0,
           left: 0,
           right: 0,
-          height: '60px',
-          background: 'rgba(15, 23, 42, 0.95)',
-          borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+          height: '70px',
+          background: 'rgba(26, 26, 26, 0.95)',
+          backdropFilter: 'blur(20px)',
+          borderTop: '1px solid var(--border-subtle)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-around',
           zIndex: 100,
+          padding: '0 20px',
         }}
       >
         {[
@@ -392,14 +387,14 @@ export default function NotificationsPage() {
               flexDirection: 'column',
               alignItems: 'center',
               gap: '4px',
-              background: 'none',
+              background: item.active ? 'var(--overlay-low)' : 'none',
               border: 'none',
               cursor: 'pointer',
-              padding: '8px 16px',
+              padding: '10px 20px',
+              borderRadius: '12px',
               opacity: item.active ? 1 : 0.6,
               transition: 'all 0.2s ease',
             }}
-            onMouseDown={(e) => (e.currentTarget.style.transform = 'scale(0.9)')}
             onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
             onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
           >
