@@ -253,6 +253,13 @@ export function SideMenu() {
           <div className="footer-links">
             <Link href="/about">About</Link>
             <span>·</span>
+            <Link href="/blog">Blog</Link>
+            <span>·</span>
+            <Link href="/faq">FAQ</Link>
+            <span>·</span>
+            <Link href="/contact">Contact</Link>
+          </div>
+          <div className="footer-links">
             <Link href="/privacy">Privacy</Link>
             <span>·</span>
             <Link href="/terms">Terms</Link>
