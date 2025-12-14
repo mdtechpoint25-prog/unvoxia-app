@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
 import Logo from './Logo';
 
@@ -15,11 +15,28 @@ interface NotificationItem {
 
 export function AppHeader() {
   const pathname = usePathname();
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const notifRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
+
+  const handleLogout = async () => {
+    try {
+      // Call logout API
+      await fetch('/api/auth/logout', { method: 'POST' });
+      // Clear local session
+      localStorage.removeItem('noma_session');
+      // Redirect to login
+      router.push('/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Still redirect even if API fails
+      localStorage.removeItem('noma_session');
+      router.push('/login');
+    }
+  };
 
   // Mock notifications
   const notifications: NotificationItem[] = [
@@ -194,7 +211,7 @@ export function AppHeader() {
               <Link href="/terms" className="dropdown-item">Terms</Link>
               <Link href="/about" className="dropdown-item">About NOMA</Link>
               <hr className="dropdown-divider" />
-              <button className="dropdown-item logout-btn">
+              <button className="dropdown-item logout-btn" onClick={handleLogout}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
                   <polyline points="16 17 21 12 16 7"/>
