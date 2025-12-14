@@ -5,11 +5,36 @@ import Image from 'next/image';
 
 export default function MessagesPage() {
   const [message, setMessage] = useState('');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [rightPanelOpen, setRightPanelOpen] = useState(false);
 
   return (
     <div className="flex h-screen bg-gray-900 text-gray-200 antialiased">
+      {/* Mobile Header */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-gray-950 flex items-center justify-between px-4 z-50 border-b border-gray-800">
+        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 hover:bg-gray-800 rounded-lg">
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <h1 className="text-lg font-semibold">ICG chat</h1>
+        <button onClick={() => setRightPanelOpen(!rightPanelOpen)} className="p-2 hover:bg-gray-800 rounded-lg">
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Mobile Overlay */}
+      {(sidebarOpen || rightPanelOpen) && (
+        <div 
+          className="lg:hidden fixed inset-0 bg-black/60 z-40"
+          onClick={() => { setSidebarOpen(false); setRightPanelOpen(false); }}
+        />
+      )}
+
       {/* Left Sidebar - Channels */}
-      <div className="w-60 bg-gray-800 flex flex-col">
+      <div className={`w-60 bg-gray-800 flex flex-col fixed lg:relative inset-y-0 left-0 z-50 transform transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
         {/* Server List Placeholder */}
         <div className="h-12 bg-gray-950 flex items-center px-3 shadow-md">
           <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-black font-bold text-xl">
@@ -51,43 +76,58 @@ export default function MessagesPage() {
           <div className="px-2 mt-6">
             <div className="text-xs uppercase text-gray-400 font-semibold px-2 mb-2">Direct Messages</div>
             <div className="space-y-1">
-              <div className="flex items-center px-2 py-2 rounded hover:bg-gray-700 cursor-pointer">
-                <div className="w-8 h-8 bg-orange-500 rounded-full mr-2 flex-shrink-0" />
+              <div className="flex items-center px-2 py-2 rounded hover:bg-gray-700 cursor-pointer group transition-colors">
+                <div className="relative w-8 h-8 mr-2 flex-shrink-0">
+                  <Image src="https://i.pravatar.cc/150?img=12" alt="Richard Wilson" fill className="rounded-full object-cover" />
+                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-gray-800" />
+                </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-medium truncate">Richard Wilson</div>
                   <div className="text-xs text-gray-400 truncate">I will add you to our team...</div>
                 </div>
               </div>
-              <div className="flex items-center px-2 py-2 rounded hover:bg-gray-700 cursor-pointer">
-                <div className="w-8 h-8 bg-green-500 rounded-full mr-2 flex-shrink-0" />
+              <div className="flex items-center px-2 py-2 rounded hover:bg-gray-700 cursor-pointer group transition-colors">
+                <div className="relative w-8 h-8 mr-2 flex-shrink-0">
+                  <Image src="https://i.pravatar.cc/150?img=5" alt="Sarah Parker" fill className="rounded-full object-cover" />
+                </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-medium truncate">Sarah Parker</div>
                   <div className="text-xs text-gray-400 truncate">You: Ok, see you soon!</div>
                 </div>
               </div>
-              <div className="flex items-center px-2 py-2 rounded hover:bg-gray-700 cursor-pointer">
-                <div className="w-8 h-8 bg-blue-500 rounded-full mr-2 flex-shrink-0" />
+              <div className="flex items-center px-2 py-2 rounded hover:bg-gray-700 cursor-pointer group transition-colors">
+                <div className="relative w-8 h-8 mr-2 flex-shrink-0">
+                  <Image src="https://i.pravatar.cc/150?img=15" alt="Abubakar Campbell" fill className="rounded-full object-cover" />
+                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-gray-800" />
+                </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-medium truncate">Abubakar Campbell</div>
                   <div className="text-xs text-gray-400 truncate">You: Do you think we can do it?</div>
                 </div>
               </div>
-              <div className="flex items-center px-2 py-2 rounded hover:bg-gray-700 cursor-pointer">
-                <div className="w-8 h-8 bg-purple-500 rounded-full mr-2 flex-shrink-0" />
+              <div className="flex items-center px-2 py-2 rounded hover:bg-gray-700 cursor-pointer group transition-colors">
+                <div className="relative w-8 h-8 mr-2 flex-shrink-0">
+                  <Image src="https://i.pravatar.cc/150?img=8" alt="Nathanael Jordan" fill className="rounded-full object-cover" />
+                </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-medium truncate">Nathanael Jordan</div>
                   <div className="text-xs text-gray-400 truncate">I'm busy</div>
                 </div>
               </div>
-              <div className="flex items-center px-2 py-2 rounded hover:bg-gray-700 cursor-pointer">
-                <div className="w-8 h-8 bg-red-500 rounded-full mr-2 flex-shrink-0" />
+              <div className="flex items-center px-2 py-2 rounded hover:bg-gray-700 cursor-pointer group transition-colors">
+                <div className="relative w-8 h-8 mr-2 flex-shrink-0">
+                  <Image src="https://i.pravatar.cc/150?img=11" alt="Conner Garcia" fill className="rounded-full object-cover" />
+                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-gray-800" />
+                </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-medium truncate">Conner Garcia</div>
                   <div className="text-xs text-gray-400 truncate">You: Hey, maybe we can meet...</div>
                 </div>
               </div>
-              <div className="flex items-center px-2 py-2 rounded hover:bg-gray-700 cursor-pointer">
-                <div className="w-8 h-8 bg-pink-500 rounded-full mr-2 flex-shrink-0" />
+              <div className="flex items-center px-2 py-2 rounded hover:bg-gray-700 cursor-pointer group transition-colors">
+                <div className="relative w-8 h-8 mr-2 flex-shrink-0">
+                  <Image src="https://i.pravatar.cc/150?img=9" alt="Cynthia Mckay" fill className="rounded-full object-cover" />
+                </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-medium truncate">Cynthia Mckay</div>
                   <div className="text-xs text-gray-400 truncate">You: Maybe</div>
@@ -106,9 +146,9 @@ export default function MessagesPage() {
       </div>
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col bg-gray-900">
-        {/* Header */}
-        <div className="h-12 bg-gray-950 flex items-center px-4 shadow-md border-b border-gray-800">
+      <div className="flex-1 flex flex-col bg-gray-900 pt-14 lg:pt-0">
+        {/* Header - Desktop Only */}
+        <div className="hidden lg:flex h-12 bg-gray-950 items-center px-4 shadow-md border-b border-gray-800">
           <h1 className="text-lg font-semibold text-white">ICG chat</h1>
           <div className="ml-auto flex items-center space-x-3">
             <div className="relative">
@@ -165,8 +205,10 @@ export default function MessagesPage() {
               </div>
 
               {/* Messages */}
-              <div className="flex items-start space-x-3">
-                <div className="w-10 h-10 bg-red-500 rounded-full flex-shrink-0" />
+              <div className="flex items-start space-x-3 hover:bg-gray-800/30 p-2 rounded-lg transition-colors">
+                <div className="relative w-10 h-10 flex-shrink-0">
+                  <Image src="https://i.pravatar.cc/150?img=11" alt="Conner Garcia" fill className="rounded-full object-cover" />
+                </div>
                 <div className="flex-1">
                   <div className="text-sm">
                     <span className="font-semibold text-yellow-500">Conner Garcia</span>
@@ -176,8 +218,10 @@ export default function MessagesPage() {
                 </div>
               </div>
 
-              <div className="flex items-start space-x-3">
-                <div className="w-10 h-10 bg-orange-500 rounded-full flex-shrink-0" />
+              <div className="flex items-start space-x-3 hover:bg-gray-800/30 p-2 rounded-lg transition-colors">
+                <div className="relative w-10 h-10 flex-shrink-0">
+                  <Image src="https://i.pravatar.cc/150?img=12" alt="Richard Wilson" fill className="rounded-full object-cover" />
+                </div>
                 <div className="flex-1">
                   <div className="text-sm">
                     <span className="font-semibold text-yellow-500">Richard Wilson</span>
@@ -192,8 +236,10 @@ export default function MessagesPage() {
                 <span className="bg-gray-800 px-3 py-1 rounded-full">10 Sep 2024</span>
               </div>
 
-              <div className="flex items-start space-x-3">
-                <div className="w-10 h-10 bg-blue-500 rounded-full flex-shrink-0" />
+              <div className="flex items-start space-x-3 hover:bg-gray-800/30 p-2 rounded-lg transition-colors">
+                <div className="relative w-10 h-10 flex-shrink-0">
+                  <Image src="https://i.pravatar.cc/150?img=14" alt="Lawrence Patterson" fill className="rounded-full object-cover" />
+                </div>
                 <div className="flex-1">
                   <div className="text-sm">
                     <span className="font-semibold text-yellow-500">Lawrence Patterson</span>
@@ -203,8 +249,10 @@ export default function MessagesPage() {
                 </div>
               </div>
 
-              <div className="flex items-start space-x-3">
-                <div className="w-10 h-10 bg-purple-500 rounded-full flex-shrink-0" />
+              <div className="flex items-start space-x-3 hover:bg-gray-800/30 p-2 rounded-lg transition-colors">
+                <div className="relative w-10 h-10 flex-shrink-0">
+                  <Image src="https://i.pravatar.cc/150?img=8" alt="Jaden Parker" fill className="rounded-full object-cover" />
+                </div>
                 <div className="flex-1">
                   <div className="text-sm">
                     <span className="font-semibold text-yellow-500">Jaden Parker</span>
@@ -215,8 +263,10 @@ export default function MessagesPage() {
               </div>
 
               {/* Video Call Started */}
-              <div className="flex items-center justify-center space-x-3 py-4">
-                <div className="w-8 h-8 bg-orange-500 rounded-full flex-shrink-0" />
+              <div className="flex items-center justify-center space-x-3 py-4 bg-gray-800/30 rounded-lg mx-2">
+                <div className="relative w-8 h-8 flex-shrink-0">
+                  <Image src="https://i.pravatar.cc/150?img=12" alt="Richard Wilson" fill className="rounded-full object-cover" />
+                </div>
                 <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
@@ -257,25 +307,25 @@ export default function MessagesPage() {
           </div>
 
           {/* Right Sidebar - Members & Files */}
-          <div className="w-64 bg-gray-800 flex flex-col border-l border-gray-700">
+          <div className={`w-64 bg-gray-800 flex flex-col border-l border-gray-700 fixed lg:relative inset-y-0 right-0 z-50 transform transition-transform duration-300 ${rightPanelOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}`}>
             {/* Action Buttons */}
             <div className="p-3 flex space-x-2 border-b border-gray-700">
-              <button className="w-9 h-9 bg-yellow-500/20 rounded-full flex items-center justify-center text-yellow-500">
+              <button className="w-9 h-9 bg-yellow-500/20 rounded-full flex items-center justify-center text-yellow-500 transition-colors hover:bg-yellow-500/30">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
               </button>
-              <button className="w-9 h-9 bg-gray-700 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-200">
+              <button className="w-9 h-9 bg-gray-700 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-200 transition-colors hover:bg-gray-600">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
               </button>
-              <button className="w-9 h-9 bg-gray-700 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-200">
+              <button className="w-9 h-9 bg-gray-700 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-200 transition-colors hover:bg-gray-600">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                 </svg>
               </button>
-              <button className="w-9 h-9 bg-gray-700 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-200">
+              <button className="w-9 h-9 bg-gray-700 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-200 transition-colors hover:bg-gray-600">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                 </svg>
@@ -286,25 +336,38 @@ export default function MessagesPage() {
             <div className="p-4 border-b border-gray-700">
               <h2 className="text-sm font-semibold uppercase text-gray-400 mb-3">Members</h2>
               <div className="space-y-3">
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-orange-500 rounded-full" />
+                <div className="flex items-center space-x-2 hover:bg-gray-700/50 p-1 rounded transition-colors cursor-pointer">
+                  <div className="relative w-8 h-8">
+                    <Image src="https://i.pravatar.cc/150?img=12" alt="Richard Wilson" fill className="rounded-full object-cover" />
+                    <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-gray-800" />
+                  </div>
                   <span className="text-sm flex-1">Richard Wilson</span>
-                  <span className="text-xs text-gray-500">Admin</span>
+                  <span className="text-xs text-gray-500 bg-gray-700 px-2 py-0.5 rounded">Admin</span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-yellow-500 rounded-full" />
+                <div className="flex items-center space-x-2 hover:bg-gray-700/50 p-1 rounded transition-colors cursor-pointer">
+                  <div className="relative w-8 h-8">
+                    <Image src="https://i.pravatar.cc/150?img=3" alt="You" fill className="rounded-full object-cover" />
+                    <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-gray-800" />
+                  </div>
                   <span className="text-sm">You</span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-purple-500 rounded-full" />
+                <div className="flex items-center space-x-2 hover:bg-gray-700/50 p-1 rounded transition-colors cursor-pointer">
+                  <div className="relative w-8 h-8">
+                    <Image src="https://i.pravatar.cc/150?img=8" alt="Jaden Perker" fill className="rounded-full object-cover" />
+                  </div>
                   <span className="text-sm">Jaden Perker</span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-red-500 rounded-full" />
+                <div className="flex items-center space-x-2 hover:bg-gray-700/50 p-1 rounded transition-colors cursor-pointer">
+                  <div className="relative w-8 h-8">
+                    <Image src="https://i.pravatar.cc/150?img=11" alt="Conner Garcia" fill className="rounded-full object-cover" />
+                    <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-gray-800" />
+                  </div>
                   <span className="text-sm">Conner Garcia</span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-blue-500 rounded-full" />
+                <div className="flex items-center space-x-2 hover:bg-gray-700/50 p-1 rounded transition-colors cursor-pointer">
+                  <div className="relative w-8 h-8">
+                    <Image src="https://i.pravatar.cc/150?img=14" alt="Lawrence Patterson" fill className="rounded-full object-cover" />
+                  </div>
                   <span className="text-sm">Lawrence Patterson</span>
                 </div>
               </div>
