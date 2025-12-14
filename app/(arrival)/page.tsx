@@ -1,14 +1,14 @@
-import EmotionalStream from '@/components/EmotionalStream';
+import { redirect } from 'next/navigation';
 
 export const metadata = {
   title: 'NOMA – A World With No Masks',
-  description: 'A social platform where people exist authentically. No masks, no pretending, just real human connection.',
+  description: 'A text-based social platform where people exist authentically. Anonymous, safe, real.',
   openGraph: {
     title: 'NOMA – A World With No Masks',
-    description: 'Feel understood before you participate. Express yourself authentically.',
+    description: 'Express yourself authentically. No masks, no pretending.',
   },
 };
 
 export default function HomePage() {
-  return <EmotionalStream />;
+  redirect('/foryou');
 }
