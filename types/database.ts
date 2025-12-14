@@ -1,219 +1,554 @@
-export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
 
 export interface Database {
   public: {
     Tables: {
       users: {
         Row: {
-          id: string;
-          username: string;
-          email: string;
-          phone: string;
-          password_hash: string;
-          avatar_url: string | null;
-          bio: string | null;
-          badges: Json;
-          streak_count: number;
-          last_prompt_date: string | null;
-          notification_settings: Json;
-          email_verified: boolean;
-          status: string;
-          otp_code: string | null;
-          otp_expiry: string | null;
-          reset_token: string | null;
-          reset_expiry: string | null;
-          created_at: string;
-          last_login: string | null;
-        };
+          id: string
+          username: string
+          bio: string | null
+          avatar_icon: string
+          is_active: boolean
+          allow_messages: boolean
+          allow_comments: boolean
+          content_sensitivity: 'standard' | 'sensitive' | 'strict'
+          notification_settings: Json
+          created_at: string
+          updated_at: string
+        }
         Insert: {
-          username: string;
-          email: string;
-          phone: string;
-          password_hash: string;
-          avatar_url?: string | null;
-          bio?: string | null;
-          badges?: Json;
-          streak_count?: number;
-          last_prompt_date?: string | null;
-          notification_settings?: Json;
-          email_verified?: boolean;
-          status?: string;
-          otp_code?: string | null;
-          otp_expiry?: string | null;
-          reset_token?: string | null;
-          reset_expiry?: string | null;
-          last_login?: string | null;
-        };
-        Update: Partial<Database['public']['Tables']['users']['Insert']>;
-      };
+          id: string
+          username: string
+          bio?: string | null
+          avatar_icon?: string
+          is_active?: boolean
+          allow_messages?: boolean
+          allow_comments?: boolean
+          content_sensitivity?: 'standard' | 'sensitive' | 'strict'
+          notification_settings?: Json
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          username?: string
+          bio?: string | null
+          avatar_icon?: string
+          is_active?: boolean
+          allow_messages?: boolean
+          allow_comments?: boolean
+          content_sensitivity?: 'standard' | 'sensitive' | 'strict'
+          notification_settings?: Json
+          created_at?: string
+          updated_at?: string
+        }
+      }
       posts: {
         Row: {
-          id: string;
-          user_id: string;
-          content: string;
-          media_url: string | null;
-          category: string;
-          is_anonymous: boolean;
-          created_at: string;
-          reactions: Json;
-          comments_count: number;
-        };
+          id: string
+          user_id: string
+          content: string
+          post_type: 'experience' | 'question' | 'advice' | 'release'
+          allow_comments: boolean
+          is_anonymous: boolean
+          view_count: number
+          reaction_count: number
+          comment_count: number
+          share_count: number
+          is_flagged: boolean
+          created_at: string
+        }
         Insert: {
-          user_id: string;
-          content: string;
-          media_url?: string | null;
-          category?: string;
-          is_anonymous?: boolean;
-          reactions?: Json;
-        };
-        Update: Partial<Database['public']['Tables']['posts']['Insert']>;
-      };
-      comments: {
+          id?: string
+          user_id: string
+          content: string
+          post_type?: 'experience' | 'question' | 'advice' | 'release'
+          allow_comments?: boolean
+          is_anonymous?: boolean
+          view_count?: number
+          reaction_count?: number
+          comment_count?: number
+          share_count?: number
+          is_flagged?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          content?: string
+          post_type?: 'experience' | 'question' | 'advice' | 'release'
+          allow_comments?: boolean
+          is_anonymous?: boolean
+          view_count?: number
+          reaction_count?: number
+          comment_count?: number
+          share_count?: number
+          is_flagged?: boolean
+          created_at?: string
+        }
+      }
+      tags: {
         Row: {
-          id: string;
-          post_id: string;
-          user_id: string;
-          parent_id: string | null;
-          content: string;
-          created_at: string;
-          reactions: Json;
-        };
+          id: number
+          name: string
+          usage_count: number
+        }
         Insert: {
-          post_id: string;
-          user_id: string;
-          parent_id?: string | null;
-          content: string;
-          reactions?: Json;
-        };
-        Update: Partial<Database['public']['Tables']['comments']['Insert']>;
-      };
-      messages: {
+          id?: number
+          name: string
+          usage_count?: number
+        }
+        Update: {
+          id?: number
+          name?: string
+          usage_count?: number
+        }
+      }
+      post_tags: {
         Row: {
-          id: string;
-          sender_id: string;
-          receiver_id: string;
-          content: string;
-          media_url: string | null;
-          is_anonymous: boolean;
-          created_at: string;
-          read: boolean;
-        };
+          post_id: string
+          tag_id: number
+        }
         Insert: {
-          sender_id: string;
-          receiver_id: string;
-          content: string;
-          media_url?: string | null;
-          is_anonymous?: boolean;
-        };
-        Update: Partial<Database['public']['Tables']['messages']['Insert']>;
-      };
-      chat_requests: {
+          post_id: string
+          tag_id: number
+        }
+        Update: {
+          post_id?: string
+          tag_id?: number
+        }
+      }
+      follows: {
         Row: {
-          id: string;
-          requester_id: string;
-          recipient_id: string;
-          status: string;
-          message: string | null;
-          created_at: string;
-          responded_at: string | null;
-        };
+          follower_id: string
+          following_id: string
+          created_at: string
+        }
         Insert: {
-          requester_id: string;
-          recipient_id: string;
-          status?: string;
-          message?: string | null;
-        };
-        Update: Partial<Database['public']['Tables']['chat_requests']['Insert']>;
-      };
-      daily_prompts: {
-        Row: {
-          id: string;
-          prompt: string | null;
-          user_id: string | null;
-          response: string | null;
-          feelings_score: number | null;
-          created_at: string;
-        };
-        Insert: {
-          prompt?: string | null;
-          user_id?: string | null;
-          response?: string | null;
-          feelings_score?: number | null;
-        };
-        Update: Partial<Database['public']['Tables']['daily_prompts']['Insert']>;
-      };
+          follower_id: string
+          following_id: string
+          created_at?: string
+        }
+        Update: {
+          follower_id?: string
+          following_id?: string
+          created_at?: string
+        }
+      }
       reactions: {
         Row: {
-          id: string;
-          target_type: string;
-          target_id: string;
-          user_id: string;
-          emoji: string;
-          created_at: string;
-        };
+          user_id: string
+          post_id: string
+          reaction_type: 'feel_this' | 'not_alone' | 'strength'
+          created_at: string
+        }
         Insert: {
-          target_type: string;
-          target_id: string;
-          user_id: string;
-          emoji: string;
-        };
-        Update: Partial<Database['public']['Tables']['reactions']['Insert']>;
-      };
-      flagged_posts: {
+          user_id: string
+          post_id: string
+          reaction_type?: 'feel_this' | 'not_alone' | 'strength'
+          created_at?: string
+        }
+        Update: {
+          user_id?: string
+          post_id?: string
+          reaction_type?: 'feel_this' | 'not_alone' | 'strength'
+          created_at?: string
+        }
+      }
+      comments: {
         Row: {
-          id: string;
-          post_id: string;
-          reporter_id: string;
-          reason: string;
-          status: string;
-          admin_notes: string | null;
-          created_at: string;
-          reviewed_at: string | null;
-          reviewed_by: string | null;
-        };
+          id: string
+          post_id: string
+          user_id: string
+          content: string
+          is_pinned: boolean
+          is_flagged: boolean
+          created_at: string
+        }
         Insert: {
-          post_id: string;
-          reporter_id: string;
-          reason: string;
-          status?: string;
-          admin_notes?: string | null;
-        };
-        Update: Partial<Database['public']['Tables']['flagged_posts']['Insert']>;
-      };
+          id?: string
+          post_id: string
+          user_id: string
+          content: string
+          is_pinned?: boolean
+          is_flagged?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          post_id?: string
+          user_id?: string
+          content?: string
+          is_pinned?: boolean
+          is_flagged?: boolean
+          created_at?: string
+        }
+      }
+      saved_posts: {
+        Row: {
+          user_id: string
+          post_id: string
+          created_at: string
+        }
+        Insert: {
+          user_id: string
+          post_id: string
+          created_at?: string
+        }
+        Update: {
+          user_id?: string
+          post_id?: string
+          created_at?: string
+        }
+      }
+      message_requests: {
+        Row: {
+          id: string
+          sender_id: string
+          receiver_id: string
+          status: 'pending' | 'accepted' | 'rejected'
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          sender_id: string
+          receiver_id: string
+          status?: 'pending' | 'accepted' | 'rejected'
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          sender_id?: string
+          receiver_id?: string
+          status?: 'pending' | 'accepted' | 'rejected'
+          created_at?: string
+        }
+      }
+      messages: {
+        Row: {
+          id: string
+          sender_id: string
+          receiver_id: string
+          content: string
+          is_read: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          sender_id: string
+          receiver_id: string
+          content: string
+          is_read?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          sender_id?: string
+          receiver_id?: string
+          content?: string
+          is_read?: boolean
+          created_at?: string
+        }
+      }
       notifications: {
         Row: {
-          id: string;
-          user_id: string;
-          type: string;
-          title: string;
-          message: string | null;
-          link: string | null;
-          read: boolean;
-          created_at: string;
-        };
+          id: string
+          user_id: string
+          type: 'reaction' | 'comment' | 'follow' | 'message' | 'mention'
+          reference_id: string | null
+          actor_id: string | null
+          message: string | null
+          is_read: boolean
+          created_at: string
+        }
         Insert: {
-          user_id: string;
-          type: string;
-          title: string;
-          message?: string | null;
-          link?: string | null;
-          read?: boolean;
-        };
-        Update: Partial<Database['public']['Tables']['notifications']['Insert']>;
-      };
-    };
-    Views: {};
-    Functions: {};
-    Enums: {};
-  };
+          id?: string
+          user_id: string
+          type: 'reaction' | 'comment' | 'follow' | 'message' | 'mention'
+          reference_id?: string | null
+          actor_id?: string | null
+          message?: string | null
+          is_read?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          type?: 'reaction' | 'comment' | 'follow' | 'message' | 'mention'
+          reference_id?: string | null
+          actor_id?: string | null
+          message?: string | null
+          is_read?: boolean
+          created_at?: string
+        }
+      }
+      reports: {
+        Row: {
+          id: string
+          reporter_id: string
+          post_id: string | null
+          comment_id: string | null
+          reported_user_id: string | null
+          reason: string
+          details: string | null
+          status: 'pending' | 'reviewed' | 'resolved' | 'dismissed'
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          reporter_id: string
+          post_id?: string | null
+          comment_id?: string | null
+          reported_user_id?: string | null
+          reason: string
+          details?: string | null
+          status?: 'pending' | 'reviewed' | 'resolved' | 'dismissed'
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          reporter_id?: string
+          post_id?: string | null
+          comment_id?: string | null
+          reported_user_id?: string | null
+          reason?: string
+          details?: string | null
+          status?: 'pending' | 'reviewed' | 'resolved' | 'dismissed'
+          created_at?: string
+        }
+      }
+      blocked_users: {
+        Row: {
+          blocker_id: string
+          blocked_id: string
+          created_at: string
+        }
+        Insert: {
+          blocker_id: string
+          blocked_id: string
+          created_at?: string
+        }
+        Update: {
+          blocker_id?: string
+          blocked_id?: string
+          created_at?: string
+        }
+      }
+      muted_words: {
+        Row: {
+          id: number
+          user_id: string
+          word: string
+        }
+        Insert: {
+          id?: number
+          user_id: string
+          word: string
+        }
+        Update: {
+          id?: number
+          user_id?: string
+          word?: string
+        }
+      }
+      circles: {
+        Row: {
+          id: string
+          name: string
+          description: string | null
+          icon: string
+          member_count: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          description?: string | null
+          icon?: string
+          member_count?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          description?: string | null
+          icon?: string
+          member_count?: number
+          created_at?: string
+        }
+      }
+      circle_members: {
+        Row: {
+          circle_id: string
+          user_id: string
+          joined_at: string
+        }
+        Insert: {
+          circle_id: string
+          user_id: string
+          joined_at?: string
+        }
+        Update: {
+          circle_id?: string
+          user_id?: string
+          joined_at?: string
+        }
+      }
+      circle_posts: {
+        Row: {
+          circle_id: string
+          post_id: string
+        }
+        Insert: {
+          circle_id: string
+          post_id: string
+        }
+        Update: {
+          circle_id?: string
+          post_id?: string
+        }
+      }
+      user_interests: {
+        Row: {
+          user_id: string
+          tag_id: number
+          weight: number
+        }
+        Insert: {
+          user_id: string
+          tag_id: number
+          weight?: number
+        }
+        Update: {
+          user_id?: string
+          tag_id?: number
+          weight?: number
+        }
+      }
+      post_interactions: {
+        Row: {
+          id: number
+          user_id: string
+          post_id: string
+          interaction_type: 'view' | 'scroll_pause' | 'read_full' | 'share'
+          duration_seconds: number | null
+          created_at: string
+        }
+        Insert: {
+          id?: number
+          user_id: string
+          post_id: string
+          interaction_type: 'view' | 'scroll_pause' | 'read_full' | 'share'
+          duration_seconds?: number | null
+          created_at?: string
+        }
+        Update: {
+          id?: number
+          user_id?: string
+          post_id?: string
+          interaction_type?: 'view' | 'scroll_pause' | 'read_full' | 'share'
+          duration_seconds?: number | null
+          created_at?: string
+        }
+      }
+      daily_prompts: {
+        Row: {
+          id: string
+          prompt_text: string
+          prompt_date: string
+          category: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          prompt_text: string
+          prompt_date?: string
+          category?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          prompt_text?: string
+          prompt_date?: string
+          category?: string | null
+          created_at?: string
+        }
+      }
+      prompt_responses: {
+        Row: {
+          id: string
+          user_id: string
+          prompt_id: string
+          response: string
+          is_private: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          prompt_id: string
+          response: string
+          is_private?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          prompt_id?: string
+          response?: string
+          is_private?: boolean
+          created_at?: string
+        }
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      get_for_you_feed: {
+        Args: {
+          p_user_id: string
+          p_limit?: number
+          p_cursor?: string | null
+        }
+        Returns: {
+          id: string
+          user_id: string
+          username: string
+          avatar_icon: string
+          content: string
+          post_type: string
+          tags: string[]
+          reaction_count: number
+          comment_count: number
+          share_count: number
+          created_at: string
+          has_reacted: boolean
+          is_following: boolean
+          score: number
+        }[]
+      }
+      get_user_top_tags: {
+        Args: {
+          p_user_id: string
+          p_limit?: number
+        }
+        Returns: {
+          tag_id: number
+          tag_name: string
+          weight: number
+        }[]
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+  }
 }
-
-export type User = Database['public']['Tables']['users']['Row'];
-export type Post = Database['public']['Tables']['posts']['Row'];
-export type Comment = Database['public']['Tables']['comments']['Row'];
-export type Message = Database['public']['Tables']['messages']['Row'];
-export type ChatRequest = Database['public']['Tables']['chat_requests']['Row'];
-export type DailyPrompt = Database['public']['Tables']['daily_prompts']['Row'];
-export type Reaction = Database['public']['Tables']['reactions']['Row'];
-export type FlaggedPost = Database['public']['Tables']['flagged_posts']['Row'];
-export type Notification = Database['public']['Tables']['notifications']['Row'];

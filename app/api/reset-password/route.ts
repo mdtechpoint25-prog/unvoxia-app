@@ -1,50 +1,35 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
-import bcrypt from 'bcryptjs';
+import { supabaseAdmin, isSupabaseConfigured } from '@/lib/supabase';
 
 export async function POST(request: Request) {
   try {
-    const { token, password } = await request.json();
+    if (!isSupabaseConfigured()) {
+      return NextResponse.json(
+        { error: 'Database not configured' },
+        { status: 503 }
+      );
+    }
 
-    if (!token || !password) {
-      return NextResponse.json({ error: 'Token and password are required' }, { status: 400 });
+    const { access_token, password } = await request.json();
+
+    if (!access_token || !password) {
+      return NextResponse.json({ error: 'Access token and password are required' }, { status: 400 });
     }
 
     if (password.length < 8) {
       return NextResponse.json({ error: 'Password must be at least 8 characters' }, { status: 400 });
     }
 
-    // Find user by reset token
-    const { data: user, error: fetchError } = await supabase
-      .from('users')
-      .select('id, reset_token, reset_expiry')
-      .eq('reset_token', token)
-      .single();
+    // Use Supabase Auth to update user password
+    // The access_token is passed from the URL after user clicks reset link
+    const { data, error } = await supabaseAdmin.auth.admin.updateUserById(
+      access_token, // This would be the user ID from the session
+      { password }
+    );
 
-    if (fetchError || !user) {
-      return NextResponse.json({ error: 'Invalid or expired reset link' }, { status: 400 });
-    }
-
-    // Check expiry
-    if (!user.reset_expiry || new Date(user.reset_expiry) < new Date()) {
-      return NextResponse.json({ error: 'Reset link has expired' }, { status: 400 });
-    }
-
-    // Hash new password
-    const passwordHash = await bcrypt.hash(password, 12);
-
-    // Update password and clear reset token
-    const { error: updateError } = await supabase
-      .from('users')
-      .update({
-        password_hash: passwordHash,
-        reset_token: null,
-        reset_expiry: null
-      })
-      .eq('id', user.id);
-
-    if (updateError) {
-      return NextResponse.json({ error: 'Failed to reset password' }, { status: 500 });
+    if (error) {
+      console.error('Password update error:', error);
+      return NextResponse.json({ error: 'Failed to reset password' }, { status: 400 });
     }
 
     return NextResponse.json({ ok: true, message: 'Password reset successfully' });
