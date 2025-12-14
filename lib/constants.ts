@@ -1,9 +1,10 @@
 export const SITE = {
   name: 'NOMA',
+  fullName: 'No Mask World',
   shortName: 'NOMA',
   domain: 'nomaworld.co.ke',
-  tagline: 'Speak Without Fear. Heal Without Judgement.',
-  description: 'A safe, anonymous healing platform where you can freely express your true feelings, receive emotional support, and find healing without fear of judgement. You are heard. You are safe. You are not alone.'
+  tagline: 'A World With No Masks',
+  description: 'NOMA is the social platform created for authenticity. No filters, no pressure, no pretending—just real people sharing real thoughts and real life. Express yourself freely, explore meaningful conversations, and connect with others without the masks that define traditional social media.'
 };
 
 export const CONTACT = {
@@ -12,12 +13,12 @@ export const CONTACT = {
 };
 
 export const CATEGORIES = [
-  'Emotional Pain',
-  'Mental Health',
-  'Life Struggles',
-  'Dreams & Goals',
-  'Anonymous Confessions',
-  'Seeking Support'
+  'Feelings',
+  'Thoughts',
+  'Creativity',
+  'Life',
+  'Anonymous',
+  'Support'
 ];
 
 export const REACTIONS = {
@@ -28,8 +29,8 @@ export const REACTIONS = {
 };
 
 export const FEELINGS = [
-  { value: 1, emoji: 'sad', label: 'Struggling' },
-  { value: 2, emoji: 'unhappy', label: 'Low' },
+  { value: 1, emoji: 'sad', label: 'Low' },
+  { value: 2, emoji: 'unhappy', label: 'Okay' },
   { value: 3, emoji: 'neutral', label: 'Neutral' },
   { value: 4, emoji: 'smile', label: 'Good' },
   { value: 5, emoji: 'happy', label: 'Great' }
@@ -37,13 +38,13 @@ export const FEELINGS = [
 
 export const BADGES = {
   'First Voice': { icon: 'microphone', description: 'Shared your voice for the first time' },
-  'Healing Journey': { icon: 'heart', description: 'Completed 7 daily reflections' },
-  'Week Healer': { icon: 'fire', description: '7 day healing streak' },
-  'Month Warrior': { icon: 'star', description: '30 day courage streak' },
-  'Compassionate Soul': { icon: 'hands', description: 'Gave 10 supportive responses' },
-  'Safe Space Creator': { icon: 'shield', description: 'Helped 5 people feel heard' },
-  'Brave Heart': { icon: 'courage', description: 'Shared 20 vulnerable moments' },
-  'Light Bringer': { icon: 'sun', description: 'Brought hope to 50 people' }
+  'Consistency': { icon: 'fire', description: '7 day prompt streak' },
+  'Expression': { icon: 'star', description: 'Created 20 authentic posts' },
+  'Connection': { icon: 'hands', description: 'Gave 10 supportive responses' },
+  'Creativity': { icon: 'sparkles', description: 'Shared creative content' },
+  'Authenticity': { icon: 'heart', description: 'Completed 30 daily prompts' },
+  'Storyteller': { icon: 'book', description: 'Shared 50 moments' },
+  'Community': { icon: 'users', description: 'Connected with 25 people' }
 };
 
 export const REPORT_REASONS = [

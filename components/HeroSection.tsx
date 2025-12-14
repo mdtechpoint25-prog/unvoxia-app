@@ -76,7 +76,7 @@ export default function HeroSection() {
               background: '#14b8a6'
             }} />
             <span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.8125rem', fontWeight: 500 }}>
-              Safe Space for Healing
+              No Mask World
             </span>
           </div>
 
@@ -88,13 +88,12 @@ export default function HeroSection() {
             marginBottom: '1.5rem',
             letterSpacing: '-0.025em'
           }}>
-            Speak Without Fear.{' '}
+            Welcome to NOMA —{' '}
             <span style={{
               color: '#14b8a6'
             }}>
-              Heal
+              A World With No Masks
             </span>
-            {' '}Without Judgement
           </h1>
 
           <p style={{
@@ -104,13 +103,15 @@ export default function HeroSection() {
             marginBottom: '2rem',
             maxWidth: '520px'
           }}>
-            A safe, anonymous platform where you can freely express your feelings, 
-            receive support, and find healing. You are heard. You are not alone.
+            NOMA is the social platform created for authenticity. No filters, no pressure, 
+            no pretending—just real people sharing real thoughts and real life. Whether you 
+            want to be creative, vulnerable, expressive, bold, or quiet—NOMA gives you the 
+            freedom to be your true self.
           </p>
 
           <div style={{ display: 'flex', gap: '0.875rem', flexWrap: 'wrap' }}>
             <Link
-              href="/share"
+              href="/signup"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -125,11 +126,11 @@ export default function HeroSection() {
                 transition: 'all 0.2s ease'
               }}
             >
-              Share Your Story
+              Join NOMA
               <span style={{ opacity: 0.7 }}>→</span>
             </Link>
             <Link
-              href="/circles"
+              href="#features"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -145,7 +146,7 @@ export default function HeroSection() {
                 transition: 'all 0.2s ease'
               }}
             >
-              Join Communities
+              Explore Features
             </Link>
           </div>
 
@@ -157,8 +158,8 @@ export default function HeroSection() {
             borderTop: '1px solid rgba(255, 255, 255, 0.08)'
           }}>
             {[
-              { value: '100%', label: 'Anonymous' },
-              { value: '24/7', label: 'Support' },
+              { value: 'Real', label: 'Content' },
+              { value: 'No', label: 'Filters' },
               { value: 'Free', label: 'Forever' }
             ].map((stat, i) => (
               <div key={i}>
@@ -210,24 +211,24 @@ export default function HeroSection() {
               animation: 'float 6s ease-in-out infinite'
             }}>
               <div style={{
-                color: '#1ABC9C',
+                color: '#14b8a6',
                 fontSize: '2rem',
                 marginBottom: '0.5rem'
-              }}>💭</div>
+              }}>✨</div>
               <p style={{
                 color: 'rgba(255, 255, 255, 0.9)',
                 fontSize: '0.9rem',
                 margin: 0,
                 lineHeight: 1.5
               }}>
-                "Finally, a place where I can express my feelings without fear..."
+                "For the first time, I feel like I can post without editing myself..."
               </p>
               <div style={{
                 marginTop: '0.75rem',
                 fontSize: '0.75rem',
                 color: 'rgba(255, 255, 255, 0.5)'
               }}>
-                - Anonymous Voice
+                - Early User, Kenya
               </div>
             </div>
 
@@ -236,11 +237,11 @@ export default function HeroSection() {
               position: 'absolute',
               top: '40%',
               left: '0',
-              background: 'rgba(155, 89, 182, 0.15)',
+              background: 'rgba(124, 58, 237, 0.15)',
               backdropFilter: 'blur(20px)',
               padding: '1.5rem',
               borderRadius: '16px',
-              border: '1px solid rgba(155, 89, 182, 0.3)',
+              border: '1px solid rgba(124, 58, 237, 0.3)',
               maxWidth: '280px',
               animation: 'float 7s ease-in-out infinite 1s'
             }}>
@@ -254,18 +255,18 @@ export default function HeroSection() {
                   width: '32px',
                   height: '32px',
                   borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #1ABC9C, #9B59B6)',
+                  background: '#0d9488',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontSize: '1.2rem'
-                }}>💚</div>
+                }}>🎭</div>
                 <span style={{
                   color: 'rgba(255, 255, 255, 0.9)',
                   fontWeight: 600,
                   fontSize: '0.9rem'
                 }}>
-                  Compassionate Response
+                  Authentic Expression
                 </span>
               </div>
               <p style={{
@@ -273,7 +274,7 @@ export default function HeroSection() {
                 fontSize: '0.85rem',
                 margin: 0
               }}>
-                You're not alone in this...
+                Share your real thoughts freely
               </p>
             </div>
 
@@ -282,32 +283,32 @@ export default function HeroSection() {
               position: 'absolute',
               top: '50%',
               right: '0',
-              background: 'rgba(26, 188, 156, 0.15)',
+              background: 'rgba(13, 148, 136, 0.15)',
               backdropFilter: 'blur(20px)',
               padding: '1.5rem',
               borderRadius: '16px',
-              border: '1px solid rgba(26, 188, 156, 0.3)',
+              border: '1px solid rgba(13, 148, 136, 0.3)',
               maxWidth: '260px',
               animation: 'float 8s ease-in-out infinite 2s'
             }}>
               <div style={{
-                color: '#1ABC9C',
+                color: '#14b8a6',
                 fontSize: '1.5rem',
                 marginBottom: '0.5rem'
-              }}>🌟</div>
+              }}>📹</div>
               <h4 style={{
                 color: 'rgba(255, 255, 255, 0.95)',
                 fontSize: '0.95rem',
                 margin: '0 0 0.5rem 0',
                 fontWeight: 600
-              }}>Healing Circles</h4>
+              }}>Authentic Reels</h4>
               <p style={{
                 color: 'rgba(255, 255, 255, 0.6)',
                 fontSize: '0.8rem',
                 margin: 0,
                 lineHeight: 1.4
               }}>
-                Join supportive communities focused on specific healing journeys
+                Full-screen videos that showcase real life, not trends
               </p>
             </div>
 
@@ -331,23 +332,22 @@ export default function HeroSection() {
                 width: '40px',
                 height: '40px',
                 borderRadius: '50%',
-                background: 'linear-gradient(135deg, #1ABC9C, #9B59B6)',
+                background: '#0d9488',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '1.5rem',
-                boxShadow: '0 4px 12px rgba(26, 188, 156, 0.4)'
-              }}>🔒</div>
+                fontSize: '1.5rem'
+              }}>💬</div>
               <div>
                 <div style={{
                   color: 'rgba(255, 255, 255, 0.95)',
                   fontWeight: 600,
                   fontSize: '0.9rem'
-                }}>100% Anonymous</div>
+                }}>Daily Prompts</div>
                 <div style={{
                   color: 'rgba(255, 255, 255, 0.5)',
                   fontSize: '0.75rem'
-                }}>Your identity is protected</div>
+                }}>Reflect and express yourself</div>
               </div>
             </div>
           </div>

@@ -1,26 +1,26 @@
 const steps = [
   {
     number: '01',
-    title: 'Share Instantly',
-    description: 'No signup needed. Just visit and share what you\'re feeling. Your identity stays completely anonymous.',
-    icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z'
+    title: 'Create Your Profile',
+    description: 'Sign up with email or phone. No pressure to use your real name—be yourself, however you want.',
+    icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'
   },
   {
     number: '02',
-    title: 'Express Your Truth',
-    description: 'Share your deepest struggles, feelings, or confessions. No judgement. No exposure. No names.',
+    title: 'Express Authentically',
+    description: 'Share text, images, audio, or videos. Post to the feed or create reels. No filters needed.',
     icon: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z'
   },
   {
     number: '03',
-    title: 'Receive Support',
-    description: 'Get compassionate responses and emotional support from the community. You are heard.',
-    icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z'
+    title: 'Connect & Engage',
+    description: 'React to posts, leave comments, and connect with others through private messaging.',
+    icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z'
   },
   {
     number: '04',
-    title: 'Begin Healing',
-    description: 'Find clarity, join healing circles, and discover your path forward with guidance and community.',
+    title: 'Grow & Reflect',
+    description: 'Answer daily prompts, track your journey with badges, and build a timeline of personal growth.',
     icon: 'M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z'
   }
 ];
@@ -56,7 +56,7 @@ export default function HowItWorks() {
             color: '#1e293b',
             marginBottom: '1rem'
           }}>
-            Your Path to Healing
+            Start Being Yourself
           </h2>
           <p style={{
             fontSize: '1.0625rem',
@@ -65,7 +65,7 @@ export default function HowItWorks() {
             margin: '0 auto',
             lineHeight: 1.6
           }}>
-            Four simple steps to begin your healing journey in a safe, anonymous environment.
+            Four simple steps to join NOMA and start expressing your authentic self.
           </p>
         </div>
 

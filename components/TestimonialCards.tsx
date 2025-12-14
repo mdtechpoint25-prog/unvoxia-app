@@ -2,33 +2,33 @@
 
 const testimonials = [
   {
-    quote: 'NOMA gave me the courage to share things I could never say out loud. The anonymity made me feel safe, and the support I received helped me start healing.',
-    name: 'Grace W.',
-    role: 'NOMA Member',
+    quote: 'For the first time, I feel like I can post without editing myself. NOMA feels like breathing fresh air online.',
+    name: 'Sarah M.',
+    role: 'Early User, Kenya',
     avatar: '/images/avatar-1.svg',
     color: '#0d9488',
     rating: 5
   },
   {
-    quote: 'For the first time, I felt heard without judgement. The compassionate responses from strangers reminded me I\'m not alone in my struggles.',
-    name: 'Daniel O.',
-    role: 'Finding My Path',
+    quote: 'The prompts helped me understand myself more. I\'ve never felt more connected to people I\'ve never met.',
+    name: 'Michael T.',
+    role: 'Beta Tester, UK',
     avatar: '/images/avatar-2.svg',
     color: '#7c3aed',
     rating: 5
   },
   {
-    quote: 'NOMA became my safe space when everything else felt overwhelming. Being anonymous let me be vulnerable, and that vulnerability led to genuine healing.',
-    name: 'Lydia M.',
-    role: 'Healing Journey',
+    quote: 'The reels feel real. No filters, no pressure—just life. Finally a platform where I can be myself.',
+    name: 'Amara K.',
+    role: 'Content Creator, Nigeria',
     avatar: '/images/avatar-3.svg',
     color: '#0284c7',
     rating: 5
   },
   {
-    quote: 'The mentorship and support I found here changed my perspective. Sometimes we just need someone to listen without knowing who we are.',
-    name: 'James K.',
-    role: 'Grateful Member',
+    quote: 'NOMA is different. It\'s not about likes or going viral—it\'s about real connection and authentic expression.',
+    name: 'David O.',
+    role: 'Community Member',
     avatar: '/images/avatar-4.svg',
     color: '#ea580c',
     rating: 5
@@ -68,7 +68,7 @@ export default function TestimonialCards() {
             color: '#1e293b',
             marginBottom: '1rem'
           }}>
-            Stories of Hope & Healing
+            Real People, Real Experiences
           </h2>
           <p style={{
             fontSize: '1.0625rem',
@@ -77,7 +77,7 @@ export default function TestimonialCards() {
             margin: '0 auto',
             lineHeight: 1.6
           }}>
-            See what our users are saying about their experience with NOMA.
+            See what our community is saying about their experience with No Mask World.
           </p>
         </div>
 
