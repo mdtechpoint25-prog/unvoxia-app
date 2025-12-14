@@ -30,66 +30,31 @@ const socialLinks = [
 
 export default function Footer() {
   return (
-    <footer style={{
-      background: '#0f172a',
-      color: '#fff',
-      paddingTop: '4rem',
-      paddingBottom: '2rem'
-    }}>
-      <div style={{
-        maxWidth: '1200px',
-        margin: '0 auto',
-        padding: '0 1.5rem'
-      }}>
+    <footer className="site-footer">
+      <div className="footer-container">
         {/* Top Section */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '3rem',
-          paddingBottom: '3rem',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
-        }}>
+        <div className="footer-grid">
           {/* Brand Column */}
-          <div style={{ gridColumn: 'span 1' }}>
+          <div className="brand-column">
             <div style={{ marginBottom: '1.5rem' }}>
               <Logo size={48} showText={false} variant="icon" />
             </div>
-            <h3 style={{ 
-              fontSize: '1.5rem', 
-              fontWeight: 700, 
-              marginBottom: '0.5rem',
-              color: '#fff'
-            }}>
+            <h3 className="brand-title">
               {SITE.name}
             </h3>
-            <p style={{ 
-              color: 'rgba(255, 255, 255, 0.6)', 
-              fontSize: '0.95rem',
-              lineHeight: 1.7,
-              marginBottom: '1.5rem'
-            }}>
+            <p className="brand-tagline">
               {SITE.tagline}
             </p>
             {/* Social Links */}
-            <div style={{ display: 'flex', gap: '0.75rem' }}>
+            <div className="social-links">
               {socialLinks.map((social) => (
                 <a
                   key={social.name}
                   href={social.href}
                   className="social-link"
-                  style={{
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '10px',
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    transition: 'all 0.3s ease'
-                  }}
                   aria-label={social.name}
                 >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                     <path d={social.icon} />
                   </svg>
                 </a>
@@ -99,29 +64,11 @@ export default function Footer() {
 
           {/* Platform Links */}
           <div>
-            <h4 style={{ 
-              fontSize: '0.875rem', 
-              fontWeight: 600, 
-              textTransform: 'uppercase', 
-              letterSpacing: '0.1em',
-              color: 'rgba(255, 255, 255, 0.4)',
-              marginBottom: '1.25rem'
-            }}>
-              Platform
-            </h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+            <h4 className="footer-heading">Platform</h4>
+            <ul className="footer-list">
               {footerLinks.platform.map((link) => (
-                <li key={link.href} style={{ marginBottom: '0.75rem' }}>
-                  <Link
-                    href={link.href}
-                    className="footer-link"
-                    style={{
-                      color: 'rgba(255, 255, 255, 0.7)',
-                      textDecoration: 'none',
-                      fontSize: '0.95rem',
-                      transition: 'color 0.2s ease'
-                    }}
-                  >
+                <li key={link.href}>
+                  <Link href={link.href} className="footer-link">
                     {link.label}
                   </Link>
                 </li>
@@ -131,29 +78,11 @@ export default function Footer() {
 
           {/* Company Links */}
           <div>
-            <h4 style={{ 
-              fontSize: '0.875rem', 
-              fontWeight: 600, 
-              textTransform: 'uppercase', 
-              letterSpacing: '0.1em',
-              color: 'rgba(255, 255, 255, 0.4)',
-              marginBottom: '1.25rem'
-            }}>
-              Company
-            </h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+            <h4 className="footer-heading">Company</h4>
+            <ul className="footer-list">
               {footerLinks.company.map((link) => (
-                <li key={link.href} style={{ marginBottom: '0.75rem' }}>
-                  <Link
-                    href={link.href}
-                    className="footer-link"
-                    style={{
-                      color: 'rgba(255, 255, 255, 0.7)',
-                      textDecoration: 'none',
-                      fontSize: '0.95rem',
-                      transition: 'color 0.2s ease'
-                    }}
-                  >
+                <li key={link.href}>
+                  <Link href={link.href} className="footer-link">
                     {link.label}
                   </Link>
                 </li>
@@ -163,34 +92,14 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 style={{ 
-              fontSize: '0.875rem', 
-              fontWeight: 600, 
-              textTransform: 'uppercase', 
-              letterSpacing: '0.1em',
-              color: 'rgba(255, 255, 255, 0.4)',
-              marginBottom: '1.25rem'
-            }}>
-              Contact
-            </h4>
-            <div style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.95rem' }}>
+            <h4 className="footer-heading">Contact</h4>
+            <div className="contact-info">
               {CONTACT.emails.map((email, i) => (
-                <a
-                  key={i}
-                  href={`mailto:${email}`}
-                  className="footer-link"
-                  style={{
-                    display: 'block',
-                    color: 'rgba(255, 255, 255, 0.7)',
-                    textDecoration: 'none',
-                    marginBottom: '0.5rem',
-                    transition: 'color 0.2s ease'
-                  }}
-                >
+                <a key={i} href={`mailto:${email}`} className="footer-link contact-email">
                   {email}
                 </a>
               ))}
-              <div style={{ marginTop: '1rem', color: 'rgba(255, 255, 255, 0.5)' }}>
+              <div className="contact-phones">
                 {CONTACT.phones.join(' | ')}
               </div>
             </div>
@@ -198,34 +107,138 @@ export default function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <div style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: '1rem',
-          paddingTop: '2rem'
-        }}>
-          <p style={{ 
-            color: 'rgba(255, 255, 255, 0.4)', 
-            fontSize: '0.875rem',
-            margin: 0
-          }}>
+        <div className="footer-bottom">
+          <p className="copyright">
             2024 {SITE.name} ({SITE.shortName}). All rights reserved.
           </p>
-          <p style={{ 
-            color: 'rgba(255, 255, 255, 0.4)', 
-            fontSize: '0.875rem',
-            margin: 0
-          }}>
+          <p className="domain">
             {SITE.domain}
           </p>
         </div>
       </div>
 
-      <style jsx global>{`
-        .footer-link:hover { color: #0d9488 !important; }
-        .social-link:hover { background: #0d9488 !important; }
+      <style jsx>{`
+        .site-footer {
+          background: var(--bg-surface);
+          color: var(--text-primary);
+          padding-top: 4rem;
+          padding-bottom: 2rem;
+          border-top: 1px solid var(--border-subtle);
+        }
+
+        .footer-container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 1.5rem;
+        }
+
+        .footer-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 3rem;
+          padding-bottom: 3rem;
+          border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .brand-column {
+          grid-column: span 1;
+        }
+
+        .brand-title {
+          font-size: 1.5rem;
+          font-weight: 700;
+          margin-bottom: 0.5rem;
+          color: var(--text-primary);
+        }
+
+        .brand-tagline {
+          color: var(--text-muted);
+          font-size: 0.95rem;
+          line-height: 1.7;
+          margin-bottom: 1.5rem;
+        }
+
+        .social-links {
+          display: flex;
+          gap: 0.75rem;
+        }
+
+        .social-link {
+          width: 40px;
+          height: 40px;
+          border-radius: 10px;
+          background: var(--overlay-medium);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--text-primary);
+          transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+          background: var(--accent);
+          color: var(--bg-primary);
+        }
+
+        .footer-heading {
+          font-size: 0.875rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: var(--text-muted);
+          margin-bottom: 1.25rem;
+        }
+
+        .footer-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+
+        .footer-list li {
+          margin-bottom: 0.75rem;
+        }
+
+        .footer-link {
+          color: var(--text-secondary);
+          text-decoration: none;
+          font-size: 0.95rem;
+          transition: color 0.2s ease;
+        }
+
+        .footer-link:hover {
+          color: var(--accent);
+        }
+
+        .contact-info {
+          color: var(--text-secondary);
+          font-size: 0.95rem;
+        }
+
+        .contact-email {
+          display: block;
+          margin-bottom: 0.5rem;
+        }
+
+        .contact-phones {
+          margin-top: 1rem;
+          color: var(--text-muted);
+        }
+
+        .footer-bottom {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          align-items: center;
+          gap: 1rem;
+          padding-top: 2rem;
+        }
+
+        .copyright, .domain {
+          color: var(--text-muted);
+          font-size: 0.875rem;
+          margin: 0;
+        }
       `}</style>
     </footer>
   );
