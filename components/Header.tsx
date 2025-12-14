@@ -6,10 +6,11 @@ import Logo from './Logo';
 import { ThemeToggle } from './ThemeProvider';
 
 const navLinks = [
-  { href: '/experiences', label: 'Experiences' },
+  { href: '/foryou', label: 'For You' },
+  { href: '/explore', label: 'Explore' },
+  { href: '/reels', label: 'Reels' },
   { href: '/circles', label: 'Communities' },
-  { href: '/share', label: 'Share Story' },
-  { href: '/about', label: 'About' },
+  { href: '/stories', label: 'Stories' },
 ];
 
 export default function Header() {

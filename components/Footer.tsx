@@ -6,11 +6,18 @@ import { SITE, CONTACT } from '@/lib/constants';
 
 const footerLinks = {
   platform: [
-    { href: '/feed', label: 'Authentic Feed' },
+    { href: '/authentic-feed', label: 'Authentic Feed' },
     { href: '/reels', label: 'Reels' },
+    { href: '/explore', label: 'Explore' },
+    { href: '/foryou', label: 'For You' },
+    { href: '/circles', label: 'Communities' },
+  ],
+  discover: [
+    { href: '/stories', label: 'Stories' },
+    { href: '/experiences', label: 'Experiences' },
     { href: '/daily-prompts', label: 'Daily Prompts' },
-    { href: '/messages', label: 'Messages' },
-    { href: '/profile', label: 'Your Profile' },
+    { href: '/journal', label: 'Journal' },
+    { href: '/heal', label: 'Healing' },
   ],
   company: [
     { href: '/about', label: 'About NOMA' },
@@ -18,6 +25,7 @@ const footerLinks = {
     { href: '/contact', label: 'Contact' },
     { href: '/privacy', label: 'Privacy Policy' },
     { href: '/terms', label: 'Terms of Service' },
+    { href: '/safety', label: 'Safety' },
   ],
 };
 
@@ -67,6 +75,20 @@ export default function Footer() {
             <h4 className="footer-heading">Platform</h4>
             <ul className="footer-list">
               {footerLinks.platform.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="footer-link">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Discover Links */}
+          <div>
+            <h4 className="footer-heading">Discover</h4>
+            <ul className="footer-list">
+              {footerLinks.discover.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="footer-link">
                     {link.label}
