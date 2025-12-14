@@ -91,13 +91,14 @@ export default function ActionStack({
     <div
       style={{
         position: 'absolute',
-        right: '12px',
-        bottom: '100px',
+        right: '16px',
+        top: '50%',
+        transform: 'translateY(-50%)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: '20px',
-        zIndex: 10,
+        gap: '24px',
+        zIndex: 50,
       }}
     >
       {/* Floating Particles */}

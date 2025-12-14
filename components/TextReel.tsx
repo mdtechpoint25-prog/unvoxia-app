@@ -43,12 +43,32 @@ function formatTime(dateString: string): string {
   return date.toLocaleDateString();
 }
 
-// Post type badge colors
-const postTypeStyles: Record<string, { bg: string; text: string; glow: string }> = {
-  experience: { bg: 'rgba(13, 148, 136, 0.2)', text: '#0d9488', glow: 'rgba(13, 148, 136, 0.3)' },
-  question: { bg: 'rgba(124, 58, 237, 0.2)', text: '#7c3aed', glow: 'rgba(124, 58, 237, 0.3)' },
-  advice: { bg: 'rgba(59, 130, 246, 0.2)', text: '#3b82f6', glow: 'rgba(59, 130, 246, 0.3)' },
-  release: { bg: 'rgba(239, 68, 68, 0.2)', text: '#ef4444', glow: 'rgba(239, 68, 68, 0.3)' },
+// Post type badge colors with emotional tints
+const postTypeStyles: Record<string, { bg: string; text: string; glow: string; ambientColor: string }> = {
+  experience: { 
+    bg: 'rgba(13, 148, 136, 0.2)', 
+    text: '#0d9488', 
+    glow: 'rgba(13, 148, 136, 0.3)',
+    ambientColor: 'rgba(124, 255, 178, 0.08)' // Hope green tint
+  },
+  question: { 
+    bg: 'rgba(124, 58, 237, 0.2)', 
+    text: '#7c3aed', 
+    glow: 'rgba(124, 58, 237, 0.3)',
+    ambientColor: 'rgba(124, 58, 237, 0.08)' // Purple tint
+  },
+  advice: { 
+    bg: 'rgba(59, 130, 246, 0.2)', 
+    text: '#3b82f6', 
+    glow: 'rgba(59, 130, 246, 0.3)',
+    ambientColor: 'rgba(59, 130, 246, 0.08)' // Blue tint
+  },
+  release: { 
+    bg: 'rgba(255, 122, 122, 0.2)', 
+    text: '#FF7A7A', 
+    glow: 'rgba(255, 122, 122, 0.3)',
+    ambientColor: 'rgba(255, 122, 122, 0.06)' // Pain red tint
+  },
 };
 
 // Avatar emoji mapping
@@ -93,11 +113,50 @@ export default function TextReel({ post, isActive = true, onReact, onComment, on
         display: 'flex',
         flexDirection: 'row',
         position: 'relative',
-        background: '#0f172a',
+        background: '#0E0F14',
         scrollSnapAlign: 'start',
         overflow: 'hidden',
       }}
     >
+      {/* Emotional ambient background overlay */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: `linear-gradient(180deg, transparent 0%, ${typeStyle.ambientColor} 50%, transparent 100%)`,
+          opacity: isVisible ? 1 : 0,
+          transition: 'opacity 1s ease',
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* Top fade gradient */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '120px',
+          background: 'linear-gradient(180deg, #0E0F14 0%, transparent 100%)',
+          pointerEvents: 'none',
+          zIndex: 10,
+        }}
+      />
+
+      {/* Bottom fade gradient */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: '120px',
+          background: 'linear-gradient(0deg, #0E0F14 0%, transparent 100%)',
+          pointerEvents: 'none',
+          zIndex: 10,
+        }}
+      />
       {/* Ambient Background Glow */}
       <div
         style={{
@@ -116,33 +175,38 @@ export default function TextReel({ post, isActive = true, onReact, onComment, on
         }}
       />
 
-      {/* Main Content Area */}
+      {/* Main Content Area - Centered */}
       <div
         style={{
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          padding: '24px',
+          alignItems: 'center',
+          padding: '48px 24px',
           paddingRight: '80px',
+          textAlign: 'center',
+          maxWidth: '720px',
+          margin: '0 auto',
         }}
       >
-        {/* Post Content - Large centered text with entrance animation */}
+        {/* Post Content - Large centered text (TikTok style) */}
         <p
           style={{
-            color: 'rgba(255, 255, 255, 0.95)',
-            fontSize: 'clamp(1.25rem, 4vw, 1.75rem)',
-            lineHeight: 1.7,
-            fontFamily: 'Georgia, "Times New Roman", serif',
-            marginBottom: '24px',
-            maxWidth: '600px',
+            color: '#FFFFFF',
+            fontSize: 'clamp(22px, 5vw, 28px)',
+            lineHeight: 1.55,
+            fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
+            fontWeight: 400,
+            letterSpacing: '-0.01em',
+            marginBottom: '32px',
             opacity: isVisible ? 1 : 0,
             transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
             transition: 'all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)',
             transitionDelay: '0.1s',
           }}
         >
-          &ldquo;{post.content}&rdquo;
+          {post.content}
         </p>
 
         {/* Bottom info bar with staggered animation */}
@@ -150,6 +214,7 @@ export default function TextReel({ post, isActive = true, onReact, onComment, on
           style={{
             display: 'flex',
             alignItems: 'center',
+            justifyContent: 'center',
             gap: '12px',
             flexWrap: 'wrap',
             opacity: isVisible ? 1 : 0,

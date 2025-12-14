@@ -1,21 +1,33 @@
-/* NOMA Healing Platform - Professional & Natural Design */
+/* NOMA Healing Platform - Immersive Dark UI */
 
 :root {
-  /* Primary Brand Colors - Refined & Sophisticated */
-  --noma-primary: #0d9488;       /* Softer teal - more natural */
+  /* NOMA Core Dark Theme (TikTok-inspired) */
+  --noma-bg: #0E0F14;           /* Deep black - main background */
+  --noma-surface: #161823;       /* Slightly lighter surface */
+  --noma-surface-light: #1F2133;
+  
+  /* Text Colors */
+  --noma-text-primary: #FFFFFF;
+  --noma-text-secondary: #B3B3B3;
+  --noma-text-muted: rgba(255, 255, 255, 0.5);
+  
+  /* Emotional Accent Colors */
+  --noma-hope: #7CFFB2;          /* Hope/Healing green */
+  --noma-pain: #FF7A7A;          /* Pain/Release red */
+  --noma-primary: #0d9488;       /* Teal primary */
   --noma-primary-dark: #0f766e;
   --noma-primary-light: #14b8a6;
-  --noma-accent: #7c3aed;        /* Rich purple accent */
+  --noma-accent: #7c3aed;        /* Purple accent */
   --noma-accent-light: #a78bfa;
   
-  /* Warm & Grounded Accent Colors */
+  /* Legacy colors (for compatibility) */
   --noma-sage: #84a98c;
   --noma-terracotta: #c08552;
   --noma-sand: #d4c4a8;
   --noma-mist: #94a3b8;
   
-  /* Professional Neutrals - High Readability */
-  --noma-dark: #0f172a;          /* Deep slate - easier on eyes */
+  /* Dark Mode Neutrals */
+  --noma-dark: #0E0F14;
   --noma-charcoal: #1e293b;
   --noma-gray-900: #1e293b;
   --noma-gray-800: #334155;
@@ -32,11 +44,11 @@
   --noma-bg-warm: #fefdfb;
   --noma-bg-cool: #f8fafc;
   
-  /* Professional Gradients - More Subtle */
+  /* Immersive Gradients */
   --gradient-primary: linear-gradient(135deg, #0d9488 0%, #7c3aed 100%);
-  --gradient-subtle: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-  --gradient-warm: linear-gradient(135deg, #fefdfb 0%, #f1f5f9 100%);
-  --gradient-hero: linear-gradient(160deg, #0f172a 0%, #1e293b 40%, #0d9488 100%);
+  --gradient-dark-fade: linear-gradient(180deg, #0E0F14 0%, transparent 100%);
+  --gradient-emotional-hope: linear-gradient(180deg, transparent 0%, rgba(124, 255, 178, 0.05) 50%, transparent 100%);
+  --gradient-emotional-pain: linear-gradient(180deg, transparent 0%, rgba(255, 122, 122, 0.05) 50%, transparent 100%);
   
   /* Refined Shadows - Softer & More Natural */
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);

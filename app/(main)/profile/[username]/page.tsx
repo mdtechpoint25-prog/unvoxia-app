@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
+import ImmersiveHeader from '@/components/ImmersiveHeader';
 
 interface ProfileData {
   username: string;
@@ -84,53 +85,15 @@ export default function ProfilePage() {
     <div
       style={{
         minHeight: '100vh',
-        background: '#0f172a',
-        paddingBottom: '80px',
+        background: '#0E0F14',
+        paddingBottom: '40px',
       }}
     >
-      {/* Header */}
-      <header
-        style={{
-          padding: '16px 20px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-        }}
-      >
-        <button
-          onClick={() => router.back()}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: '#fff',
-            fontSize: '1.2rem',
-            cursor: 'pointer',
-          }}
-        >
-          ←
-        </button>
-
-        <h1 style={{ color: '#fff', fontSize: '1rem', fontWeight: 600, margin: 0 }}>
-          @{profile.username}
-        </h1>
-
-        <button
-          onClick={() => router.push('/settings')}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: '#fff',
-            fontSize: '1.2rem',
-            cursor: 'pointer',
-          }}
-        >
-          ⚙️
-        </button>
-      </header>
+      {/* Immersive Header */}
+      <ImmersiveHeader />
 
       {/* Profile Info */}
-      <div style={{ padding: '24px 20px', textAlign: 'center' }}>
+      <div style={{ padding: '72px 20px 24px', textAlign: 'center' }}>
         {/* Avatar */}
         <div
           style={{
@@ -175,28 +138,28 @@ export default function ProfilePage() {
             justifyContent: 'center',
             gap: '32px',
             marginBottom: '24px',
-            padding: '16px',
-            background: 'rgba(255, 255, 255, 0.03)',
-            borderRadius: '12px',
+            padding: '16px 20px',
+            background: '#161823',
+            borderRadius: '16px',
           }}
         >
           <div style={{ textAlign: 'center' }}>
             <div style={{ color: '#fff', fontSize: '1.25rem', fontWeight: 700 }}>
               {profile.postCount}
             </div>
-            <div style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.8rem' }}>Posts</div>
+            <div style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Posts</div>
           </div>
           <div style={{ textAlign: 'center' }}>
-            <div style={{ color: '#0d9488', fontSize: '1.25rem', fontWeight: 700 }}>
+            <div style={{ color: '#7CFFB2', fontSize: '1.25rem', fontWeight: 700 }}>
               {profile.feelsGiven}
             </div>
-            <div style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.8rem' }}>Feels Given</div>
+            <div style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Feels Given</div>
           </div>
           <div style={{ textAlign: 'center' }}>
             <div style={{ color: '#7c3aed', fontSize: '1.25rem', fontWeight: 700 }}>
               {profile.supportSent}
             </div>
-            <div style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.8rem' }}>Support Sent</div>
+            <div style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Support Sent</div>
           </div>
         </div>
       </div>
@@ -211,7 +174,7 @@ export default function ProfilePage() {
               alignItems: 'center',
               gap: '12px',
               padding: '16px',
-              background: 'rgba(255, 255, 255, 0.03)',
+              background: '#161823',
               borderRadius: '12px',
               textDecoration: 'none',
               color: '#fff',
@@ -229,7 +192,7 @@ export default function ProfilePage() {
               alignItems: 'center',
               gap: '12px',
               padding: '16px',
-              background: 'rgba(255, 255, 255, 0.03)',
+              background: '#161823',
               borderRadius: '12px',
               textDecoration: 'none',
               color: '#fff',
@@ -247,7 +210,7 @@ export default function ProfilePage() {
               alignItems: 'center',
               gap: '12px',
               padding: '16px',
-              background: 'rgba(255, 255, 255, 0.03)',
+              background: '#161823',
               borderRadius: '12px',
               textDecoration: 'none',
               color: '#fff',
@@ -265,7 +228,7 @@ export default function ProfilePage() {
               alignItems: 'center',
               gap: '12px',
               padding: '16px',
-              background: 'rgba(255, 255, 255, 0.03)',
+              background: '#161823',
               borderRadius: '12px',
               textDecoration: 'none',
               color: '#fff',
@@ -289,7 +252,7 @@ export default function ProfilePage() {
               key={post.id}
               style={{
                 padding: '12px 16px',
-                background: 'rgba(255, 255, 255, 0.03)',
+                background: '#161823',
                 borderRadius: '12px',
                 borderLeft: `3px solid ${
                   post.postType === 'experience' ? '#0d9488' :
@@ -308,61 +271,6 @@ export default function ProfilePage() {
           ))}
         </div>
       </div>
-
-      {/* Bottom Nav */}
-      <BottomNav currentPath="/profile" />
     </div>
-  );
-}
-
-// Bottom Navigation Component
-function BottomNav({ currentPath }: { currentPath: string }) {
-  const router = useRouter();
-
-  const navItems = [
-    { path: '/foryou', icon: '🏠', label: 'Home' },
-    { path: '/explore', icon: '🔍', label: 'Explore' },
-    { path: '/messages', icon: '💬', label: 'Messages' },
-    { path: '/profile', icon: '👤', label: 'Profile' },
-  ];
-
-  return (
-    <nav
-      style={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: '60px',
-        background: 'rgba(15, 23, 42, 0.95)',
-        borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        zIndex: 100,
-        backdropFilter: 'blur(10px)',
-      }}
-    >
-      {navItems.map((item) => (
-        <button
-          key={item.path}
-          onClick={() => router.push(item.path)}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '4px',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            padding: '8px 16px',
-            opacity: currentPath.startsWith(item.path) ? 1 : 0.6,
-          }}
-        >
-          <span style={{ fontSize: '1.3rem' }}>{item.icon}</span>
-          <span style={{ fontSize: '0.65rem', color: '#fff' }}>{item.label}</span>
-        </button>
-      ))}
-    </nav>
   );
 }

@@ -3,9 +3,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import TextReel, { TextReelData } from '@/components/TextReel';
-import FeedNav from '@/components/FeedNav';
+import ImmersiveHeader from '@/components/ImmersiveHeader';
 import CommentSheet from '@/components/CommentSheet';
-import CreateButton from '@/components/CreateButton';
+import FloatingCreateButton from '@/components/FloatingCreateButton';
 
 // Mock data - in production, fetch from API
 const mockPosts: TextReelData[] = [
@@ -118,7 +118,6 @@ const mockPosts: TextReelData[] = [
 export default function ForYouPage() {
   const router = useRouter();
   const [posts, setPosts] = useState<TextReelData[]>(mockPosts);
-  const [activeTab, setActiveTab] = useState<'foryou' | 'following'>('foryou');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showComments, setShowComments] = useState(false);
   const [activePostId, setActivePostId] = useState<string | null>(null);
@@ -203,24 +202,19 @@ export default function ForYouPage() {
     setShowReportModal(true);
   }, []);
 
-  const handleTabChange = (tab: 'foryou' | 'following') => {
-    setActiveTab(tab);
-    // TODO: Fetch different posts based on tab
-  };
-
   return (
     <div
       style={{
         position: 'fixed',
         inset: 0,
-        background: '#0f172a',
+        background: '#0E0F14',
         zIndex: 1,
       }}
     >
-      {/* Top Navigation */}
-      <FeedNav activeTab={activeTab} onTabChange={handleTabChange} />
+      {/* Immersive Header - Auto-hides on scroll */}
+      <ImmersiveHeader mode="feed" />
 
-      {/* Feed Container */}
+      {/* Feed Container - Full viewport, scroll-snap */}
       <div
         ref={containerRef}
         style={{
@@ -232,10 +226,11 @@ export default function ForYouPage() {
           WebkitOverflowScrolling: 'touch',
         }}
       >
-        {posts.map((post) => (
+        {posts.map((post, index) => (
           <TextReel
             key={post.id}
             post={post}
+            isActive={index === currentIndex}
             onReact={handleReact}
             onComment={handleComment}
             onSave={handleSave}
@@ -244,8 +239,8 @@ export default function ForYouPage() {
         ))}
       </div>
 
-      {/* Create Button */}
-      <CreateButton />
+      {/* Floating Create Button */}
+      <FloatingCreateButton />
 
       {/* Comment Sheet */}
       {showComments && activePostId && (
@@ -262,9 +257,6 @@ export default function ForYouPage() {
           onClose={() => setShowReportModal(false)}
         />
       )}
-
-      {/* Bottom Navigation */}
-      <BottomNav currentPath="/foryou" />
     </div>
   );
 }
@@ -390,57 +382,5 @@ function ReportModal({ postId, onClose }: { postId: string; onClose: () => void 
         )}
       </div>
     </div>
-  );
-}
-
-// Bottom Navigation Component
-function BottomNav({ currentPath }: { currentPath: string }) {
-  const router = useRouter();
-
-  const navItems = [
-    { path: '/foryou', icon: '🏠', label: 'Home' },
-    { path: '/explore', icon: '🔍', label: 'Explore' },
-    { path: '/notifications', icon: '🔔', label: 'Inbox' },
-    { path: '/profile', icon: '👤', label: 'Profile' },
-  ];
-
-  return (
-    <nav
-      style={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: '60px',
-        background: 'rgba(15, 23, 42, 0.95)',
-        borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        zIndex: 100,
-        backdropFilter: 'blur(10px)',
-      }}
-    >
-      {navItems.map((item) => (
-        <button
-          key={item.path}
-          onClick={() => router.push(item.path)}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '4px',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            padding: '8px 16px',
-            opacity: currentPath === item.path ? 1 : 0.6,
-          }}
-        >
-          <span style={{ fontSize: '1.3rem' }}>{item.icon}</span>
-          <span style={{ fontSize: '0.65rem', color: '#fff' }}>{item.label}</span>
-        </button>
-      ))}
-    </nav>
   );
 }

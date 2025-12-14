@@ -123,7 +123,8 @@ export default function CommentSheet({ postId, onClose }: CommentSheetProps) {
       style={{
         position: 'fixed',
         inset: 0,
-        background: 'rgba(0, 0, 0, 0.5)',
+        background: 'rgba(0, 0, 0, 0.7)',
+        backdropFilter: 'blur(4px)',
         zIndex: 200,
         display: 'flex',
         alignItems: 'flex-end',
@@ -135,53 +136,66 @@ export default function CommentSheet({ postId, onClose }: CommentSheetProps) {
         style={{
           width: '100%',
           maxWidth: '500px',
-          maxHeight: '70vh',
-          background: '#1e293b',
-          borderTopLeftRadius: '24px',
-          borderTopRightRadius: '24px',
+          maxHeight: '75vh',
+          background: '#161823',
+          borderTopLeftRadius: '28px',
+          borderTopRightRadius: '28px',
           display: 'flex',
           flexDirection: 'column',
-          animation: 'slideUp 0.3s ease-out',
+          animation: 'slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+          boxShadow: '0 -8px 40px rgba(0, 0, 0, 0.5)',
         }}
       >
+        {/* Handle */}
+        <div style={{ display: 'flex', justifyContent: 'center', padding: '12px' }}>
+          <div style={{ width: '40px', height: '4px', background: 'rgba(255, 255, 255, 0.2)', borderRadius: '2px' }} />
+        </div>
+
         {/* Header */}
         <div
           style={{
-            padding: '16px 20px',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+            padding: '8px 20px 16px',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
           }}
         >
-          <h3 style={{ color: '#fff', fontSize: '1rem', fontWeight: 600, margin: 0 }}>
-            {comments.length} responses
+          <h3 style={{ color: '#fff', fontSize: '1.1rem', fontWeight: 600, margin: 0 }}>
+            Support ({comments.length})
           </h3>
           <button
             onClick={onClose}
             style={{
-              background: 'none',
+              background: 'rgba(255, 255, 255, 0.1)',
               border: 'none',
               color: 'rgba(255, 255, 255, 0.6)',
-              fontSize: '1.5rem',
+              fontSize: '1.25rem',
               cursor: 'pointer',
-              padding: '4px',
+              padding: '8px',
+              borderRadius: '50%',
+              width: '36px',
+              height: '36px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.2s ease',
             }}
           >
             ×
           </button>
         </div>
 
-        {/* Kindness Reminder */}
+        {/* Kindness Reminder - Pinned */}
         <div
           style={{
-            padding: '12px 20px',
-            background: 'rgba(13, 148, 136, 0.1)',
+            padding: '14px 20px',
+            background: 'rgba(124, 255, 178, 0.08)',
             borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
           }}
         >
-          <p style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.8rem', margin: 0, textAlign: 'center' }}>
-            💚 Respond with kindness. This is a safe space.
+          <p style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.85rem', margin: 0, textAlign: 'center' }}>
+            💚 Respond with kindness. Someone is healing.
           </p>
         </div>
 
