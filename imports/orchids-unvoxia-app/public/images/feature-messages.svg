@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9B59B6"/>
+      <stop offset="100%" stop-color="#8e44ad"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="#f9fafb"/>
+  <rect x="20" y="20" width="360" height="260" rx="16" fill="white" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.1))"/>
+  <!-- Chat bubbles -->
+  <rect x="60" y="60" width="160" height="40" rx="20" fill="url(#g2)"/>
+  <rect x="180" y="120" width="160" height="40" rx="20" fill="#e5e7eb"/>
+  <rect x="60" y="180" width="200" height="40" rx="20" fill="url(#g2)"/>
+  <!-- Typing indicator -->
+  <circle cx="200" cy="250" r="6" fill="#d1d5db"/>
+  <circle cx="220" cy="250" r="6" fill="#9ca3af"/>
+  <circle cx="240" cy="250" r="6" fill="#6b7280"/>
+</svg>

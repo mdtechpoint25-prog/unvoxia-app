@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400">
+  <defs>
+    <linearGradient id="ogBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="50%" stop-color="#2C3E50"/>
+      <stop offset="100%" stop-color="#1ABC9C"/>
+    </linearGradient>
+    <linearGradient id="ogAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1ABC9C"/>
+      <stop offset="100%" stop-color="#9B59B6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="400" fill="url(#ogBg)"/>
+  <!-- Logo -->
+  <rect x="80" y="140" width="120" height="120" rx="28" fill="url(#ogAccent)"/>
+  <path d="M115 220V160L140 190L165 160V220" stroke="white" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Text -->
+  <text x="240" y="190" fill="white" font-size="72" font-family="system-ui, sans-serif" font-weight="800">No Mask World</text>
+  <text x="240" y="250" fill="rgba(255,255,255,0.7)" font-size="32" font-family="system-ui, sans-serif">Real Work. Real Results. No Mask.</text>
+  <!-- Decorative elements -->
+  <circle cx="1050" cy="100" r="60" fill="rgba(26,188,156,0.3)"/>
+  <circle cx="1100" cy="300" r="40" fill="rgba(155,89,182,0.3)"/>
+</svg>
