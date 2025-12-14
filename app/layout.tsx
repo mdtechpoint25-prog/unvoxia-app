@@ -1,8 +1,7 @@
 import './globals.css';
 import type { Metadata, Viewport } from 'next';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+import { SideMenu } from '@/components/SideMenu';
 
 export const metadata: Metadata = {
   title: 'NOMA – Speak Without Fear | Anonymous Emotional Support',
@@ -101,9 +100,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <ThemeProvider defaultTheme="dark">
-          <Header />
+          <SideMenu />
           {children}
-          <Footer />
         </ThemeProvider>
       </body>
     </html>

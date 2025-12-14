@@ -1,816 +1,976 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import Image from "next/image";
 
 export default function LandingPage() {
-  const [showWriteModal, setShowWriteModal] = useState(false);
+  const [activeChat, setActiveChat] = useState("ICG chat");
 
-  const textReels = [
-    {
-      id: 1,
-      category: "Depression",
-      text: "I smile every day at work, but inside I feel empty. No one notices because I never let the mask slip.",
-      replies: 42,
-      support: 210
-    },
-    {
-      id: 2,
-      category: "Relationships",
-      text: "Loving someone who doesn't understand your pain feels lonelier than being alone.",
-      replies: 18,
-      support: 97
-    },
-    {
-      id: 3,
-      category: "Job Stress",
-      text: "I fear losing my job every day, but I can't tell my family how scared I am.",
-      replies: 33,
-      support: 156
-    },
-    {
-      id: 4,
-      category: "Family",
-      text: "My parents still don't accept who I am. I've given up trying to make them understand.",
-      replies: 67,
-      support: 234
-    },
-    {
-      id: 5,
-      category: "Anxiety",
-      text: "Some days the simplest tasks feel impossible. Getting out of bed is a victory no one sees.",
-      replies: 89,
-      support: 412
-    },
-    {
-      id: 6,
-      category: "Marriage",
-      text: "We haven't talked about anything real in months. We're roommates pretending to be partners.",
-      replies: 54,
-      support: 178
-    },
-    {
-      id: 7,
-      category: "Loss",
-      text: "It's been two years and I still reach for my phone to call them. The grief never really leaves.",
-      replies: 91,
-      support: 523
-    },
-    {
-      id: 8,
-      category: "Self-Worth",
-      text: "I keep achieving things but never feel good enough. The goalposts just keep moving further away.",
-      replies: 76,
-      support: 289
-    }
+  const conversations = [
+    { id: 1, name: "Richard Wilson", message: "I will add you to our team, we...", avatar: "/images/avatar1.jpg", online: true },
+    { id: 2, name: "ICG chat", message: "Jaden: Let's discuss this tom...", avatar: "/images/avatar2.jpg", group: true },
+    { id: 3, name: "Sarah Parker", message: "You: Ok, see you soon!", avatar: "/images/avatar3.jpg", online: true },
+    { id: 4, name: "Abubakar Campbell", message: "You: Do you think we can do it?", avatar: "/images/avatar4.jpg", online: false },
+    { id: 5, name: "Nathanael Jordan", message: "I'm busy", avatar: "/images/avatar5.jpg", online: true },
+    { id: 6, name: "Conner Garcia", message: "You: Hey, maybe we can meet...", avatar: "/images/avatar6.jpg", online: false },
+    { id: 7, name: "Cynthia Mckay", message: "You: Maybe", avatar: "/images/avatar7.jpg", online: true },
+    { id: 8, name: "Cora Richards", message: "Will you go play?", avatar: "/images/avatar8.jpg", online: false },
+    { id: 9, name: "Lawrence Patterson", message: "I miss the guys what they think", avatar: "/images/avatar9.jpg", online: true },
+    { id: 10, name: "Lukas Mcgowan", message: "You: We can try this strategy I...", avatar: "/images/avatar10.jpg", online: false },
+    { id: 11, name: "Alia Bonner", message: "I had a great time yesterday", avatar: "/images/avatar11.jpg", online: true },
+    { id: 12, name: "Fletcher Morse", message: "You: I need to work, sorry", avatar: "/images/avatar12.jpg", online: true },
   ];
 
-  const circles = [
-    "Love & Relationships",
-    "Depression Support",
-    "Job Stress",
-    "Marriage",
-    "Family Trauma",
-    "Discrimination",
-    "Anxiety & Panic",
-    "Self-Worth"
+  const members = [
+    { id: 1, name: "Richard Wilson", role: "Admin", avatar: "/images/avatar1.jpg", online: true },
+    { id: 2, name: "You", avatar: "/images/avatar-you.jpg", online: true },
+    { id: 3, name: "Jaden Parker", avatar: "/images/avatar-jaden.jpg", online: false },
+    { id: 4, name: "Conner Garcia", avatar: "/images/avatar-conner.jpg", online: true },
+    { id: 5, name: "Lawrence Patterson", avatar: "/images/avatar-lawrence.jpg", online: false },
+  ];
+
+  const messages = [
+    { id: 1, author: "Richard Wilson", text: "added You", time: "6:15 pm", system: true, date: "9 Sep 2024" },
+    { id: 2, author: "Conner Garcia", text: "Hey guys! Don't forget about our meeting next week! I'll be waiting for you at the 'Cozy Corner' cafe at 6:00 PM. Don't be late!", time: "6:25 pm", avatar: "/images/avatar-conner.jpg" },
+    { id: 3, author: "Richard Wilson", text: "Absolutely, I'll be there! Looking forward to catching up and discussing everything.", time: "6:25 pm", avatar: "/images/avatar1.jpg", date: "10 Sep 2024" },
+    { id: 4, author: "Lawrence Patterson", text: "@wilson @jparker I have a new game plan", time: "6:25 pm", avatar: "/images/avatar-lawrence.jpg" },
+    { id: 5, author: "Jaden Parker", text: "Let's discuss this tomorrow", time: "6:25 pm", avatar: "/images/avatar-jaden.jpg" },
   ];
 
   return (
-    <>
-      <div className="noma-app">
-        {/* LEFT RAIL */}
-        <aside className="left-rail">
-          <div className="logo-container">
-            <div className="noma-logo">N</div>
+    <div className="chat-app">
+      {/* LEFT SIDEBAR */}
+      <aside className="left-sidebar">
+        <div className="logo">
+          <div className="logo-circle">
+            <span className="logo-letter">S</span>
           </div>
-          
-          <nav className="icon-nav">
-            <Link href="/feed" className="nav-icon active">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                <polyline points="9 22 9 12 15 12 15 22"/>
-              </svg>
-            </Link>
-            
-            <Link href="/circles" className="nav-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10"/>
-                <circle cx="12" cy="12" r="6"/>
-                <circle cx="12" cy="12" r="2"/>
-              </svg>
-            </Link>
-            
-            <button onClick={() => setShowWriteModal(true)} className="nav-icon create-btn">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="12" y1="5" x2="12" y2="19"/>
-                <line x1="5" y1="12" x2="19" y2="12"/>
+        </div>
+        
+        <nav className="sidebar-nav">
+          <button className="nav-circle active">Work</button>
+          <button className="nav-circle highlight">IC</button>
+          <button className="nav-circle">SP</button>
+          <button className="nav-circle">BFF</button>
+          <button className="nav-circle">MJ</button>
+          <button className="nav-circle">GI</button>
+        </nav>
+
+        <div className="sidebar-bottom">
+          <button className="nav-circle settings">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24"/>
+            </svg>
+          </button>
+          <button className="add-circle">+</button>
+        </div>
+      </aside>
+
+      {/* CONVERSATIONS PANEL */}
+      <aside className="conversations-panel">
+        <div className="conversations-header">
+          <h2>Messages</h2>
+          <button className="search-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.35-4.35"/>
+            </svg>
+          </button>
+        </div>
+
+        <div className="conversations-list">
+          {conversations.map((conv) => (
+            <div 
+              key={conv.id} 
+              className={`conversation-item ${activeChat === conv.name ? 'active' : ''}`}
+              onClick={() => setActiveChat(conv.name)}
+            >
+              <div className="conv-avatar">
+                <div className="avatar-placeholder" style={{ background: `hsl(${conv.id * 35}, 70%, 60%)` }}>
+                  {conv.name.charAt(0)}
+                </div>
+                {conv.online && <span className="status-dot"></span>}
+              </div>
+              <div className="conv-info">
+                <div className="conv-header">
+                  <h3>{conv.name}</h3>
+                </div>
+                <p className="conv-message">{conv.message}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </aside>
+
+      {/* MAIN CHAT AREA */}
+      <main className="main-chat">
+        <header className="chat-header">
+          <div className="chat-title-area">
+            <h1 className="chat-title">{activeChat}</h1>
+          </div>
+          <div className="chat-actions">
+            <button className="icon-btn">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
               </svg>
             </button>
-            
-            <Link href="/notifications" className="nav-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-              </svg>
-            </Link>
-            
-            <Link href="/saved" className="nav-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-              </svg>
-            </Link>
-            
-            <Link href="/profile" className="nav-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                <circle cx="12" cy="7" r="4"/>
-              </svg>
-            </Link>
-            
-            <Link href="/settings" className="nav-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <button className="icon-btn">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="12" cy="12" r="3"/>
                 <path d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24"/>
               </svg>
-            </Link>
-          </nav>
-        </aside>
-
-        {/* MAIN FEED */}
-        <main className="main-feed">
-          <header className="feed-header">
-            <h1 className="feed-title">NOMA — Speak Without Fear</h1>
-            <div className="header-actions">
-              <button className="search-btn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="11" cy="11" r="8"/>
-                  <path d="m21 21-4.35-4.35"/>
-                </svg>
-              </button>
-              <button className="notif-btn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                  <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                </svg>
-              </button>
-              <Link href="/profile" className="avatar-btn" />
-            </div>
-          </header>
-
-          <div className="text-reels">
-            {textReels.map((reel) => (
-              <article key={reel.id} className="text-reel">
-                <span className="reel-tag">{reel.category}</span>
-                <p className="reel-content">{reel.text}</p>
-                <div className="reel-actions">
-                  <button className="action-btn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                    </svg>
-                    <span>{reel.replies}</span>
-                  </button>
-                  <button className="action-btn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                    </svg>
-                    <span>{reel.support}</span>
-                  </button>
-                  <button className="action-btn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-                    </svg>
-                  </button>
-                </div>
-              </article>
-            ))}
-            
-            <div className="feed-cta">
-              <p>You are not alone</p>
-              <button onClick={() => setShowWriteModal(true)} className="share-cta-btn">
-                Share what you're carrying
-              </button>
-            </div>
-          </div>
-        </main>
-
-        {/* RIGHT RAIL */}
-        <aside className="right-rail">
-          <div className="panel-card">
-            <h3 className="panel-title">Circles You May Relate To</h3>
-            <ul className="circles-list">
-              {circles.map((circle, idx) => (
-                <li key={idx}>
-                  <Link href="/circles">{circle}</Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="panel-card">
-            <h3 className="panel-title">You Are Not Alone</h3>
-            <blockquote className="quote">
-              "I thought I was weak until I saw others feel the same."
-            </blockquote>
-          </div>
-
-          <div className="panel-card cta-card">
-            <p>Ready to lighten your load?</p>
-            <button onClick={() => setShowWriteModal(true)} className="gentle-cta">
-              Share your story
             </button>
+            <div className="avatar-group">
+              <div className="small-avatar" style={{ background: 'linear-gradient(135deg, #10b981, #06b6d4)' }}>R</div>
+            </div>
           </div>
-        </aside>
+        </header>
 
-        {/* MOBILE BOTTOM NAV */}
-        <nav className="bottom-nav">
-          <Link href="/feed" className="bottom-nav-item active">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-              <polyline points="9 22 9 12 15 12 15 22"/>
-            </svg>
-          </Link>
-          <Link href="/circles" className="bottom-nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <circle cx="12" cy="12" r="6"/>
-            </svg>
-          </Link>
-          <button onClick={() => setShowWriteModal(true)} className="bottom-nav-item create">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="12" y1="5" x2="12" y2="19"/>
-              <line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
-          </button>
-          <Link href="/notifications" className="bottom-nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-            </svg>
-          </Link>
-          <Link href="/profile" className="bottom-nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-              <circle cx="12" cy="7" r="4"/>
-            </svg>
-          </Link>
-        </nav>
-      </div>
-
-      {/* WRITE MODAL */}
-      {showWriteModal && (
-        <div className="modal-overlay" onClick={() => setShowWriteModal(false)}>
-          <div className="write-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>Share what you're carrying</h2>
-              <button onClick={() => setShowWriteModal(false)} className="modal-close">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <line x1="18" y1="6" x2="6" y2="18"/>
-                  <line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-              </button>
-            </div>
-            <div className="modal-body">
-              <textarea 
-                placeholder="What's weighing on you today?"
-                className="write-textarea"
-                rows={8}
-              />
-              <div className="category-chips">
-                <button className="chip">Depression</button>
-                <button className="chip">Relationships</button>
-                <button className="chip">Job Stress</button>
-                <button className="chip">Family</button>
-                <button className="chip">Anxiety</button>
-                <button className="chip">Loss</button>
-              </div>
-              <label className="anonymous-toggle">
-                <input type="checkbox" defaultChecked />
-                <span>Post anonymously</span>
-              </label>
-            </div>
-            <div className="modal-footer">
-              <button className="post-btn">Share</button>
-            </div>
+        <div className="chat-hero">
+          <div className="hero-image">
+            <div className="hero-placeholder"></div>
           </div>
         </div>
-      )}
+
+        <div className="messages-container">
+          {messages.map((msg) => (
+            <div key={msg.id} className="message-wrapper">
+              {msg.date && <div className="date-separator">{msg.date}</div>}
+              
+              {msg.system ? (
+                <div className="system-message">
+                  <span className="sys-icon">→</span>
+                  <span><strong>{msg.author}</strong> {msg.text}</span>
+                  <span className="msg-time">{msg.time}</span>
+                </div>
+              ) : (
+                <div className="message">
+                  <div className="msg-avatar">
+                    <div className="avatar-placeholder" style={{ background: `hsl(${msg.id * 40}, 65%, 55%)` }}>
+                      {msg.author.charAt(0)}
+                    </div>
+                    <span className="status-indicator"></span>
+                  </div>
+                  <div className="msg-content">
+                    <div className="msg-header">
+                      <strong className="msg-author">{msg.author}</strong>
+                      <span className="msg-time">{msg.time}</span>
+                    </div>
+                    <p className="msg-text">{msg.text}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+
+          <div className="video-call-banner">
+            <span className="call-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polygon points="23 7 16 12 23 17 23 7"/>
+                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+              </svg>
+            </span>
+            <span><strong>Richard Wilson</strong> started a video call</span>
+            <button className="join-btn">Join</button>
+          </div>
+        </div>
+
+        <div className="message-input-area">
+          <button className="attach-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+            </svg>
+          </button>
+          <input type="text" placeholder="Write a message..." className="message-input" />
+          <button className="voice-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/>
+            </svg>
+          </button>
+          <button className="send-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <line x1="22" y1="2" x2="11" y2="13"/>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+          </button>
+        </div>
+      </main>
+
+      {/* RIGHT SIDEBAR */}
+      <aside className="right-sidebar">
+        <div className="sidebar-actions">
+          <button className="action-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+          </button>
+          <button className="action-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polygon points="23 7 16 12 23 17 23 7"/>
+              <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+            </svg>
+          </button>
+          <button className="action-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/>
+              <circle cx="4" cy="4" r="2"/>
+            </svg>
+          </button>
+          <button className="action-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </button>
+        </div>
+
+        <div className="members-section">
+          <h3 className="section-title">Members</h3>
+          <div className="members-list">
+            {members.map((member) => (
+              <div key={member.id} className="member-item">
+                <div className="member-avatar">
+                  <div className="avatar-placeholder" style={{ background: `hsl(${member.id * 50}, 60%, 55%)` }}>
+                    {member.name.charAt(0)}
+                  </div>
+                  {member.online && <span className="online-dot"></span>}
+                </div>
+                <span className="member-name">{member.name}</span>
+                {member.role && <span className="member-role">{member.role}</span>}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="files-section">
+          <div className="section-header">
+            <h3 className="section-title">Files</h3>
+          </div>
+          
+          <div className="files-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+            <span>116 photos</span>
+            <button className="expand-btn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="18 15 12 9 6 15"/>
+              </svg>
+            </button>
+          </div>
+
+          <div className="files-preview">
+            <div className="preview-grid">
+              <div className="preview-img"></div>
+              <div className="preview-img"></div>
+            </div>
+          </div>
+
+          <div className="files-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+              <polyline points="13 2 13 9 20 9"/>
+            </svg>
+            <span>208 files</span>
+            <button className="expand-btn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </button>
+          </div>
+
+          <div className="files-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+            </svg>
+            <span>47 shared links</span>
+            <button className="expand-btn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </aside>
 
       <style jsx>{`
-        .noma-app {
+        .chat-app {
           display: grid;
-          grid-template-columns: 88px 1fr 320px;
+          grid-template-columns: 80px 320px 1fr 280px;
           height: 100vh;
-          background: #0b0b0f;
-          color: var(--text-primary);
+          background: #0a0a0a;
+          color: #ffffff;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
           overflow: hidden;
         }
 
-        /* LEFT RAIL */
-        .left-rail {
-          background: #111216;
+        /* LEFT SIDEBAR */
+        .left-sidebar {
+          background: #000000;
           display: flex;
           flex-direction: column;
           align-items: center;
-          padding: 1.5rem 0;
-          border-right: 1px solid rgba(255, 255, 255, 0.05);
+          padding: 24px 0;
+          gap: 32px;
         }
 
-        .logo-container {
-          margin-bottom: 2.5rem;
+        .logo {
+          margin-bottom: 8px;
         }
 
-        .noma-logo {
+        .logo-circle {
           width: 52px;
           height: 52px;
-          background: linear-gradient(135deg, #f4ffac, #a8e6a1);
-          border-radius: 16px;
-          display: grid;
-          place-items: center;
-          font-weight: 700;
-          font-size: 24px;
-          color: #0b0b0f;
-          box-shadow: 0 8px 24px rgba(244, 255, 172, 0.2);
-        }
-
-        .icon-nav {
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-          width: 100%;
-          align-items: center;
-        }
-
-        .nav-icon {
-          width: 44px;
-          height: 44px;
-          display: grid;
-          place-items: center;
-          border-radius: 12px;
-          color: rgba(255, 255, 255, 0.5);
-          transition: all 0.2s ease;
-          cursor: pointer;
-          border: none;
-          background: transparent;
-        }
-
-        .nav-icon:hover {
-          color: #f4ffac;
-          background: rgba(244, 255, 172, 0.1);
-        }
-
-        .nav-icon.active {
-          color: #f4ffac;
-          background: rgba(244, 255, 172, 0.15);
-        }
-
-        .nav-icon.create-btn {
-          background: linear-gradient(135deg, #f4ffac, #a8e6a1);
-          color: #0b0b0f;
-          margin-top: 0.5rem;
-        }
-
-        .nav-icon.create-btn:hover {
-          transform: scale(1.05);
-          box-shadow: 0 8px 24px rgba(244, 255, 172, 0.3);
-        }
-
-        /* MAIN FEED */
-        .main-feed {
-          display: flex;
-          flex-direction: column;
-          overflow: hidden;
-        }
-
-        .feed-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 1.25rem 1.5rem;
-          background: #111216;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .feed-title {
-          font-size: 1.25rem;
-          font-weight: 600;
-          color: var(--text-primary);
-        }
-
-        .header-actions {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-        }
-
-        .search-btn, .notif-btn {
-          width: 40px;
-          height: 40px;
-          display: grid;
-          place-items: center;
-          background: rgba(255, 255, 255, 0.05);
-          border: none;
-          border-radius: 10px;
-          color: rgba(255, 255, 255, 0.6);
-          cursor: pointer;
-          transition: all 0.2s ease;
-        }
-
-        .search-btn:hover, .notif-btn:hover {
-          background: rgba(255, 255, 255, 0.1);
-          color: #f4ffac;
-        }
-
-        .avatar-btn {
-          width: 40px;
-          height: 40px;
-          background: linear-gradient(135deg, #7c3aed, #0d9488);
+          background: linear-gradient(135deg, #c4e84b, #b8e62d);
           border-radius: 50%;
-          cursor: pointer;
-        }
-
-        /* TEXT REELS */
-        .text-reels {
-          flex: 1;
-          overflow-y: auto;
-          padding: 1.5rem;
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
-
-        .text-reel {
-          background: #111216;
-          border-radius: 20px;
-          padding: 1.75rem;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-          transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .text-reel:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        .reel-tag {
-          display: inline-block;
-          font-size: 0.75rem;
-          font-weight: 600;
-          color: #7dd3fc;
-          background: rgba(125, 211, 252, 0.1);
-          padding: 0.35rem 0.75rem;
-          border-radius: 8px;
-          margin-bottom: 1rem;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-        }
-
-        .reel-content {
-          font-size: 1.25rem;
-          line-height: 1.7;
-          color: var(--text-primary);
-          margin-bottom: 1.25rem;
-          font-weight: 400;
-        }
-
-        .reel-actions {
-          display: flex;
-          gap: 1.5rem;
-          opacity: 0.7;
-        }
-
-        .action-btn {
           display: flex;
           align-items: center;
-          gap: 0.5rem;
-          background: transparent;
-          border: none;
-          color: rgba(255, 255, 255, 0.6);
-          cursor: pointer;
-          font-size: 0.9rem;
-          transition: all 0.2s ease;
+          justify-content: center;
         }
 
-        .action-btn:hover {
-          color: #f4ffac;
+        .logo-letter {
+          font-size: 24px;
+          font-weight: 700;
+          color: #000;
         }
 
-        .feed-cta {
-          text-align: center;
-          padding: 3rem 2rem;
-          background: linear-gradient(135deg, rgba(244, 255, 172, 0.05), rgba(168, 230, 161, 0.05));
-          border-radius: 20px;
-          margin-top: 1rem;
-        }
-
-        .feed-cta p {
-          font-size: 1.5rem;
-          margin-bottom: 1.5rem;
-          color: var(--text-primary);
-        }
-
-        .share-cta-btn {
-          background: linear-gradient(135deg, #f4ffac, #a8e6a1);
-          color: #0b0b0f;
-          padding: 1rem 2.5rem;
-          border: none;
-          border-radius: 50px;
-          font-size: 1.05rem;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.2s ease;
-        }
-
-        .share-cta-btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 12px 32px rgba(244, 255, 172, 0.3);
-        }
-
-        /* RIGHT RAIL */
-        .right-rail {
-          background: #0f1014;
-          padding: 1.5rem;
-          overflow-y: auto;
+        .sidebar-nav {
           display: flex;
           flex-direction: column;
-          gap: 1.5rem;
-          border-left: 1px solid rgba(255, 255, 255, 0.05);
+          gap: 16px;
+          flex: 1;
         }
 
-        .panel-card {
-          background: #111216;
-          border-radius: 16px;
-          padding: 1.5rem;
-        }
-
-        .panel-title {
-          font-size: 1rem;
-          font-weight: 600;
-          margin-bottom: 1rem;
-          color: var(--text-primary);
-        }
-
-        .circles-list {
-          list-style: none;
-          display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
-
-        .circles-list li a {
-          display: block;
-          color: rgba(255, 255, 255, 0.7);
-          font-size: 0.9rem;
-          padding: 0.5rem;
-          border-radius: 8px;
-          transition: all 0.2s ease;
-          text-decoration: none;
-        }
-
-        .circles-list li a:hover {
-          background: rgba(244, 255, 172, 0.1);
-          color: #f4ffac;
-        }
-
-        .quote {
-          font-size: 0.95rem;
-          line-height: 1.6;
-          color: rgba(255, 255, 255, 0.8);
-          font-style: italic;
-          padding-left: 1rem;
-          border-left: 3px solid #f4ffac;
-        }
-
-        .cta-card {
-          background: linear-gradient(135deg, rgba(244, 255, 172, 0.05), rgba(168, 230, 161, 0.05));
-        }
-
-        .cta-card p {
-          margin-bottom: 1rem;
-          color: var(--text-primary);
-        }
-
-        .gentle-cta {
-          width: 100%;
-          background: rgba(244, 255, 172, 0.2);
-          color: #f4ffac;
-          padding: 0.75rem;
-          border: none;
-          border-radius: 12px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.2s ease;
-        }
-
-        .gentle-cta:hover {
-          background: rgba(244, 255, 172, 0.3);
-        }
-
-        /* BOTTOM NAV (MOBILE) */
-        .bottom-nav {
-          display: none;
-          position: fixed;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          background: #111216;
-          border-top: 1px solid rgba(255, 255, 255, 0.05);
-          padding: 0.75rem;
-          justify-content: space-around;
-          z-index: 50;
-        }
-
-        .bottom-nav-item {
+        .nav-circle {
           width: 48px;
           height: 48px;
-          display: grid;
-          place-items: center;
-          color: rgba(255, 255, 255, 0.5);
-          background: transparent;
+          border-radius: 50%;
+          background: #1a1a1a;
+          color: #888;
           border: none;
-          border-radius: 12px;
-          transition: all 0.2s ease;
+          font-size: 11px;
+          font-weight: 600;
           cursor: pointer;
+          transition: all 0.2s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
-        .bottom-nav-item.active {
-          color: #f4ffac;
-          background: rgba(244, 255, 172, 0.15);
+        .nav-circle.active {
+          background: #2a2a2a;
+          color: #fff;
         }
 
-        .bottom-nav-item.create {
-          background: linear-gradient(135deg, #f4ffac, #a8e6a1);
-          color: #0b0b0f;
+        .nav-circle.highlight {
+          background: #1a1a1a;
+          color: #fff;
+          border: 2px solid #888;
         }
 
-        /* WRITE MODAL */
-        .modal-overlay {
-          position: fixed;
-          inset: 0;
-          background: rgba(0, 0, 0, 0.85);
-          backdrop-filter: blur(8px);
-          display: grid;
-          place-items: center;
-          z-index: 100;
-          padding: 1rem;
+        .nav-circle.settings {
+          background: transparent;
+          color: #666;
         }
 
-        .write-modal {
-          background: #111216;
-          border-radius: 24px;
-          width: 100%;
-          max-width: 600px;
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        .sidebar-bottom {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          margin-top: auto;
         }
 
-        .modal-header {
+        .add-circle {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          background: #c4e84b;
+          color: #000;
+          border: none;
+          font-size: 24px;
+          font-weight: 300;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        /* CONVERSATIONS PANEL */
+        .conversations-panel {
+          background: #141414;
+          border-right: 1px solid #1f1f1f;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .conversations-header {
+          padding: 20px 20px 16px;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 1.5rem;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+          border-bottom: 1px solid #1f1f1f;
         }
 
-        .modal-header h2 {
-          font-size: 1.25rem;
+        .conversations-header h2 {
+          font-size: 18px;
           font-weight: 600;
-          color: var(--text-primary);
+          margin: 0;
         }
 
-        .modal-close {
+        .search-icon {
           width: 36px;
           height: 36px;
-          display: grid;
-          place-items: center;
           background: transparent;
           border: none;
-          color: rgba(255, 255, 255, 0.6);
+          color: #888;
           cursor: pointer;
-          border-radius: 8px;
-          transition: all 0.2s ease;
-        }
-
-        .modal-close:hover {
-          background: rgba(255, 255, 255, 0.1);
-          color: var(--text-primary);
-        }
-
-        .modal-body {
-          padding: 1.5rem;
-        }
-
-        .write-textarea {
-          width: 100%;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 12px;
-          padding: 1rem;
-          color: var(--text-primary);
-          font-size: 1.05rem;
-          line-height: 1.6;
-          resize: vertical;
-          margin-bottom: 1.5rem;
-        }
-
-        .write-textarea::placeholder {
-          color: rgba(255, 255, 255, 0.4);
-        }
-
-        .category-chips {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.75rem;
-          margin-bottom: 1.5rem;
-        }
-
-        .chip {
-          padding: 0.5rem 1rem;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 20px;
-          color: rgba(255, 255, 255, 0.7);
-          font-size: 0.85rem;
-          cursor: pointer;
-          transition: all 0.2s ease;
-        }
-
-        .chip:hover {
-          background: rgba(244, 255, 172, 0.15);
-          border-color: #f4ffac;
-          color: #f4ffac;
-        }
-
-        .anonymous-toggle {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
+          justify-content: center;
+          border-radius: 8px;
+          transition: all 0.2s;
+        }
+
+        .search-icon:hover {
+          background: #1f1f1f;
+          color: #fff;
+        }
+
+        .conversations-list {
+          flex: 1;
+          overflow-y: auto;
+          padding: 8px 0;
+        }
+
+        .conversation-item {
+          display: flex;
+          gap: 12px;
+          padding: 12px 20px;
           cursor: pointer;
-          color: rgba(255, 255, 255, 0.8);
+          transition: all 0.2s;
+          position: relative;
         }
 
-        .anonymous-toggle input {
-          width: 18px;
-          height: 18px;
-          cursor: pointer;
+        .conversation-item:hover {
+          background: #1a1a1a;
         }
 
-        .modal-footer {
-          padding: 1.5rem;
-          border-top: 1px solid rgba(255, 255, 255, 0.05);
+        .conversation-item.active {
+          background: #1f1f1f;
         }
 
-        .post-btn {
-          width: 100%;
-          background: linear-gradient(135deg, #f4ffac, #a8e6a1);
-          color: #0b0b0f;
-          padding: 1rem;
-          border: none;
-          border-radius: 12px;
-          font-size: 1.05rem;
+        .conv-avatar {
+          position: relative;
+          flex-shrink: 0;
+        }
+
+        .avatar-placeholder {
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           font-weight: 600;
+          font-size: 16px;
+          color: #fff;
+        }
+
+        .status-dot {
+          position: absolute;
+          bottom: 2px;
+          right: 2px;
+          width: 10px;
+          height: 10px;
+          background: #10b981;
+          border: 2px solid #141414;
+          border-radius: 50%;
+        }
+
+        .conv-info {
+          flex: 1;
+          min-width: 0;
+        }
+
+        .conv-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 4px;
+        }
+
+        .conv-header h3 {
+          font-size: 14px;
+          font-weight: 600;
+          margin: 0;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .conv-message {
+          font-size: 13px;
+          color: #888;
+          margin: 0;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        /* MAIN CHAT */
+        .main-chat {
+          background: #0a0a0a;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .chat-header {
+          background: #000;
+          padding: 16px 24px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border-bottom: 1px solid #1f1f1f;
+        }
+
+        .chat-title {
+          font-size: 18px;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        .chat-actions {
+          display: flex;
+          gap: 12px;
+          align-items: center;
+        }
+
+        .icon-btn {
+          width: 36px;
+          height: 36px;
+          background: #1a1a1a;
+          border: none;
+          color: #888;
+          border-radius: 8px;
           cursor: pointer;
-          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s;
         }
 
-        .post-btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 12px 32px rgba(244, 255, 172, 0.3);
+        .icon-btn:hover {
+          background: #2a2a2a;
+          color: #fff;
         }
 
-        /* RESPONSIVE */
-        @media (max-width: 1024px) {
-          .noma-app {
-            grid-template-columns: 72px 1fr;
-          }
-          .right-rail {
+        .avatar-group {
+          display: flex;
+          margin-left: 8px;
+        }
+
+        .small-avatar {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 600;
+          font-size: 14px;
+          color: #fff;
+          border: 2px solid #000;
+        }
+
+        .chat-hero {
+          padding: 20px 24px;
+          background: #000;
+          border-bottom: 1px solid #1f1f1f;
+        }
+
+        .hero-image {
+          border-radius: 16px;
+          overflow: hidden;
+          height: 200px;
+        }
+
+        .hero-placeholder {
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(135deg, #3a2a1a 0%, #1a1a0a 50%, #2a3a1a 100%);
+          position: relative;
+        }
+
+        .messages-container {
+          flex: 1;
+          overflow-y: auto;
+          padding: 20px 24px;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .date-separator {
+          text-align: center;
+          color: #666;
+          font-size: 12px;
+          font-weight: 500;
+          margin: 12px 0;
+        }
+
+        .system-message {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 13px;
+          color: #888;
+          padding: 8px 0;
+        }
+
+        .sys-icon {
+          color: #666;
+        }
+
+        .message {
+          display: flex;
+          gap: 12px;
+        }
+
+        .msg-avatar {
+          position: relative;
+          flex-shrink: 0;
+        }
+
+        .msg-avatar .avatar-placeholder {
+          width: 40px;
+          height: 40px;
+          font-size: 15px;
+        }
+
+        .status-indicator {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          width: 10px;
+          height: 10px;
+          background: #10b981;
+          border: 2px solid #0a0a0a;
+          border-radius: 50%;
+        }
+
+        .msg-content {
+          flex: 1;
+        }
+
+        .msg-header {
+          display: flex;
+          gap: 12px;
+          align-items: baseline;
+          margin-bottom: 4px;
+        }
+
+        .msg-author {
+          font-size: 14px;
+          font-weight: 600;
+        }
+
+        .msg-time {
+          font-size: 12px;
+          color: #666;
+        }
+
+        .msg-text {
+          font-size: 14px;
+          color: #ccc;
+          line-height: 1.5;
+          margin: 0;
+        }
+
+        .video-call-banner {
+          background: #1a1a1a;
+          padding: 14px 20px;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          font-size: 13px;
+          margin-top: 8px;
+        }
+
+        .call-icon {
+          color: #fff;
+          display: flex;
+        }
+
+        .join-btn {
+          margin-left: auto;
+          padding: 8px 20px;
+          background: #c4e84b;
+          color: #000;
+          border: none;
+          border-radius: 8px;
+          font-weight: 600;
+          font-size: 13px;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .join-btn:hover {
+          background: #b8d840;
+        }
+
+        .message-input-area {
+          padding: 16px 24px;
+          background: #000;
+          border-top: 1px solid #1f1f1f;
+          display: flex;
+          gap: 12px;
+          align-items: center;
+        }
+
+        .attach-btn, .voice-btn, .send-btn {
+          width: 40px;
+          height: 40px;
+          background: transparent;
+          border: none;
+          color: #888;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 8px;
+          transition: all 0.2s;
+        }
+
+        .attach-btn:hover, .voice-btn:hover {
+          background: #1a1a1a;
+          color: #fff;
+        }
+
+        .send-btn {
+          background: #1a1a1a;
+          color: #fff;
+        }
+
+        .send-btn:hover {
+          background: #2a2a2a;
+        }
+
+        .message-input {
+          flex: 1;
+          background: #1a1a1a;
+          border: none;
+          padding: 12px 16px;
+          border-radius: 10px;
+          color: #fff;
+          font-size: 14px;
+          outline: none;
+        }
+
+        .message-input::placeholder {
+          color: #666;
+        }
+
+        /* RIGHT SIDEBAR */
+        .right-sidebar {
+          background: #000;
+          border-left: 1px solid #1f1f1f;
+          padding: 20px;
+          overflow-y: auto;
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
+        }
+
+        .sidebar-actions {
+          display: flex;
+          justify-content: space-around;
+          padding: 12px 0;
+        }
+
+        .action-icon {
+          width: 44px;
+          height: 44px;
+          background: #1a1a1a;
+          border: none;
+          color: #888;
+          border-radius: 50%;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s;
+        }
+
+        .action-icon:hover {
+          background: #2a2a2a;
+          color: #fff;
+        }
+
+        .members-section {
+          background: #0a0a0a;
+          border-radius: 12px;
+          padding: 16px;
+        }
+
+        .section-title {
+          font-size: 15px;
+          font-weight: 600;
+          margin: 0 0 16px 0;
+        }
+
+        .members-list {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .member-item {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .member-avatar {
+          position: relative;
+        }
+
+        .member-avatar .avatar-placeholder {
+          width: 36px;
+          height: 36px;
+          font-size: 14px;
+        }
+
+        .online-dot {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          width: 9px;
+          height: 9px;
+          background: #10b981;
+          border: 2px solid #000;
+          border-radius: 50%;
+        }
+
+        .member-name {
+          font-size: 14px;
+          font-weight: 500;
+        }
+
+        .member-role {
+          margin-left: auto;
+          font-size: 12px;
+          color: #888;
+          background: #1a1a1a;
+          padding: 4px 10px;
+          border-radius: 6px;
+        }
+
+        .files-section {
+          background: #0a0a0a;
+          border-radius: 12px;
+          padding: 16px;
+        }
+
+        .section-header {
+          margin-bottom: 16px;
+        }
+
+        .files-item {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 12px 0;
+          border-bottom: 1px solid #1a1a1a;
+          font-size: 13px;
+          color: #ccc;
+        }
+
+        .files-item:last-child {
+          border-bottom: none;
+        }
+
+        .files-item svg {
+          color: #888;
+        }
+
+        .expand-btn {
+          margin-left: auto;
+          background: transparent;
+          border: none;
+          color: #888;
+          cursor: pointer;
+          padding: 4px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .files-preview {
+          padding: 12px 0 8px;
+        }
+
+        .preview-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 8px;
+        }
+
+        .preview-img {
+          aspect-ratio: 16/9;
+          background: linear-gradient(135deg, #2a3a1a 0%, #1a2a0a 100%);
+          border-radius: 8px;
+        }
+
+        @media (max-width: 1400px) {
+          .right-sidebar {
             display: none;
+          }
+          .chat-app {
+            grid-template-columns: 80px 320px 1fr;
+          }
+        }
+
+        @media (max-width: 1024px) {
+          .conversations-panel {
+            display: none;
+          }
+          .chat-app {
+            grid-template-columns: 80px 1fr;
           }
         }
 
         @media (max-width: 768px) {
-          .noma-app {
+          .left-sidebar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            flex-direction: row;
+            height: 64px;
+            padding: 0 20px;
+            z-index: 100;
+            border-top: 1px solid #1f1f1f;
+          }
+          .chat-app {
             grid-template-columns: 1fr;
-            padding-bottom: 72px;
+            padding-bottom: 64px;
           }
-          .left-rail {
-            display: none;
+          .sidebar-nav {
+            flex-direction: row;
           }
-          .bottom-nav {
-            display: flex;
-          }
-          .feed-header {
-            padding: 1rem;
-          }
-          .feed-title {
-            font-size: 1.1rem;
-          }
-          .text-reels {
-            padding: 1rem;
-          }
-          .reel-content {
-            font-size: 1.1rem;
+          .sidebar-bottom {
+            flex-direction: row;
+            margin-top: 0;
+            margin-left: auto;
           }
         }
       `}</style>
-    </>
+    </div>
   );
 }

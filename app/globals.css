@@ -5,11 +5,11 @@
    ======================================== */
 :root {
   /* Primary Theme Colors */
-  --bg-primary: #040404;
-  --bg-surface: #303030;
-  --bg-surface-elevated: #3a3a3a;
-  --accent: #f4ffac;
-  --accent-hover: #e8f090;
+  --bg-primary: #000000;
+  --bg-surface: #0a0a0a;
+  --bg-surface-elevated: #1a1a1a;
+  --accent: #1ABC9C;
+  --accent-hover: #16a085;
   --text-primary: #ffffff;
   --text-secondary: #cccccc;
   --text-muted: #999999;
@@ -112,11 +112,11 @@
    DARK THEME (Explicit)
    ======================================== */
 [data-theme="dark"] {
-  --bg-primary: #040404;
-  --bg-surface: #303030;
-  --bg-surface-elevated: #3a3a3a;
-  --accent: #f4ffac;
-  --accent-hover: #e8f090;
+  --bg-primary: #000000;
+  --bg-surface: #0a0a0a;
+  --bg-surface-elevated: #1a1a1a;
+  --accent: #1ABC9C;
+  --accent-hover: #16a085;
   --text-primary: #ffffff;
   --text-secondary: #cccccc;
   --text-muted: #999999;

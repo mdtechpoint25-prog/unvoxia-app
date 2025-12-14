@@ -123,8 +123,77 @@ export default function ForYouPage() {
   const [activePostId, setActivePostId] = useState<string | null>(null);
   const [showReportModal, setShowReportModal] = useState(false);
   const [reportPostId, setReportPostId] = useState<string | null>(null);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [pullStartY, setPullStartY] = useState(0);
+  const [pullDelta, setPullDelta] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const lastScrollTime = useRef(0);
+
+  // Infinite scroll: Load more when near end
+  useEffect(() => {
+    if (currentIndex >= posts.length - 2 && !isLoadingMore) {
+      loadMorePosts();
+    }
+  }, [currentIndex, posts.length]);
+
+  const loadMorePosts = async () => {
+    if (isLoadingMore) return;
+    setIsLoadingMore(true);
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    const newPosts: TextReelData[] = Array.from({ length: 5 }, (_, i) => ({
+      id: `${posts.length + i + 1}`,
+      username: `user_${posts.length + i}`,
+      avatarIcon: ['spiral', 'butterfly', 'lotus', 'heart', 'moon'][i % 5] as any,
+      content: `New post ${posts.length + i + 1}: More authentic content from the community...`,
+      postType: 'experience',
+      tags: ['new', 'community'],
+      reactionCount: Math.floor(Math.random() * 1000),
+      commentCount: Math.floor(Math.random() * 100),
+      createdAt: new Date().toISOString(),
+      hasReacted: false,
+      hasSaved: false,
+    }));
+    
+    setPosts(prev => [...prev, ...newPosts]);
+    setIsLoadingMore(false);
+  };
+
+  // Pull to refresh
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (containerRef.current && containerRef.current.scrollTop === 0) {
+      setPullStartY(e.touches[0].clientY);
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (pullStartY && containerRef.current && containerRef.current.scrollTop === 0) {
+      const delta = e.touches[0].clientY - pullStartY;
+      if (delta > 0 && delta < 120) {
+        setPullDelta(delta);
+        e.preventDefault();
+      }
+    }
+  };
+
+  const handleTouchEnd = async () => {
+    if (pullDelta > 80) {
+      setIsRefreshing(true);
+      // Simulate refresh
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setPosts([...mockPosts]);
+      setCurrentIndex(0);
+      if (containerRef.current) {
+        containerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      setIsRefreshing(false);
+    }
+    setPullStartY(0);
+    setPullDelta(0);
+  };
 
   // Handle scroll to detect current post
   useEffect(() => {
@@ -207,16 +276,46 @@ export default function ForYouPage() {
       style={{
         position: 'fixed',
         inset: 0,
-        background: '#0E0F14',
+        background: '#000000',
         zIndex: 1,
       }}
     >
-      {/* Immersive Header - Auto-hides on scroll */}
       <ImmersiveHeader mode="feed" />
 
-      {/* Feed Container - Full viewport, scroll-snap */}
+      {/* Pull to refresh indicator */}
+      {pullDelta > 0 && (
+        <div style={{
+          position: 'fixed',
+          top: '1rem',
+          left: '50%',
+          transform: `translateX(-50%) scale(${Math.min(pullDelta / 80, 1)})`,
+          zIndex: 100,
+          transition: 'transform 0.1s',
+        }}>
+          <div style={{
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            background: '#1ABC9C',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            animation: isRefreshing ? 'spin 1s linear infinite' : 'none',
+          }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
+              <polyline points="23 4 23 10 17 10"/>
+              <polyline points="1 20 1 14 7 14"/>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+            </svg>
+          </div>
+        </div>
+      )}
+
       <div
         ref={containerRef}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
         style={{
           height: '100vh',
           overflowY: 'auto',
@@ -237,12 +336,23 @@ export default function ForYouPage() {
             onReport={handleReport}
           />
         ))}
+        
+        {/* Loading indicator */}
+        {isLoadingMore && (
+          <div style={{
+            height: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            scrollSnapAlign: 'start',
+          }}>
+            <div style={{ color: '#1ABC9C', fontSize: '1rem' }}>Loading more...</div>
+          </div>
+        )}
       </div>
 
-      {/* Floating Create Button */}
       <FloatingCreateButton />
 
-      {/* Comment Sheet */}
       {showComments && activePostId && (
         <CommentSheet
           postId={activePostId}
@@ -250,13 +360,19 @@ export default function ForYouPage() {
         />
       )}
 
-      {/* Report Modal */}
       {showReportModal && reportPostId && (
         <ReportModal
           postId={reportPostId}
           onClose={() => setShowReportModal(false)}
         />
       )}
+
+      <style jsx>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 }

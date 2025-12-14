@@ -234,11 +234,10 @@ export function SideMenu() {
                 {items.map((item) => {
                   const isActive = pathname?.startsWith(item.href);
                   return (
-                    <li key={item.href}>
+                    <li key={item.href} onClick={() => setIsOpen(false)}>
                       <Link
                         href={item.href}
                         className={`menu-link ${isActive ? 'active' : ''}`}
-                        onClick={() => setIsOpen(false)}
                       >
                         {item.icon(isActive)}
                         <span>{item.label}</span>
