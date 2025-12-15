@@ -1,18 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { CheckCircle, XCircle, Loader2 } from "lucide-react";
 
-export default function ConfirmEmail() {
+function ConfirmEmailContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
   const [message, setMessage] = useState("");
-  const supabase = createClientComponentClient();
 
   useEffect(() => {
     const confirmEmail = async () => {
@@ -50,7 +49,7 @@ export default function ConfirmEmail() {
     };
 
     confirmEmail();
-  }, [searchParams, supabase, router]);
+  }, [searchParams, router]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center px-6">
@@ -101,5 +100,22 @@ export default function ConfirmEmail() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function ConfirmEmail() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center px-6">
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-12 text-center">
+          <Loader2 className="w-16 h-16 text-blue-600 animate-spin mx-auto mb-6" />
+          <h1 className="text-2xl font-bold text-gray-900 mb-3">
+            Loading...
+          </h1>
+        </div>
+      </div>
+    }>
+      <ConfirmEmailContent />
+    </Suspense>
   );
 }
