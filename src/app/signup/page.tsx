@@ -1,0 +1,256 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/lib/auth-context";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import Link from "next/link";
+import { MaskLogo } from "@/components/MaskLogo";
+import { motion } from "framer-motion";
+import { UserPlus, Mail, Lock, AlertCircle, CheckCircle, RefreshCw } from "lucide-react";
+
+export default function SignupPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [resendMessage, setResendMessage] = useState("");
+  const { signUp } = useAuth();
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setSuccess(false);
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await signUp(email, password);
+      setSuccess(true);
+    } catch (err: any) {
+      setError(err.message || "Failed to create account");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendConfirmation = async () => {
+    setResending(true);
+    setResendMessage("");
+    setError("");
+
+    try {
+      const response = await fetch('/api/auth/resend-confirmation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setResendMessage("Confirmation email sent! Please check your inbox.");
+      } else {
+        setError(data.error || "Failed to resend email");
+      }
+    } catch (err) {
+      setError("Failed to resend confirmation email");
+    } finally {
+      setResending(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 flex items-center justify-center px-6 py-12">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md"
+      >
+        <div className="text-center mb-8">
+          <Link href="/" className="inline-flex items-center gap-3 group">
+            <div className="w-14 h-14 rounded-2xl bg-[#1A3C63] flex items-center justify-center shadow-lg shadow-blue-900/20 group-hover:shadow-xl group-hover:shadow-blue-900/30 group-hover:scale-105 transition-all duration-300">
+              <MaskLogo className="w-8 h-8" />
+            </div>
+            <span className="text-3xl font-black tracking-tight text-[#1A3C63]">NOMA</span>
+          </Link>
+        </div>
+
+        <Card className="border-2 border-blue-100 rounded-3xl shadow-xl">
+          <CardHeader className="text-center pb-4">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#1A3C63] to-[#0d2238] flex items-center justify-center mx-auto mb-4">
+              <UserPlus className="w-8 h-8 text-white" />
+            </div>
+            <CardTitle className="text-3xl font-bold text-[#1A3C63]">Create Account</CardTitle>
+            <p className="text-gray-600 mt-2">Join NOMA and start your journey</p>
+          </CardHeader>
+
+          <CardContent className="pt-0">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {error && (
+                <div className="bg-red-50 border border-red-200 rounded-2xl p-4 flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-red-700">{error}</p>
+                </div>
+              )}
+
+              {resendMessage && (
+                <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-blue-700">{resendMessage}</p>
+                </div>
+              )}
+
+              {success && (
+                <div className="bg-green-50 border border-green-200 rounded-2xl p-4 space-y-4">
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1">
+                      <p className="text-sm text-green-700 font-semibold mb-2">
+                        Account created successfully!
+                      </p>
+                      <p className="text-sm text-green-700">
+                        We've sent a confirmation email to <strong>{email}</strong>. 
+                        Please check your inbox and click the confirmation link to activate your account.
+                      </p>
+                      <p className="text-xs text-green-600 mt-2">
+                        Check your spam folder if you don't see the email within a few minutes.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="pt-2 border-t border-green-200">
+                    <p className="text-xs text-green-700 mb-2">Didn't receive the email?</p>
+                    <Button
+                      type="button"
+                      onClick={handleResendConfirmation}
+                      disabled={resending}
+                      variant="outline"
+                      size="sm"
+                      className="w-full border-green-300 text-green-700 hover:bg-green-100"
+                    >
+                      {resending ? (
+                        <>
+                          <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                          Sending...
+                        </>
+                      ) : (
+                        <>
+                          <Mail className="w-4 h-4 mr-2" />
+                          Resend Confirmation Email
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-gray-700 font-semibold">
+                  Email Address
+                </Label>
+                <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="pl-12 h-12 rounded-xl border-2 border-gray-200 focus:border-[#1A3C63]"
+                    placeholder="you@example.com"
+                    required
+                    disabled={loading || success}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-gray-700 font-semibold">
+                  Password
+                </Label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="pl-12 h-12 rounded-xl border-2 border-gray-200 focus:border-[#1A3C63]"
+                    placeholder="••••••••"
+                    required
+                    disabled={loading || success}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword" className="text-gray-700 font-semibold">
+                  Confirm Password
+                </Label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Input
+                    id="confirmPassword"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="pl-12 h-12 rounded-xl border-2 border-gray-200 focus:border-[#1A3C63]"
+                    placeholder="••••••••"
+                    required
+                    disabled={loading || success}
+                  />
+                </div>
+              </div>
+
+              <Button
+                type="submit"
+                disabled={loading || success}
+                className="w-full h-12 bg-[#1A3C63] hover:bg-[#0d2238] text-white font-semibold rounded-xl"
+              >
+                {loading ? "Creating account..." : success ? "Success!" : "Create Account"}
+              </Button>
+            </form>
+
+            <div className="mt-6 text-center">
+              <p className="text-gray-600">
+                Already have an account?{" "}
+                <Link
+                  href="/login"
+                  className="text-[#1A3C63] font-semibold hover:text-[#0d2238] transition-colors"
+                >
+                  Sign In
+                </Link>
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="text-center mt-6">
+          <Link
+            href="/"
+            className="text-gray-600 hover:text-[#1A3C63] transition-colors font-medium"
+          >
+            ← Back to Home
+          </Link>
+        </div>
+      </motion.div>
+    </div>
+  );
+}

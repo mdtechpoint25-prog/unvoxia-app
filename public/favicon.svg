@@ -1,10 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <defs>
-    <linearGradient id="fg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1ABC9C"/>
-      <stop offset="100%" stop-color="#9B59B6"/>
-    </linearGradient>
-  </defs>
-  <rect width="32" height="32" rx="6" fill="url(#fg)"/>
-  <path d="M9 23V9L16 17L23 9V23" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="12" fill="#1A3C63"/>
+  <text x="32" y="47" fill="white" font-size="42" font-weight="900" font-family="'Montserrat', sans-serif" text-anchor="middle" letter-spacing="-0.05em">N</text>
 </svg>
