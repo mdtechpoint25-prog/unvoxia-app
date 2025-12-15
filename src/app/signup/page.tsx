@@ -45,7 +45,13 @@ export default function SignupPage() {
       await signUp(email, password);
       setSuccess(true);
     } catch (err: any) {
-      setError(err.message || "Failed to create account");
+      console.error('Signup error:', err);
+      // Try to parse the error message if it's from the API
+      let errorMessage = "Failed to create account";
+      if (err.message) {
+        errorMessage = err.message;
+      }
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
