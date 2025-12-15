@@ -34,24 +34,46 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+    // Use server-side API route for consistent behavior
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
     });
-    if (error) throw error;
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to sign in');
+    }
+
+    // Set the session in Supabase client
+    if (data.session) {
+      await supabase.auth.setSession(data.session);
+    }
+
+    return data;
   };
 
   const signUp = async (email: string, password: string) => {
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-    
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${appUrl}/auth/confirm`,
+    // Use server-side API route to bypass CORS issues
+    const response = await fetch('/api/auth/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ email, password }),
     });
-    if (error) throw error;
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to create account');
+    }
+
+    return data;
   };
 
   const signOut = async () => {
