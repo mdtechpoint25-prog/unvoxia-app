@@ -51,50 +51,50 @@
 }
 
 :root {
-  --radius: 1rem;
-  --background: #FDFBF7;
-  --foreground: #3A3A3A;
+  --radius: 0.5rem;
+  --background: #FAF8F6;
+  --foreground: #5A5A5A;
   --card: #FFFFFF;
-  --card-foreground: #3A3A3A;
+  --card-foreground: #5A5A5A;
   --popover: #FFFFFF;
-  --popover-foreground: #3A3A3A;
+  --popover-foreground: #5A5A5A;
   
-  /* Spa-Inspired Color Palette */
-  /* Rose Gold - Elegance, luxury, warmth */
-  --primary: #D4A373;
+  /* Spa-Inspired Color Palette - Soft Neutrals */
+  /* Taupe/Beige - Warm, calming, elegant */
+  --primary: #C9A882;
   --primary-foreground: #FFFFFF;
   
-  /* Sage Green - Calm, wellness, natural */
-  --sage: #9FA89E;
-  --sage-light: #C7CEC4;
-  --sage-dark: #6B7469;
+  /* Soft Grays - Sophisticated, clean */
+  --sage: #A8A8A8;
+  --sage-light: #D4D4D4;
+  --sage-dark: #7A7A7A;
   
-  /* Soft Blush - Gentle, nurturing */
-  --blush: #E8C5C3;
-  --blush-light: #F5E5E4;
+  /* Warm Cream - Clean, inviting */
+  --blush: #F5EFE7;
+  --blush-light: #FAF8F6;
   
-  /* Warm Cream - Clean, sophisticated */
-  --cream: #F8F4EF;
-  --cream-dark: #EDE6DC;
+  /* Light Beige - Soft, neutral */
+  --cream: #F5F2EE;
+  --cream-dark: #E8DFD3;
   
-  --secondary: #9FA89E;
+  --secondary: #A8A8A8;
   --secondary-foreground: #FFFFFF;
-  --muted: #F8F4EF;
-  --muted-foreground: #6B7469;
-  --accent: #D4A373;
+  --muted: #F5F2EE;
+  --muted-foreground: #7A7A7A;
+  --accent: #C9A882;
   --accent-foreground: #FFFFFF;
   --destructive: #C77B6E;
-  --border: #E8E3DC;
-  --input: #F8F4EF;
-  --ring: #D4A373;
-  --chart-1: #D4A373;
-  --chart-2: #9FA89E;
-  --chart-3: #E8C5C3;
-  --chart-4: #C7CEC4;
-  --chart-5: #B89968;
+  --border: #E8E8E8;
+  --input: #F5F2EE;
+  --ring: #C9A882;
+  --chart-1: #C9A882;
+  --chart-2: #A8A8A8;
+  --chart-3: #E8DFD3;
+  --chart-4: #D4D4D4;
+  --chart-5: #B89770;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: #1A3C63;
+  --sidebar-primary: #C9A882;
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
@@ -142,16 +142,18 @@
   }
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Lato', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     font-weight: 400;
-    line-height: 1.7;
+    line-height: 1.6;
+    color: #5A5A5A;
   }
   
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-weight: 600;
-    letter-spacing: -0.015em;
-    line-height: 1.2;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+    color: #5A5A5A;
   }
   
   .text-balance {
@@ -165,27 +167,27 @@
   }
   
   .spa-gradient-primary {
-    background: linear-gradient(135deg, #D4A373 0%, #B89968 100%);
+    background: linear-gradient(135deg, #C9A882 0%, #B89770 100%);
   }
   
   .spa-gradient-sage {
-    background: linear-gradient(135deg, #9FA89E 0%, #6B7469 100%);
+    background: linear-gradient(135deg, #A8A8A8 0%, #7A7A7A 100%);
   }
   
   .spa-gradient-blush {
-    background: linear-gradient(135deg, #F5E5E4 0%, #E8C5C3 100%);
+    background: linear-gradient(135deg, #FAF8F6 0%, #F5EFE7 100%);
   }
   
   .spa-shadow-soft {
-    box-shadow: 0 2px 8px rgba(212, 163, 115, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   }
   
   .spa-shadow-medium {
-    box-shadow: 0 4px 12px rgba(212, 163, 115, 0.12), 0 2px 4px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   }
   
   .spa-shadow-large {
-    box-shadow: 0 8px 24px rgba(212, 163, 115, 0.16), 0 4px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
   }
   
   .elegant-border {
