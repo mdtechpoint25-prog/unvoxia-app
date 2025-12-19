@@ -40,11 +40,11 @@ export default function Home() {
             <Link href="/privacy" className="text-[#6B7469] hover:text-[#D4A373] transition-colors font-medium text-sm">Privacy</Link>
             <Link href="/contact" className="text-[#6B7469] hover:text-[#D4A373] transition-colors font-medium text-sm">Contact</Link>
           </div>
-          <div className="flex items-center gap-4">
-            <Button asChild variant="outline" className="rounded-full hidden md:flex border-[#D4A373] text-[#D4A373] hover:bg-[#D4A373] hover:text-white">
+          <div className="flex items-center gap-3">
+            <Button asChild variant="outline" size="sm" className="rounded-full hidden md:flex border-[#D4A373] text-[#D4A373] hover:bg-[#D4A373] hover:text-white text-sm">
               <Link href="/dashboard">Dashboard</Link>
             </Button>
-            <Button asChild className="spa-gradient-primary hover:opacity-90 text-white spa-shadow-medium hover:spa-shadow-large hover:scale-105 transition-all duration-500 rounded-full px-8 h-11 font-semibold text-sm">
+            <Button asChild size="sm" className="spa-gradient-primary hover:opacity-90 text-white shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-300 rounded-full px-6 font-medium text-sm">
               <Link href="/assessment">Start Assessment</Link>
             </Button>
           </div>
@@ -72,14 +72,14 @@ export default function Home() {
             
             <motion.h1 
               variants={fadeIn}
-              className="text-6xl md:text-7xl lg:text-8xl font-semibold tracking-tight mb-8 leading-[1.1] text-elegant"
+              className="text-5xl md:text-6xl font-semibold tracking-tight mb-6 leading-tight text-elegant"
             >
               <span className="bg-gradient-to-r from-[#D4A373] via-[#B89968] to-[#9FA89E] bg-clip-text text-transparent">NOMA</span>
             </motion.h1>
             
             <motion.p 
               variants={fadeIn}
-              className="text-2xl md:text-3xl lg:text-4xl font-light mb-6 text-[#6B7469] text-balance text-elegant italic"
+              className="text-xl md:text-2xl font-light mb-5 text-[#6B7469] text-balance text-elegant italic"
             >
               No Mask Relationships
             </motion.p>
@@ -91,26 +91,26 @@ export default function Home() {
             
             <motion.p 
               variants={fadeIn}
-              className="text-xl md:text-2xl text-[#6B7469] mb-6 max-w-3xl mx-auto leading-relaxed font-light text-balance"
+              className="text-lg md:text-xl text-[#6B7469] mb-5 max-w-2xl mx-auto leading-relaxed font-light text-balance"
             >
               Get honest clarity about your relationship—privately, anonymously, and without judgment.
             </motion.p>
             
             <motion.p 
               variants={fadeIn}
-              className="text-base text-[#9FA89E] mb-14 max-w-2xl mx-auto leading-relaxed"
+              className="text-sm md:text-base text-[#9FA89E] mb-10 max-w-xl mx-auto leading-relaxed"
             >
-              Professional relationship check-ups for individuals and couples seeking clarity, direction, and practical next steps.
+              Professional relationship check-ups for individuals and couples.
             </motion.p>
             
-            <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-5 justify-center items-center mb-16">
-              <Button asChild size="lg" className="spa-gradient-primary hover:opacity-95 text-white spa-shadow-large hover:scale-[1.02] transition-all duration-500 rounded-full text-lg px-14 py-8 h-auto font-semibold">
-                <Link href="/assessment" className="flex items-center gap-2.5">
+            <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+              <Button asChild className="spa-gradient-primary hover:opacity-90 text-white shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 rounded-full px-8 py-3 font-medium">
+                <Link href="/assessment" className="flex items-center gap-2">
                   Start Your Check-Up
-                  <ArrowRight className="w-5 h-5" />
+                  <ArrowRight className="w-4 h-4" />
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-2 elegant-border text-[#D4A373] hover:bg-[#F8F4EF] transition-all duration-500 rounded-full text-lg px-14 py-8 h-auto font-semibold">
+              <Button asChild variant="outline" className="border-2 elegant-border text-[#D4A373] hover:bg-[#F8F4EF] transition-all duration-300 rounded-full px-8 py-3 font-medium">
                 <Link href="/how-it-works">
                   Learn More
                 </Link>
@@ -170,10 +170,10 @@ export default function Home() {
               transition={{ duration: 0.6 }}
               className="text-center mb-16"
             >
-              <h2 className="text-4xl md:text-5xl text-elegant font-semibold mb-6 bg-gradient-to-r from-[#D4A373] to-[#9FA89E] bg-clip-text text-transparent">
+              <h2 className="text-3xl md:text-4xl text-elegant font-semibold mb-5 bg-gradient-to-r from-[#D4A373] to-[#9FA89E] bg-clip-text text-transparent">
                 Most Relationship Problems Start With Pretending
               </h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-[#D4A373] to-[#9FA89E] mx-auto rounded-full" />
+              <div className="w-20 h-0.5 bg-gradient-to-r from-[#D4A373] to-[#9FA89E] mx-auto rounded-full" />
             </motion.div>
             
             <div className="grid md:grid-cols-2 gap-6 mb-12">
@@ -191,9 +191,9 @@ export default function Home() {
                   transition={{ delay: i * 0.1 }}
                   className="relative group"
                 >
-                  <div className="flex items-start gap-5 p-8 rounded-3xl bg-gradient-to-br from-white to-[#F8F4EF] elegant-border spa-shadow-soft hover:spa-shadow-medium transition-all duration-500">
-                    <div className="text-4xl flex-shrink-0">{icon}</div>
-                    <p className="text-lg text-[#6B7469] font-normal pt-1 leading-relaxed">{text}</p>
+                  <div className="flex items-start gap-4 p-6 rounded-2xl bg-gradient-to-br from-white to-[#F8F4EF] elegant-border spa-shadow-soft hover:spa-shadow-medium transition-all duration-300">
+                    <div className="text-3xl flex-shrink-0">{icon}</div>
+                    <p className="text-base text-[#6B7469] font-normal pt-1 leading-relaxed">{text}</p>
                   </div>
                 </motion.div>
               ))}
@@ -206,8 +206,8 @@ export default function Home() {
               transition={{ delay: 0.4 }}
               className="text-center"
             >
-              <div className="inline-block px-10 py-5 rounded-3xl spa-gradient-primary spa-shadow-large">
-                <p className="text-2xl text-white font-light text-elegant">NOMA is a safe space to remove the mask.</p>
+              <div className="inline-block px-8 py-4 rounded-2xl spa-gradient-primary shadow-lg">
+                <p className="text-lg md:text-xl text-white font-light text-elegant">NOMA is a safe space to remove the mask.</p>
               </div>
             </motion.div>
           </div>
@@ -222,11 +222,11 @@ export default function Home() {
               viewport={{ once: true }}
               className="text-center mb-20"
             >
-              <h2 className="text-4xl md:text-5xl text-elegant font-semibold mb-6 text-[#3A3A3A]">
+              <h2 className="text-3xl md:text-4xl text-elegant font-semibold mb-5 text-[#3A3A3A]">
                 How NOMA Works
               </h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-[#D4A373] to-[#9FA89E] mx-auto rounded-full mb-6" />
-              <p className="text-xl text-[#6B7469] max-w-2xl mx-auto font-light">
+              <div className="w-20 h-0.5 bg-gradient-to-r from-[#D4A373] to-[#9FA89E] mx-auto rounded-full mb-5" />
+              <p className="text-lg text-[#6B7469] max-w-2xl mx-auto font-light">
                 A simple, private process designed for your clarity and peace of mind
               </p>
             </motion.div>
@@ -263,12 +263,12 @@ export default function Home() {
                   transition={{ delay: i * 0.15 }}
                   className="relative"
                 >
-                  <div className="bg-white rounded-3xl p-8 spa-shadow-medium hover:spa-shadow-large transition-all duration-500 h-full">
-                    <div className="w-16 h-16 rounded-2xl spa-gradient-primary flex items-center justify-center mb-6 spa-shadow-soft">
-                      <item.icon className="w-8 h-8 text-white" />
+                  <div className="bg-white rounded-2xl p-6 spa-shadow-medium hover:spa-shadow-large transition-all duration-300 h-full">
+                    <div className="w-14 h-14 rounded-xl spa-gradient-primary flex items-center justify-center mb-5 shadow-md">
+                      <item.icon className="w-7 h-7 text-white" />
                     </div>
-                    <div className="text-6xl font-bold text-[#F8F4EF] mb-4 text-display">{item.step}</div>
-                    <h3 className="text-2xl font-semibold text-[#3A3A3A] mb-4 text-display">{item.title}</h3>
+                    <div className="text-5xl font-bold text-[#F8F4EF] mb-3 text-display">{item.step}</div>
+                    <h3 className="text-xl font-semibold text-[#3A3A3A] mb-3 text-display">{item.title}</h3>
                     <p className="text-[#6B7469] leading-relaxed font-light">{item.description}</p>
                   </div>
                 </motion.div>
@@ -335,12 +335,12 @@ export default function Home() {
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
                 >
-                  <Card className="border-0 spa-shadow-soft hover:spa-shadow-medium transition-all duration-500 h-full bg-gradient-to-br from-white to-[#F8F4EF]">
-                    <CardContent className="p-8">
-                      <div className="w-14 h-14 rounded-2xl spa-gradient-sage flex items-center justify-center mb-6">
-                        <feature.icon className="w-7 h-7 text-white" />
+                  <Card className="border-0 spa-shadow-soft hover:spa-shadow-medium transition-all duration-300 h-full bg-gradient-to-br from-white to-[#F8F4EF]">
+                    <CardContent className="p-6">
+                      <div className="w-12 h-12 rounded-xl spa-gradient-sage flex items-center justify-center mb-4">
+                        <feature.icon className="w-6 h-6 text-white" />
                       </div>
-                      <h3 className="text-xl font-semibold text-[#3A3A3A] mb-3 text-display">{feature.title}</h3>
+                      <h3 className="text-lg font-semibold text-[#3A3A3A] mb-2 text-display">{feature.title}</h3>
                       <p className="text-[#6B7469] leading-relaxed font-light">{feature.description}</p>
                     </CardContent>
                   </Card>
@@ -359,11 +359,11 @@ export default function Home() {
               viewport={{ once: true }}
               className="text-center mb-20"
             >
-              <h2 className="text-4xl md:text-5xl text-elegant font-semibold mb-6 text-[#3A3A3A]">
+              <h2 className="text-3xl md:text-4xl text-elegant font-semibold mb-5 text-[#3A3A3A]">
                 What People Are Saying
               </h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-[#D4A373] to-[#9FA89E] mx-auto rounded-full mb-6" />
-              <p className="text-xl text-[#6B7469] max-w-2xl mx-auto font-light">
+              <div className="w-20 h-0.5 bg-gradient-to-r from-[#D4A373] to-[#9FA89E] mx-auto rounded-full mb-5" />
+              <p className="text-lg text-[#6B7469] max-w-2xl mx-auto font-light">
                 Real experiences from people who found clarity through NOMA
               </p>
             </motion.div>
@@ -396,17 +396,17 @@ export default function Home() {
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.15 }}
                 >
-                  <Card className="border-0 spa-shadow-medium hover:spa-shadow-large transition-all duration-500 h-full bg-white">
-                    <CardContent className="p-8">
-                      <div className="flex gap-1 mb-4">
+                  <Card className="border-0 spa-shadow-medium hover:spa-shadow-large transition-all duration-300 h-full bg-white">
+                    <CardContent className="p-6">
+                      <div className="flex gap-1 mb-3">
                         {[...Array(testimonial.rating)].map((_, i) => (
-                          <Star key={i} className="w-5 h-5 fill-[#D4A373] text-[#D4A373]" />
+                          <Star key={i} className="w-4 h-4 fill-[#D4A373] text-[#D4A373]" />
                         ))}
                       </div>
-                      <p className="text-[#6B7469] mb-6 leading-relaxed italic font-light">"{testimonial.quote}"</p>
-                      <div className="border-t border-[#E8E3DC] pt-4">
-                        <p className="font-semibold text-[#3A3A3A] text-display">{testimonial.author}</p>
-                        <p className="text-sm text-[#9FA89E] font-light">{testimonial.role}</p>
+                      <p className="text-[#6B7469] mb-5 leading-relaxed italic font-light text-sm">"{testimonial.quote}"</p>
+                      <div className="border-t border-[#E8E3DC] pt-3">
+                        <p className="font-semibold text-[#3A3A3A] text-display text-sm">{testimonial.author}</p>
+                        <p className="text-xs text-[#9FA89E] font-light">{testimonial.role}</p>
                       </div>
                     </CardContent>
                   </Card>
@@ -434,11 +434,11 @@ export default function Home() {
                   transition={{ delay: i * 0.1 }}
                   className="text-center"
                 >
-                  <div className="w-16 h-16 rounded-2xl spa-gradient-primary flex items-center justify-center mx-auto mb-4">
-                    <stat.icon className="w-8 h-8 text-white" />
+                  <div className="w-12 h-12 rounded-xl spa-gradient-primary flex items-center justify-center mx-auto mb-3">
+                    <stat.icon className="w-6 h-6 text-white" />
                   </div>
-                  <div className="text-4xl font-bold text-[#D4A373] mb-2 text-display">{stat.number}</div>
-                  <div className="text-[#6B7469] font-light">{stat.label}</div>
+                  <div className="text-3xl font-bold text-[#D4A373] mb-1.5 text-display">{stat.number}</div>
+                  <div className="text-[#6B7469] font-light text-sm">{stat.label}</div>
                 </motion.div>
               ))}
             </div>
@@ -458,19 +458,19 @@ export default function Home() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-4xl md:text-5xl text-elegant font-light mb-8 text-white">
+            <h2 className="text-3xl md:text-4xl text-elegant font-light mb-6 text-white">
               Clarity is better than confusion.
             </h2>
-            <p className="text-xl text-white/95 mb-4 max-w-2xl mx-auto leading-relaxed font-light">
+            <p className="text-lg text-white/95 mb-3 max-w-2xl mx-auto leading-relaxed font-light">
               Take the first step toward honest understanding of your relationship today.
             </p>
-            <p className="text-white/85 mb-10 text-lg font-light">
+            <p className="text-white/85 mb-8 text-base font-light">
               100% private, anonymous, and instant results
             </p>
-            <Button asChild size="lg" className="bg-white text-[#D4A373] hover:bg-[#F8F4EF] spa-shadow-large transition-all duration-500 rounded-full text-lg px-14 py-8 h-auto font-semibold">
+            <Button asChild className="bg-white text-[#D4A373] hover:bg-[#F8F4EF] shadow-xl transition-all duration-300 rounded-full px-8 py-3 font-medium">
               <Link href="/assessment">
                 Start Your Check-Up
-                <ArrowRight className="ml-2 w-5 h-5" />
+                <ArrowRight className="ml-2 w-4 h-4" />
               </Link>
             </Button>
           </motion.div>
@@ -485,11 +485,11 @@ export default function Home() {
               viewport={{ once: true }}
               className="text-center mb-16"
             >
-              <h2 className="text-4xl md:text-5xl text-elegant font-semibold mb-6 text-[#3A3A3A]">
+              <h2 className="text-3xl md:text-4xl text-elegant font-semibold mb-5 text-[#3A3A3A]">
                 Frequently Asked Questions
               </h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-[#D4A373] to-[#9FA89E] mx-auto rounded-full mb-6" />
-              <p className="text-xl text-[#6B7469] max-w-2xl mx-auto font-light">
+              <div className="w-20 h-0.5 bg-gradient-to-r from-[#D4A373] to-[#9FA89E] mx-auto rounded-full mb-5" />
+              <p className="text-lg text-[#6B7469] max-w-2xl mx-auto font-light">
                 Everything you need to know about NOMA
               </p>
             </motion.div>
@@ -528,13 +528,13 @@ export default function Home() {
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
                 >
-                  <Card className="border-0 spa-shadow-soft hover:spa-shadow-medium transition-all duration-500 bg-gradient-to-br from-white to-[#F8F4EF]">
-                    <CardContent className="p-6">
-                      <h3 className="text-lg font-semibold text-[#3A3A3A] mb-3 text-display flex items-start gap-3">
-                        <MessageCircle className="w-5 h-5 text-[#D4A373] flex-shrink-0 mt-1" />
+                  <Card className="border-0 spa-shadow-soft hover:spa-shadow-medium transition-all duration-300 bg-gradient-to-br from-white to-[#F8F4EF]">
+                    <CardContent className="p-5">
+                      <h3 className="text-base font-semibold text-[#3A3A3A] mb-2.5 text-display flex items-start gap-2.5">
+                        <MessageCircle className="w-4 h-4 text-[#D4A373] flex-shrink-0 mt-0.5" />
                         {faq.question}
                       </h3>
-                      <p className="text-[#6B7469] leading-relaxed font-light pl-8">{faq.answer}</p>
+                      <p className="text-[#6B7469] leading-relaxed font-light pl-7 text-sm">{faq.answer}</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -547,10 +547,10 @@ export default function Home() {
               viewport={{ once: true }}
               className="text-center mt-12"
             >
-              <p className="text-[#6B7469] mb-6 font-light">
+              <p className="text-[#6B7469] mb-5 font-light text-sm">
                 Have more questions? We're here to help.
               </p>
-              <Button asChild variant="outline" className="elegant-border text-[#D4A373] hover:bg-[#F8F4EF] rounded-full px-8">
+              <Button asChild variant="outline" size="sm" className="elegant-border text-[#D4A373] hover:bg-[#F8F4EF] rounded-full px-6">
                 <Link href="/contact">Contact Us</Link>
               </Button>
             </motion.div>
@@ -558,39 +558,39 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="bg-gradient-to-br from-[#3A3A3A] to-[#2A2A2A] text-white py-20 px-6">
+      <footer className="bg-gradient-to-br from-[#3A3A3A] to-[#2A2A2A] text-white py-12 px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-12 mb-16">
+          <div className="grid md:grid-cols-4 gap-8 mb-10">
             <div className="md:col-span-1">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-2xl spa-gradient-primary flex items-center justify-center spa-shadow-soft">
-                  <MaskLogo className="w-6 h-6" />
+              <div className="flex items-center gap-2.5 mb-5">
+                <div className="w-10 h-10 rounded-xl spa-gradient-primary flex items-center justify-center">
+                  <MaskLogo className="w-5 h-5" />
                 </div>
-                <span className="text-2xl font-light text-elegant text-[#D4A373]">NOMA</span>
+                <span className="text-xl font-light text-elegant text-[#D4A373]">NOMA</span>
               </div>
-              <p className="text-[#C7CEC4] max-w-md leading-relaxed text-base font-light mb-6">
+              <p className="text-[#C7CEC4] max-w-md leading-relaxed text-sm font-light mb-5">
                 Helping individuals and couples remove emotional masks and gain honest clarity about their relationships.
               </p>
-              <div className="flex gap-3">
+              <div className="flex gap-2.5">
                 {/* Social media placeholders - can be updated with actual links */}
-                <a href="#" className="w-10 h-10 rounded-full bg-[#4A4A4A] hover:bg-[#D4A373] transition-colors flex items-center justify-center">
+                <a href="#" className="w-9 h-9 rounded-full bg-[#4A4A4A] hover:bg-[#D4A373] transition-colors flex items-center justify-center">
                   <span className="sr-only">Facebook</span>
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                 </a>
-                <a href="#" className="w-10 h-10 rounded-full bg-[#4A4A4A] hover:bg-[#D4A373] transition-colors flex items-center justify-center">
+                <a href="#" className="w-9 h-9 rounded-full bg-[#4A4A4A] hover:bg-[#D4A373] transition-colors flex items-center justify-center">
                   <span className="sr-only">Twitter</span>
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
                 </a>
-                <a href="#" className="w-10 h-10 rounded-full bg-[#4A4A4A] hover:bg-[#D4A373] transition-colors flex items-center justify-center">
+                <a href="#" className="w-9 h-9 rounded-full bg-[#4A4A4A] hover:bg-[#D4A373] transition-colors flex items-center justify-center">
                   <span className="sr-only">Instagram</span>
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                 </a>
               </div>
             </div>
             
             <div>
-              <h4 className="font-medium text-lg mb-6 text-[#D4A373] text-display">Quick Links</h4>
-              <ul className="space-y-3">
+              <h4 className="font-medium text-base mb-4 text-[#D4A373] text-display">Quick Links</h4>
+              <ul className="space-y-2.5 text-sm">
                 <li><Link href="/how-it-works" className="text-[#C7CEC4] hover:text-[#D4A373] transition-colors font-light">How It Works</Link></li>
                 <li><Link href="/about" className="text-[#C7CEC4] hover:text-[#D4A373] transition-colors font-light">About NOMA</Link></li>
                 <li><Link href="/packages" className="text-[#C7CEC4] hover:text-[#D4A373] transition-colors font-light">Packages</Link></li>
@@ -600,9 +600,9 @@ export default function Home() {
             </div>
 
             <div>
-              <h4 className="font-medium text-lg mb-6 text-[#D4A373] text-display">📧 Email Us</h4>
-              <p className="text-[#9FA89E] text-sm mb-4 font-light">For general inquiries and support</p>
-              <ul className="space-y-2">
+              <h4 className="font-medium text-base mb-4 text-[#D4A373] text-display">📧 Email Us</h4>
+              <p className="text-[#9FA89E] text-xs mb-3 font-light">For general inquiries and support</p>
+              <ul className="space-y-2 text-sm">
                 <li><a href="mailto:info@nomaworld.co.ke" className="text-[#D4A373] hover:text-[#B89968] transition-colors font-light">info@nomaworld.co.ke</a></li>
                 <li><a href="mailto:support@nomaworld.co.ke" className="text-[#D4A373] hover:text-[#B89968] transition-colors font-light">support@nomaworld.co.ke</a></li>
                 <li><a href="mailto:admin@nomaworld.co.ke" className="text-[#D4A373] hover:text-[#B89968] transition-colors font-light">admin@nomaworld.co.ke</a></li>
@@ -610,18 +610,18 @@ export default function Home() {
             </div>
             
             <div>
-              <h4 className="font-medium text-lg mb-6 text-[#D4A373] text-display">📞 Call Us</h4>
-              <p className="text-[#9FA89E] text-sm mb-4 font-light">Available Mon-Fri, 9am-5pm EAT</p>
-              <ul className="space-y-2">
+              <h4 className="font-medium text-base mb-4 text-[#D4A373] text-display">📞 Call Us</h4>
+              <p className="text-[#9FA89E] text-xs mb-3 font-light">Available Mon-Fri, 9am-5pm EAT</p>
+              <ul className="space-y-2 text-sm">
                 <li><a href="tel:+254701066845" className="text-[#D4A373] hover:text-[#B89968] transition-colors font-light">0701066845</a></li>
                 <li><a href="tel:+254702794172" className="text-[#D4A373] hover:text-[#B89968] transition-colors font-light">0702794172</a></li>
               </ul>
             </div>
           </div>
           
-          <div className="border-t border-[#4A4A4A] pt-10 text-center text-[#9FA89E]">
-            <p className="mb-2 font-light">© {new Date().getFullYear()} NOMA — No Mask Relationships. All rights reserved.</p>
-            <p className="text-sm font-light">NOMA provides educational and guidance-based information. Not a substitute for therapy or medical advice.</p>
+          <div className="border-t border-[#4A4A4A] pt-6 text-center text-[#9FA89E]">
+            <p className="mb-1.5 font-light text-xs">© {new Date().getFullYear()} NOMA — No Mask Relationships. All rights reserved.</p>
+            <p className="text-xs font-light">NOMA provides educational and guidance-based information. Not a substitute for therapy or medical advice.</p>
           </div>
         </div>
       </footer>
