@@ -24,9 +24,9 @@ export async function POST(request: NextRequest) {
   try {
     // Validate environment variables
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-    if (!supabaseUrl || !supabaseServiceKey) {
+    if (!supabaseUrl || !supabaseAnonKey) {
       console.error('Missing Supabase environment variables');
       return NextResponse.json(
         { error: 'Server configuration error. Please contact support.' },
@@ -50,23 +50,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create admin client to bypass CORS
-    const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+    // Use anon key for standard signup (no email confirmation required)
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
       auth: {
         autoRefreshToken: false,
         persistSession: false
       }
     });
 
-    // Get the app URL from environment or request origin
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.nomaworld.co.ke';
-
-    const { data, error } = await supabase.auth.admin.createUser({
+    // Create user with auto-confirm
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      email_confirm: false,
-      user_metadata: {
-        created_via: 'signup_api'
+      options: {
+        data: {
+          created_via: 'signup_api'
+        },
+        emailRedirectTo: `${origin}/auth/confirm`
       }
     });
 
@@ -78,24 +78,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Send confirmation email
-    if (data.user) {
-      const { error: emailError } = await supabase.auth.admin.inviteUserByEmail(email, {
-        redirectTo: `${origin}/auth/confirm`
-      });
-
-      if (emailError) {
-        console.error('Email error:', emailError);
-      }
-    }
+    // Check if user needs email confirmation
+    const needsConfirmation = data.user && !data.session;
 
     return NextResponse.json({
       success: true,
-      message: 'Account created successfully. Please check your email for confirmation.',
+      message: needsConfirmation 
+        ? 'Account created! Please check your email to confirm your account.'
+        : 'Account created successfully! You can now sign in.',
       user: {
         id: data.user?.id,
         email: data.user?.email
-      }
+      },
+      session: data.session,
+      needsConfirmation
     }, { headers: corsHeaders(origin) });
   } catch (error: any) {
     console.error('Signup API error:', error);

@@ -42,8 +42,15 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      await signUp(email, password);
-      setSuccess(true);
+      const result = await signUp(email, password);
+      
+      // If user is immediately confirmed (has session), redirect to dashboard
+      if (result.session && !result.needsConfirmation) {
+        router.push('/dashboard');
+      } else {
+        // Otherwise show success message about email confirmation
+        setSuccess(true);
+      }
     } catch (err: any) {
       console.error('Signup error:', err);
       // Try to parse the error message if it's from the API

@@ -59,29 +59,29 @@ export default function PackagesPage() {
     : packages.filter(pkg => pkg.category === selectedCategory);
 
   return (
-    <div className="min-h-screen bg-white">
-      <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-gray-100">
+    <div className="min-h-screen bg-[#0f0f1a]">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0f0f1a]/95 backdrop-blur-sm border-b border-[#333333]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3.5 group">
-            <div className="w-14 h-14 rounded-2xl bg-[#1A3C63] flex items-center justify-center shadow-lg shadow-blue-900/20 group-hover:shadow-xl group-hover:shadow-blue-900/30 group-hover:scale-105 transition-all duration-300">
-              <MaskLogo className="w-8 h-8" />
+          <Link href="/" className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-[#ffbe0b] flex items-center justify-center">
+              <MaskLogo className="w-5 h-5 text-[#0f0f1a]" />
             </div>
-            <span className="text-2xl font-black tracking-tight text-[#1A3C63]">NOMA</span>
+            <span className="text-xl font-light tracking-wide text-white" style={{ fontFamily: 'Georgia, serif' }}>NOMA</span>
           </Link>
-          <div className="hidden md:flex items-center gap-12">
-            <Link href="/how-it-works" className="text-gray-700 hover:text-[#1A3C63] transition-colors font-medium text-sm">How It Works</Link>
-            <Link href="/packages" className="text-[#1A3C63] font-bold text-sm border-b-2 border-[#1A3C63]">Packages</Link>
-            <Link href="/about" className="text-gray-700 hover:text-[#1A3C63] transition-colors font-medium text-sm">About</Link>
-            <Link href="/contact" className="text-gray-700 hover:text-[#1A3C63] transition-colors font-medium text-sm">Contact</Link>
+          <div className="hidden md:flex items-center gap-8">
+            <Link href="/how-it-works" className="text-[#cccccc] hover:text-[#ffbe0b] transition-colors text-sm">How It Works</Link>
+            <Link href="/packages" className="text-[#ffbe0b] font-medium text-sm">Packages</Link>
+            <Link href="/about" className="text-[#cccccc] hover:text-[#ffbe0b] transition-colors text-sm">About</Link>
+            <Link href="/contact" className="text-[#cccccc] hover:text-[#ffbe0b] transition-colors text-sm">Contact</Link>
           </div>
-          <div className="flex items-center gap-4">
-            <Button asChild variant="outline" className="rounded-full">
+          <div className="flex items-center gap-3">
+            <Button asChild variant="ghost" size="sm" className="text-[#cccccc] hover:text-[#ffbe0b] hover:bg-transparent text-sm font-normal">
               <Link href="/basket">
                 <ShoppingCart className="w-4 h-4 mr-2" />
                 Basket
               </Link>
             </Button>
-            <Button asChild className="bg-[#FF6B6B] hover:bg-[#E55A5A] text-white shadow-lg rounded-full">
+            <Button asChild size="sm" className="bg-[#ffbe0b] hover:bg-[#e6a200] text-[#000000] shadow-lg hover:shadow-xl transition-all duration-300 rounded-md px-6 py-2 text-sm font-semibold">
               <Link href="/dashboard">Dashboard</Link>
             </Button>
           </div>
@@ -97,14 +97,14 @@ export default function PackagesPage() {
               transition={{ duration: 0.6 }}
               className="text-center mb-12"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-200 text-[#1A3C63] text-sm font-bold mb-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#ffbe0b]/10 border border-[#ffbe0b]/30 text-[#ffbe0b] text-sm font-semibold mb-6">
                 <Package className="w-4 h-4" />
                 Browse Our Services
               </div>
-              <h1 className="text-5xl md:text-6xl font-bold mb-6 text-[#1A3C63]">
+              <h1 className="text-5xl md:text-6xl font-light mb-6 text-white" style={{ fontFamily: 'Georgia, serif' }}>
                 Relationship Growth Packages
               </h1>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-xl text-[#cccccc] max-w-3xl mx-auto">
                 Choose from our curated packages designed to support your relationship journey at every stage.
               </p>
             </motion.div>
@@ -115,16 +115,16 @@ export default function PackagesPage() {
               transition={{ delay: 0.3 }}
               className="flex items-center justify-center gap-3 flex-wrap mb-12"
             >
-              <Filter className="w-5 h-5 text-gray-500" />
+              <Filter className="w-5 h-5 text-[#cccccc]" />
               {categories.map((category) => (
                 <Button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
                   variant={selectedCategory === category ? "default" : "outline"}
-                  className={`rounded-full ${
+                  className={`rounded-full transition-all duration-300 ${
                     selectedCategory === category
-                      ? "bg-[#1A3C63] text-white"
-                      : "border-gray-300 text-gray-700 hover:border-[#1A3C63]"
+                      ? "bg-[#ffbe0b] hover:bg-[#e6a200] text-[#000000] shadow-lg"
+                      : "border-2 border-[#333333] text-[#cccccc] hover:border-[#ffbe0b] hover:text-[#ffbe0b] bg-transparent"
                   }`}
                 >
                   {category}
@@ -138,8 +138,8 @@ export default function PackagesPage() {
           <div className="max-w-7xl mx-auto">
             {loading ? (
               <div className="text-center py-20">
-                <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#1A3C63]"></div>
-                <p className="mt-4 text-gray-600">Loading packages...</p>
+                <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#ffbe0b]"></div>
+                <p className="mt-4 text-[#cccccc]">Loading packages...</p>
               </div>
             ) : (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -150,45 +150,45 @@ export default function PackagesPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
                   >
-                    <Card className="h-full flex flex-col border-2 border-blue-100 hover:border-[#1A3C63] hover:shadow-xl transition-all rounded-3xl overflow-hidden group">
+                    <Card className="h-full flex flex-col border-2 border-[#333333] bg-[#1a1a2e] hover:border-[#ffbe0b] hover:shadow-2xl hover:shadow-[#ffbe0b]/20 transition-all duration-300 rounded-lg overflow-hidden group">
                       <CardHeader className="pb-4">
                         <div className="mb-4">
-                          <Badge className="bg-blue-100 text-[#1A3C63] hover:bg-blue-200">
+                          <Badge className="bg-[#ffbe0b]/10 text-[#ffbe0b] border border-[#ffbe0b]/30 hover:bg-[#ffbe0b]/20">
                             {pkg.category}
                           </Badge>
                         </div>
-                        <CardTitle className="text-2xl font-bold text-[#1A3C63] group-hover:text-[#FF6B6B] transition-colors">
+                        <CardTitle className="text-2xl font-light text-white group-hover:text-[#ffbe0b] transition-colors" style={{ fontFamily: 'Georgia, serif' }}>
                           {pkg.name}
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="flex-grow pb-6">
-                        <p className="text-gray-600 mb-6 leading-relaxed">
+                        <p className="text-[#cccccc] mb-6 leading-relaxed text-sm">
                           {pkg.description}
                         </p>
                         <div className="mb-6">
-                          <div className="text-3xl font-bold text-[#1A3C63] mb-1">
+                          <div className="text-3xl font-light text-[#ffbe0b] mb-1" style={{ fontFamily: 'Georgia, serif' }}>
                             KES {pkg.price.toLocaleString()}
                           </div>
-                          <div className="text-sm text-gray-500">{pkg.duration}</div>
+                          <div className="text-sm text-[#a0a0a0]">{pkg.duration}</div>
                         </div>
                         <div className="space-y-3">
                           {pkg.features.slice(0, 4).map((feature, i) => (
                             <div key={i} className="flex items-start gap-2">
-                              <Check className="w-5 h-5 text-[#FF6B6B] flex-shrink-0 mt-0.5" />
-                              <span className="text-sm text-gray-700">{feature}</span>
+                              <Check className="w-5 h-5 text-[#ffbe0b] flex-shrink-0 mt-0.5" />
+                              <span className="text-sm text-[#cccccc]">{feature}</span>
                             </div>
                           ))}
                         </div>
                       </CardContent>
                       <CardFooter className="pt-0 pb-6 px-6 flex gap-3">
-                        <Button asChild className="flex-1 bg-[#1A3C63] hover:bg-[#0d2238] text-white rounded-full">
+                        <Button asChild className="flex-1 bg-[#ffbe0b] hover:bg-[#e6a200] text-[#000000] rounded-md shadow-lg hover:shadow-xl transition-all duration-300 font-semibold">
                           <Link href={`/packages/${pkg.id}`}>
                             View Details
                           </Link>
                         </Button>
                         <Button
                           variant="outline"
-                          className="border-2 border-[#FF6B6B] text-[#FF6B6B] hover:bg-[#FF6B6B] hover:text-white rounded-full"
+                          className="border-2 border-[#333333] text-[#ffbe0b] hover:bg-[#ffbe0b] hover:text-[#000000] hover:border-[#ffbe0b] rounded-md transition-all duration-300"
                         >
                           <ShoppingCart className="w-4 h-4" />
                         </Button>
@@ -201,23 +201,23 @@ export default function PackagesPage() {
 
             {!loading && filteredPackages.length === 0 && (
               <div className="text-center py-20">
-                <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <p className="text-xl text-gray-600">No packages found in this category.</p>
+                <Package className="w-16 h-16 text-[#333333] mx-auto mb-4" />
+                <p className="text-xl text-[#cccccc]">No packages found in this category.</p>
               </div>
             )}
           </div>
         </section>
       </main>
 
-      <footer className="bg-gray-900 text-white py-20 px-6">
+      <footer className="bg-[#0f0f1a] text-white py-12 px-6 border-t border-[#333333]">
         <div className="max-w-7xl mx-auto text-center">
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-xl">
-              <MaskLogo className="w-6 h-6" />
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="w-8 h-8 rounded-lg bg-[#ffbe0b] flex items-center justify-center">
+              <MaskLogo className="w-5 h-5 text-[#0f0f1a]" />
             </div>
-            <span className="text-2xl font-bold">NOMA</span>
+            <span className="text-lg font-light text-white" style={{ fontFamily: 'Georgia, serif' }}>NOMA</span>
           </div>
-          <p className="text-gray-400 mb-8">© {new Date().getFullYear()} NOMA. All rights reserved.</p>
+          <p className="text-[#a0a0a0] text-sm">© {new Date().getFullYear()} NOMA — No Mask Relationships. All rights reserved.</p>
         </div>
       </footer>
     </div>

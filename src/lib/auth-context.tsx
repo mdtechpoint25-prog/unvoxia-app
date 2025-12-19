@@ -73,6 +73,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       throw new Error(data.error || 'Failed to create account');
     }
 
+    // If we got a session back, set it immediately
+    if (data.session) {
+      await supabase.auth.setSession(data.session);
+      setUser(data.session.user);
+    }
+
     return data;
   };
 
