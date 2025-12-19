@@ -71,8 +71,8 @@ export default function Assessment() {
                     We use the understanding of how you work to give you clarity about your perfect match and your path to your love.
                   </p>
                   
-                  <Button className="rounded-full w-full bg-gradient-to-r from-[#c026d3] to-[#e879f9] hover:opacity-90" size="lg">
-                    <Link href="/assessment/individual" className="w-full">
+                  <Button asChild className="rounded-full w-full bg-gradient-to-r from-[#c026d3] to-[#e879f9] hover:from-[#a21caf] hover:to-[#d946ef] shadow-lg hover:shadow-xl transition-all duration-300 py-2.5 text-sm font-semibold" size="default">
+                    <Link href="/assessment/individual" className="w-full inline-flex items-center justify-center">
                       Read More
                       <ArrowRight className="ml-2 w-4 h-4" />
                     </Link>
@@ -102,8 +102,8 @@ export default function Assessment() {
                     We are on a mission to help couples create clarity and calm in their relationship/partnership.
                   </p>
                   
-                  <Button className="rounded-full w-full bg-gradient-to-r from-[#c026d3] to-[#e879f9] hover:opacity-90" size="lg">
-                    <Link href="/assessment/couple" className="w-full">
+                  <Button asChild className="rounded-full w-full bg-gradient-to-r from-[#c026d3] to-[#e879f9] hover:from-[#a21caf] hover:to-[#d946ef] shadow-lg hover:shadow-xl transition-all duration-300 py-2.5 text-sm font-semibold" size="default">
+                    <Link href="/assessment/couple" className="w-full inline-flex items-center justify-center">
                       Read More
                       <ArrowRight className="ml-2 w-4 h-4" />
                     </Link>
@@ -134,8 +134,8 @@ export default function Assessment() {
                     Are you seeking peace and transformation of pain around your relationship?
                   </p>
                   
-                  <Button className="rounded-full w-full bg-gradient-to-r from-[#c026d3] to-[#e879f9] hover:opacity-90" size="lg">
-                    <Link href="/contact" className="w-full">
+                  <Button asChild className="rounded-full w-full bg-gradient-to-r from-[#c026d3] to-[#e879f9] hover:from-[#a21caf] hover:to-[#d946ef] shadow-lg hover:shadow-xl transition-all duration-300 py-2.5 text-sm font-semibold" size="default">
+                    <Link href="/contact" className="w-full inline-flex items-center justify-center">
                       Book Now
                       <ArrowRight className="ml-2 w-4 h-4" />
                     </Link>
