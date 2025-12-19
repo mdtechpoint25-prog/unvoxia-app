@@ -339,7 +339,7 @@ export default function BasketPage() {
         </div>
       </main>
 
-      <footer className="bg-gray-900 text-white py-20 px-6">
+      <footer className="bg-[#0a0a0f] text-white py-12 px-6 border-t border-[#333333]">
         <div className="max-w-7xl mx-auto text-center">
           <div className="flex items-center justify-center gap-3 mb-6">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-xl">

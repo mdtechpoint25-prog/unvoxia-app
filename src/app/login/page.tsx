@@ -36,7 +36,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 flex items-center justify-center px-6 py-12">
+    <div className="min-h-screen bg-[#0f0f1a] flex items-center justify-center px-6 py-12">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -44,44 +44,44 @@ export default function LoginPage() {
         className="w-full max-w-md"
       >
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-3 group">
-            <div className="w-14 h-14 rounded-2xl bg-[#0f0f1a] flex items-center justify-center shadow-lg shadow-blue-900/20 group-hover:shadow-xl group-hover:shadow-blue-900/30 group-hover:scale-105 transition-all duration-300">
-              <MaskLogo className="w-8 h-8" />
+          <Link href="/" className="inline-flex items-center gap-2 group">
+            <div className="w-8 h-8 rounded-lg bg-[#ffbe0b] flex items-center justify-center">
+              <MaskLogo className="w-5 h-5 text-[#0f0f1a]" />
             </div>
-            <span className="text-3xl font-black tracking-tight text-[#0f0f1a]">NOMA</span>
+            <span className="text-xl font-light tracking-wide text-white" style={{ fontFamily: 'Georgia, serif' }}>NOMA</span>
           </Link>
         </div>
 
-        <Card className="border-2 border-[#333333]100 rounded-3xl shadow-xl">
+        <Card className="border-2 border-[#333333] bg-[#1a1a2e] rounded-lg shadow-2xl">
           <CardHeader className="text-center pb-4">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#0f0f1a] to-[#0d2238] flex items-center justify-center mx-auto mb-4">
-              <LogIn className="w-8 h-8 text-white" />
+            <div className="w-16 h-16 rounded-lg bg-[#ffbe0b]/10 flex items-center justify-center mx-auto mb-4">
+              <LogIn className="w-8 h-8 text-[#ffbe0b]" />
             </div>
-            <CardTitle className="text-3xl font-bold text-[#0f0f1a]">Welcome Back</CardTitle>
-            <p className="text-gray-600 mt-2">Sign in to access your dashboard</p>
+            <CardTitle className="text-3xl font-light text-white" style={{ fontFamily: 'Georgia, serif' }}>Welcome Back</CardTitle>
+            <p className="text-[#cccccc] mt-2 text-sm">Sign in to access your dashboard</p>
           </CardHeader>
 
           <CardContent className="pt-0">
             <form onSubmit={handleSubmit} className="space-y-5">
               {error && (
-                <div className="bg-red-50 border border-red-200 rounded-2xl p-4 flex items-start gap-3">
-                  <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-red-700">{error}</p>
+                <div className="bg-red-900/20 border border-red-800/50 rounded-lg p-4 flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-red-300">{error}</p>
                 </div>
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-gray-700 font-semibold">
+                <Label htmlFor="email" className="text-[#cccccc] font-medium text-sm">
                   Email Address
                 </Label>
                 <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#a0a0a0]" />
                   <Input
                     id="email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-12 h-12 rounded-xl border-2 border-gray-200 focus:border-[#0f0f1a]"
+                    className="pl-12 h-12 rounded-md border-2 border-[#333333] bg-[#0f0f1a] text-white placeholder:text-[#a0a0a0] focus:border-[#ffbe0b]"
                     placeholder="you@example.com"
                     required
                   />
@@ -89,17 +89,17 @@ export default function LoginPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-gray-700 font-semibold">
+                <Label htmlFor="password" className="text-[#cccccc] font-medium text-sm">
                   Password
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#a0a0a0]" />
                   <Input
                     id="password"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-12 h-12 rounded-xl border-2 border-gray-200 focus:border-[#0f0f1a]"
+                    className="pl-12 h-12 rounded-md border-2 border-[#333333] bg-[#0f0f1a] text-white placeholder:text-[#a0a0a0] focus:border-[#ffbe0b]"
                     placeholder="••••••••"
                     required
                   />
@@ -109,18 +109,18 @@ export default function LoginPage() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full h-12 bg-[#0f0f1a] hover:bg-[#0d2238] text-white font-semibold rounded-xl"
+                className="w-full h-12 bg-[#ffbe0b] hover:bg-[#e6a200] text-[#000000] font-semibold rounded-md shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 {loading ? "Signing in..." : "Sign In"}
               </Button>
             </form>
 
             <div className="mt-6 text-center">
-              <p className="text-gray-600">
+              <p className="text-[#cccccc]">
                 Don't have an account?{" "}
                 <Link
                   href="/signup"
-                  className="text-[#0f0f1a] font-semibold hover:text-[#0d2238] transition-colors"
+                  className="text-[#ffbe0b] font-semibold hover:text-[#e6a200] transition-colors"
                 >
                   Sign Up
                 </Link>
@@ -129,14 +129,14 @@ export default function LoginPage() {
           </CardContent>
         </Card>
 
-        <div className="text-center mt-6">
+        <p className="text-center mt-6 text-sm">
           <Link
             href="/"
-            className="text-gray-600 hover:text-[#0f0f1a] transition-colors font-medium"
+            className="text-[#cccccc] hover:text-[#ffbe0b] transition-colors font-medium"
           >
             ← Back to Home
           </Link>
-        </div>
+        </p>
       </motion.div>
     </div>
   );
