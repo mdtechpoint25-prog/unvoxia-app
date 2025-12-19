@@ -59,7 +59,7 @@ export default function AdminUsers() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-[#1A3C63] text-white py-8 px-6">
+      <div className="bg-[#0f0f1a] text-white py-8 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-4 mb-2">
             <Link href="/admin">
@@ -70,7 +70,7 @@ export default function AdminUsers() {
             </Link>
             <h1 className="text-4xl font-bold">User Management</h1>
           </div>
-          <p className="text-blue-200">Monitor user progress and activity</p>
+          <p className="text-[#ffbe0b]200">Monitor user progress and activity</p>
         </div>
       </div>
 
@@ -109,7 +109,7 @@ export default function AdminUsers() {
                         <div className="text-right">
                           <div className="flex gap-4 mb-2">
                             <div>
-                              <p className="text-2xl font-bold text-blue-600">{user.progress_count}</p>
+                              <p className="text-2xl font-bold text-[#ffbe0b]600">{user.progress_count}</p>
                               <p className="text-xs text-gray-500">Assessments</p>
                             </div>
                             <div>
@@ -159,7 +159,7 @@ export default function AdminUsers() {
                             </div>
                             <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
                               <div 
-                                className="bg-blue-600 h-2 rounded-full transition-all" 
+                                className="bg-[#1a1a2e]600 h-2 rounded-full transition-all" 
                                 style={{ width: `${progress.progress_percentage}%` }}
                               />
                             </div>

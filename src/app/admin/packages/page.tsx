@@ -119,7 +119,7 @@ export default function AdminPackages() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-[#1A3C63] text-white py-8 px-6">
+      <div className="bg-[#0f0f1a] text-white py-8 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-4 mb-2">
             <Link href="/admin">
@@ -130,7 +130,7 @@ export default function AdminPackages() {
             </Link>
             <h1 className="text-4xl font-bold">Package Management</h1>
           </div>
-          <p className="text-blue-200">Add, edit, and manage pricing packages</p>
+          <p className="text-[#ffbe0b]200">Add, edit, and manage pricing packages</p>
         </div>
       </div>
 
@@ -231,7 +231,7 @@ export default function AdminPackages() {
                     <label htmlFor="is_active" className="text-sm font-medium">Active Package</label>
                   </div>
 
-                  <Button type="submit" className="w-full bg-[#1A3C63] hover:bg-[#0d2238]">
+                  <Button type="submit" className="w-full bg-[#0f0f1a] hover:bg-[#0d2238]">
                     <Save className="w-4 h-4 mr-2" />
                     {isEditing ? 'Update Package' : 'Create Package'}
                   </Button>
@@ -258,7 +258,7 @@ export default function AdminPackages() {
                           <p className="text-sm text-gray-500">{pkg.type}</p>
                         </div>
                         <div className="text-right">
-                          <p className="font-bold text-xl text-[#1A3C63]">KES {pkg.price}</p>
+                          <p className="font-bold text-xl text-[#0f0f1a]">KES {pkg.price}</p>
                           <span className={`text-xs px-2 py-1 rounded ${pkg.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
                             {pkg.is_active ? 'Active' : 'Inactive'}
                           </span>

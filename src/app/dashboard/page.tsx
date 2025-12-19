@@ -102,7 +102,7 @@ export default function DashboardPage() {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 rounded-2xl bg-[#1A3C63] flex items-center justify-center mx-auto mb-4 animate-pulse">
+          <div className="w-16 h-16 rounded-2xl bg-[#0f0f1a] flex items-center justify-center mx-auto mb-4 animate-pulse">
             <MaskLogo className="w-8 h-8" />
           </div>
           <p className="text-gray-600">Loading...</p>
@@ -133,10 +133,10 @@ export default function DashboardPage() {
       <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3.5 group">
-            <div className="w-14 h-14 rounded-2xl bg-[#1A3C63] flex items-center justify-center shadow-lg shadow-blue-900/20 group-hover:shadow-xl group-hover:shadow-blue-900/30 group-hover:scale-105 transition-all duration-300">
+            <div className="w-14 h-14 rounded-2xl bg-[#0f0f1a] flex items-center justify-center shadow-lg shadow-blue-900/20 group-hover:shadow-xl group-hover:shadow-blue-900/30 group-hover:scale-105 transition-all duration-300">
               <MaskLogo className="w-8 h-8" />
             </div>
-            <span className="text-2xl font-black tracking-tight text-[#1A3C63]">NOMA</span>
+            <span className="text-2xl font-black tracking-tight text-[#0f0f1a]">NOMA</span>
           </Link>
           <div className="flex items-center gap-4">
             <Button asChild variant="outline" className="rounded-full">
@@ -165,11 +165,11 @@ export default function DashboardPage() {
             className="mb-12"
           >
             <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#1A3C63] to-[#0d2238] flex items-center justify-center">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#0f0f1a] to-[#0d2238] flex items-center justify-center">
                 <User className="w-8 h-8 text-white" />
               </div>
               <div>
-                <h1 className="text-5xl font-bold text-[#1A3C63]">My Dashboard</h1>
+                <h1 className="text-5xl font-bold text-[#0f0f1a]">My Dashboard</h1>
                 <p className="text-gray-600">Track your progress and access your resources</p>
               </div>
             </div>
@@ -181,13 +181,13 @@ export default function DashboardPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
             >
-              <Card className="border-2 border-blue-100 rounded-3xl">
+              <Card className="border-2 border-[#333333]100 rounded-3xl">
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
-                      <Package className="w-6 h-6 text-[#1A3C63]" />
+                    <div className="w-12 h-12 rounded-xl bg-[#1a1a2e]100 flex items-center justify-center">
+                      <Package className="w-6 h-6 text-[#0f0f1a]" />
                     </div>
-                    <span className="text-3xl font-bold text-[#1A3C63]">{totalOrders}</span>
+                    <span className="text-3xl font-bold text-[#0f0f1a]">{totalOrders}</span>
                   </div>
                   <h3 className="font-bold text-gray-800">Total Orders</h3>
                   <p className="text-sm text-gray-600">All purchases</p>
@@ -200,13 +200,13 @@ export default function DashboardPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <Card className="border-2 border-blue-100 rounded-3xl">
+              <Card className="border-2 border-[#333333]100 rounded-3xl">
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div className="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center">
                       <TrendingUp className="w-6 h-6 text-[#FF6B6B]" />
                     </div>
-                    <span className="text-3xl font-bold text-[#1A3C63]">{allPackages.length}</span>
+                    <span className="text-3xl font-bold text-[#0f0f1a]">{allPackages.length}</span>
                   </div>
                   <h3 className="font-bold text-gray-800">Services Purchased</h3>
                   <p className="text-sm text-gray-600">Unique packages</p>
@@ -219,13 +219,13 @@ export default function DashboardPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <Card className="border-2 border-blue-100 rounded-3xl">
+              <Card className="border-2 border-[#333333]100 rounded-3xl">
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
-                      <Award className="w-6 h-6 text-[#1A3C63]" />
+                    <div className="w-12 h-12 rounded-xl bg-[#1a1a2e]100 flex items-center justify-center">
+                      <Award className="w-6 h-6 text-[#0f0f1a]" />
                     </div>
-                    <span className="text-3xl font-bold text-[#1A3C63]">{completedOrders}</span>
+                    <span className="text-3xl font-bold text-[#0f0f1a]">{completedOrders}</span>
                   </div>
                   <h3 className="font-bold text-gray-800">Completed</h3>
                   <p className="text-sm text-gray-600">Total achievements</p>
@@ -235,7 +235,7 @@ export default function DashboardPage() {
           </div>
 
           <Tabs defaultValue="services" className="space-y-8">
-            <TabsList className="bg-blue-50 p-1 rounded-full">
+            <TabsList className="bg-[#1a1a2e]50 p-1 rounded-full">
               <TabsTrigger value="services" className="rounded-full data-[state=active]:bg-white">
                 My Orders
               </TabsTrigger>
@@ -249,7 +249,7 @@ export default function DashboardPage() {
 
             <TabsContent value="services" className="space-y-6">
               {orders.length === 0 ? (
-                <Card className="border-2 border-blue-100 rounded-3xl">
+                <Card className="border-2 border-[#333333]100 rounded-3xl">
                   <CardContent className="p-12 text-center">
                     <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                     <h3 className="text-xl font-bold text-gray-800 mb-2">No orders yet</h3>
@@ -267,15 +267,15 @@ export default function DashboardPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
                   >
-                    <Card className="border-2 border-blue-100 hover:border-[#1A3C63] transition-all rounded-3xl">
+                    <Card className="border-2 border-[#333333]100 hover:border-[#0f0f1a] transition-all rounded-3xl">
                       <CardHeader>
                         <div className="flex items-start justify-between">
                           <div>
-                            <CardTitle className="text-2xl text-[#1A3C63] mb-2">
+                            <CardTitle className="text-2xl text-[#0f0f1a] mb-2">
                               Order #{order.id.substring(0, 8)}
                             </CardTitle>
                             <div className="flex items-center gap-2 text-sm text-gray-600">
-                              <span className="px-3 py-1 rounded-full bg-blue-100 text-[#1A3C63] font-semibold capitalize">
+                              <span className="px-3 py-1 rounded-full bg-[#1a1a2e]100 text-[#0f0f1a] font-semibold capitalize">
                                 {order.status}
                               </span>
                               <span className="flex items-center gap-1">
@@ -285,7 +285,7 @@ export default function DashboardPage() {
                             </div>
                           </div>
                           <div className="text-right">
-                            <p className="text-2xl font-bold text-[#1A3C63]">
+                            <p className="text-2xl font-bold text-[#0f0f1a]">
                               KES {order.total_amount.toLocaleString()}
                             </p>
                             <p className="text-sm text-gray-600 capitalize">{order.payment_method}</p>
@@ -296,12 +296,12 @@ export default function DashboardPage() {
                         <div className="space-y-3">
                           <h4 className="font-semibold text-gray-800">Items:</h4>
                           {order.order_items.map((item) => (
-                            <div key={item.id} className="flex items-center justify-between p-3 bg-blue-50 rounded-xl">
+                            <div key={item.id} className="flex items-center justify-between p-3 bg-[#1a1a2e]50 rounded-xl">
                               <div>
                                 <p className="font-medium text-gray-800">{item.package.name}</p>
                                 <p className="text-sm text-gray-600">{item.package.category} × {item.quantity}</p>
                               </div>
-                              <p className="font-semibold text-[#1A3C63]">
+                              <p className="font-semibold text-[#0f0f1a]">
                                 KES {(item.price * item.quantity).toLocaleString()}
                               </p>
                             </div>
@@ -315,14 +315,14 @@ export default function DashboardPage() {
             </TabsContent>
 
             <TabsContent value="progress" className="space-y-6">
-              <Card className="border-2 border-blue-100 rounded-3xl">
+              <Card className="border-2 border-[#333333]100 rounded-3xl">
                 <CardHeader>
-                  <CardTitle className="text-2xl text-[#1A3C63]">Your Progress Overview</CardTitle>
+                  <CardTitle className="text-2xl text-[#0f0f1a]">Your Progress Overview</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div className="h-64 flex items-center justify-center bg-blue-50 rounded-2xl">
+                  <div className="h-64 flex items-center justify-center bg-[#1a1a2e]50 rounded-2xl">
                     <div className="text-center">
-                      <TrendingUp className="w-16 h-16 text-[#1A3C63] mx-auto mb-4" />
+                      <TrendingUp className="w-16 h-16 text-[#0f0f1a] mx-auto mb-4" />
                       <p className="text-gray-600">Progress chart will be displayed here</p>
                     </div>
                   </div>
@@ -339,18 +339,18 @@ export default function DashboardPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
                   >
-                    <Card className="border-2 border-blue-100 hover:border-[#1A3C63] transition-all rounded-3xl group cursor-pointer">
+                    <Card className="border-2 border-[#333333]100 hover:border-[#0f0f1a] transition-all rounded-3xl group cursor-pointer">
                       <CardContent className="p-6">
                         <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                          <div className="w-12 h-12 rounded-xl bg-[#1a1a2e]100 flex items-center justify-center flex-shrink-0">
                             {resource.type === 'PDF' ? (
-                              <FileText className="w-6 h-6 text-[#1A3C63]" />
+                              <FileText className="w-6 h-6 text-[#0f0f1a]" />
                             ) : (
-                              <BookOpen className="w-6 h-6 text-[#1A3C63]" />
+                              <BookOpen className="w-6 h-6 text-[#0f0f1a]" />
                             )}
                           </div>
                           <div className="flex-grow">
-                            <h3 className="font-bold text-gray-800 mb-1 group-hover:text-[#1A3C63] transition-colors">
+                            <h3 className="font-bold text-gray-800 mb-1 group-hover:text-[#0f0f1a] transition-colors">
                               {resource.title}
                             </h3>
                             <p className="text-sm text-gray-600">{resource.type}</p>
@@ -383,9 +383,9 @@ export default function DashboardPage() {
               <h3 className="text-lg font-bold mb-4">📧 Email Us</h3>
               <p className="text-gray-400 text-sm mb-2">For general inquiries and support</p>
               <div className="space-y-2">
-                <p><a href="mailto:info@nomaworld.co.ke" className="text-blue-400 hover:text-blue-300 transition-colors">info@nomaworld.co.ke</a></p>
-                <p><a href="mailto:support@nomaworld.co.ke" className="text-blue-400 hover:text-blue-300 transition-colors">support@nomaworld.co.ke</a></p>
-                <p><a href="mailto:admin@nomaworld.co.ke" className="text-blue-400 hover:text-blue-300 transition-colors">admin@nomaworld.co.ke</a></p>
+                <p><a href="mailto:info@nomaworld.co.ke" className="text-[#ffbe0b]400 hover:text-[#ffbe0b]300 transition-colors">info@nomaworld.co.ke</a></p>
+                <p><a href="mailto:support@nomaworld.co.ke" className="text-[#ffbe0b]400 hover:text-[#ffbe0b]300 transition-colors">support@nomaworld.co.ke</a></p>
+                <p><a href="mailto:admin@nomaworld.co.ke" className="text-[#ffbe0b]400 hover:text-[#ffbe0b]300 transition-colors">admin@nomaworld.co.ke</a></p>
               </div>
             </div>
 
@@ -393,8 +393,8 @@ export default function DashboardPage() {
               <h3 className="text-lg font-bold mb-4">📞 Call Us</h3>
               <p className="text-gray-400 text-sm mb-2">Available Mon-Fri, 9am-5pm EAT</p>
               <div className="space-y-2">
-                <p><a href="tel:+254701066845" className="text-blue-400 hover:text-blue-300 transition-colors">0701066845</a></p>
-                <p><a href="tel:+254702794172" className="text-blue-400 hover:text-blue-300 transition-colors">0702794172</a></p>
+                <p><a href="tel:+254701066845" className="text-[#ffbe0b]400 hover:text-[#ffbe0b]300 transition-colors">0701066845</a></p>
+                <p><a href="tel:+254702794172" className="text-[#ffbe0b]400 hover:text-[#ffbe0b]300 transition-colors">0702794172</a></p>
               </div>
             </div>
           </div>

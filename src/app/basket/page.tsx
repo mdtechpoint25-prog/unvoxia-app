@@ -132,17 +132,17 @@ export default function BasketPage() {
         <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-3.5 group">
-              <div className="w-14 h-14 rounded-2xl bg-[#1A3C63] flex items-center justify-center shadow-lg shadow-blue-900/20 group-hover:shadow-xl group-hover:shadow-blue-900/30 group-hover:scale-105 transition-all duration-300">
+              <div className="w-14 h-14 rounded-2xl bg-[#0f0f1a] flex items-center justify-center shadow-lg shadow-blue-900/20 group-hover:shadow-xl group-hover:shadow-blue-900/30 group-hover:scale-105 transition-all duration-300">
                 <MaskLogo className="w-8 h-8" />
               </div>
-              <span className="text-2xl font-black tracking-tight text-[#1A3C63]">NOMA</span>
+              <span className="text-2xl font-black tracking-tight text-[#0f0f1a]">NOMA</span>
             </Link>
           </div>
         </nav>
         
         <main className="pt-32 pb-24 px-6">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl font-bold text-[#1A3C63] mb-6">Please Log In</h1>
+            <h1 className="text-4xl font-bold text-[#0f0f1a] mb-6">Please Log In</h1>
             <p className="text-gray-600 mb-8">You need to be logged in to view your basket.</p>
             <Button asChild className="bg-[#FF6B6B] hover:bg-[#E55A5A] rounded-full px-8">
               <Link href="/login">Log In</Link>
@@ -158,10 +158,10 @@ export default function BasketPage() {
       <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3.5 group">
-            <div className="w-14 h-14 rounded-2xl bg-[#1A3C63] flex items-center justify-center shadow-lg shadow-blue-900/20 group-hover:shadow-xl group-hover:shadow-blue-900/30 group-hover:scale-105 transition-all duration-300">
+            <div className="w-14 h-14 rounded-2xl bg-[#0f0f1a] flex items-center justify-center shadow-lg shadow-blue-900/20 group-hover:shadow-xl group-hover:shadow-blue-900/30 group-hover:scale-105 transition-all duration-300">
               <MaskLogo className="w-8 h-8" />
             </div>
-            <span className="text-2xl font-black tracking-tight text-[#1A3C63]">NOMA</span>
+            <span className="text-2xl font-black tracking-tight text-[#0f0f1a]">NOMA</span>
           </Link>
           <div className="flex items-center gap-4">
             <Button asChild variant="outline" className="rounded-full">
@@ -183,8 +183,8 @@ export default function BasketPage() {
             className="mb-12"
           >
             <div className="flex items-center gap-3 mb-4">
-              <ShoppingCart className="w-8 h-8 text-[#1A3C63]" />
-              <h1 className="text-5xl font-bold text-[#1A3C63]">Your Basket</h1>
+              <ShoppingCart className="w-8 h-8 text-[#0f0f1a]" />
+              <h1 className="text-5xl font-bold text-[#0f0f1a]">Your Basket</h1>
             </div>
             <p className="text-gray-600">
               Review your selected packages before checking out
@@ -193,7 +193,7 @@ export default function BasketPage() {
 
           {loading ? (
             <div className="text-center py-20">
-              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#1A3C63]"></div>
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#0f0f1a]"></div>
               <p className="mt-4 text-gray-600">Loading your basket...</p>
             </div>
           ) : basketItems.length === 0 ? (
@@ -209,7 +209,7 @@ export default function BasketPage() {
               <p className="text-gray-600 mb-8">
                 Add packages to get started on your relationship journey
               </p>
-              <Button asChild className="bg-[#1A3C63] hover:bg-[#0d2238] rounded-full px-8">
+              <Button asChild className="bg-[#0f0f1a] hover:bg-[#0d2238] rounded-full px-8">
                 <Link href="/packages">Browse Packages</Link>
               </Button>
             </motion.div>
@@ -223,11 +223,11 @@ export default function BasketPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
                   >
-                    <Card className="border-2 border-blue-100 hover:border-[#1A3C63] transition-all rounded-3xl overflow-hidden">
+                    <Card className="border-2 border-[#333333]100 hover:border-[#0f0f1a] transition-all rounded-3xl overflow-hidden">
                       <CardContent className="p-6">
                         <div className="flex gap-6">
                           <div className="flex-grow">
-                            <h3 className="text-xl font-bold text-[#1A3C63] mb-2">
+                            <h3 className="text-xl font-bold text-[#0f0f1a] mb-2">
                               {item.package.name}
                             </h3>
                             <p className="text-gray-600 mb-3">
@@ -249,15 +249,15 @@ export default function BasketPage() {
                               <Trash2 className="w-5 h-5" />
                             </Button>
                             <div className="text-right">
-                              <div className="text-2xl font-bold text-[#1A3C63]">
+                              <div className="text-2xl font-bold text-[#0f0f1a]">
                                 KES {(item.package.price * item.quantity).toLocaleString()}
                               </div>
-                              <div className="flex items-center gap-2 mt-2 bg-blue-50 rounded-full p-1">
+                              <div className="flex items-center gap-2 mt-2 bg-[#1a1a2e]50 rounded-full p-1">
                                 <Button
                                   variant="ghost"
                                   size="icon"
                                   onClick={() => updateQuantity(item.id, -1)}
-                                  className="h-8 w-8 rounded-full hover:bg-blue-100"
+                                  className="h-8 w-8 rounded-full hover:bg-[#1a1a2e]100"
                                 >
                                   <Minus className="w-4 h-4" />
                                 </Button>
@@ -268,7 +268,7 @@ export default function BasketPage() {
                                   variant="ghost"
                                   size="icon"
                                   onClick={() => updateQuantity(item.id, 1)}
-                                  className="h-8 w-8 rounded-full hover:bg-blue-100"
+                                  className="h-8 w-8 rounded-full hover:bg-[#1a1a2e]100"
                                 >
                                   <Plus className="w-4 h-4" />
                                 </Button>
@@ -289,9 +289,9 @@ export default function BasketPage() {
                   transition={{ delay: 0.3 }}
                   className="sticky top-32"
                 >
-                  <Card className="border-2 border-blue-100 rounded-3xl overflow-hidden">
+                  <Card className="border-2 border-[#333333]100 rounded-3xl overflow-hidden">
                     <CardContent className="p-8">
-                      <h2 className="text-2xl font-bold text-[#1A3C63] mb-6">
+                      <h2 className="text-2xl font-bold text-[#0f0f1a] mb-6">
                         Order Summary
                       </h2>
                       <div className="space-y-4 mb-6">
@@ -307,8 +307,8 @@ export default function BasketPage() {
                             KES {tax.toLocaleString()}
                           </span>
                         </div>
-                        <div className="border-t-2 border-blue-100 pt-4">
-                          <div className="flex justify-between text-xl font-bold text-[#1A3C63]">
+                        <div className="border-t-2 border-[#333333]100 pt-4">
+                          <div className="flex justify-between text-xl font-bold text-[#0f0f1a]">
                             <span>Total</span>
                             <span>KES {total.toLocaleString()}</span>
                           </div>

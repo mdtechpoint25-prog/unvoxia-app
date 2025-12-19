@@ -103,7 +103,7 @@ export default function PackageDetailPage() {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#1A3C63]"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#0f0f1a]"></div>
           <p className="mt-4 text-gray-600">Loading package details...</p>
         </div>
       </div>
@@ -117,7 +117,7 @@ export default function PackageDetailPage() {
           <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Package Not Found</h2>
           <p className="text-gray-600 mb-6">The package you're looking for doesn't exist.</p>
-          <Button asChild className="bg-[#1A3C63] hover:bg-[#0d2238] rounded-full">
+          <Button asChild className="bg-[#0f0f1a] hover:bg-[#0d2238] rounded-full">
             <Link href="/packages">Browse Packages</Link>
           </Button>
         </div>
@@ -130,10 +130,10 @@ export default function PackageDetailPage() {
       <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3.5 group">
-            <div className="w-14 h-14 rounded-2xl bg-[#1A3C63] flex items-center justify-center shadow-lg shadow-blue-900/20 group-hover:shadow-xl group-hover:shadow-blue-900/30 group-hover:scale-105 transition-all duration-300">
+            <div className="w-14 h-14 rounded-2xl bg-[#0f0f1a] flex items-center justify-center shadow-lg shadow-blue-900/20 group-hover:shadow-xl group-hover:shadow-blue-900/30 group-hover:scale-105 transition-all duration-300">
               <MaskLogo className="w-8 h-8" />
             </div>
-            <span className="text-2xl font-black tracking-tight text-[#1A3C63]">NOMA</span>
+            <span className="text-2xl font-black tracking-tight text-[#0f0f1a]">NOMA</span>
           </Link>
           <div className="flex items-center gap-4">
             <Button asChild variant="outline" className="rounded-full">
@@ -154,7 +154,7 @@ export default function PackageDetailPage() {
           <Button
             asChild
             variant="ghost"
-            className="mb-8 hover:bg-blue-50 rounded-full"
+            className="mb-8 hover:bg-[#1a1a2e]50 rounded-full"
           >
             <Link href="/packages">
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -169,10 +169,10 @@ export default function PackageDetailPage() {
               transition={{ duration: 0.6 }}
             >
               <div className="sticky top-32">
-                <Badge className="bg-blue-100 text-[#1A3C63] hover:bg-blue-200 mb-6">
+                <Badge className="bg-[#1a1a2e]100 text-[#0f0f1a] hover:bg-[#1a1a2e]200 mb-6">
                   {packageData.category}
                 </Badge>
-                <h1 className="text-5xl font-bold text-[#1A3C63] mb-6 leading-tight">
+                <h1 className="text-5xl font-bold text-[#0f0f1a] mb-6 leading-tight">
                   {packageData.name}
                 </h1>
                 <p className="text-xl text-gray-600 mb-8 leading-relaxed">
@@ -181,7 +181,7 @@ export default function PackageDetailPage() {
                 
                 <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-8 mb-8">
                   <div className="flex items-baseline gap-2 mb-2">
-                    <span className="text-5xl font-bold text-[#1A3C63]">
+                    <span className="text-5xl font-bold text-[#0f0f1a]">
                       KES {packageData.price.toLocaleString()}
                     </span>
                   </div>
@@ -218,8 +218,8 @@ export default function PackageDetailPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <div className="bg-white border-2 border-blue-100 rounded-3xl p-8">
-                <h2 className="text-2xl font-bold text-[#1A3C63] mb-6">
+              <div className="bg-white border-2 border-[#333333]100 rounded-3xl p-8">
+                <h2 className="text-2xl font-bold text-[#0f0f1a] mb-6">
                   What's Included
                 </h2>
                 <div className="space-y-4">
@@ -229,7 +229,7 @@ export default function PackageDetailPage() {
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.3 + index * 0.1 }}
-                      className="flex items-start gap-4 p-4 rounded-2xl hover:bg-blue-50 transition-colors"
+                      className="flex items-start gap-4 p-4 rounded-2xl hover:bg-[#1a1a2e]50 transition-colors"
                     >
                       <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-[#FF6B6B] to-[#E55A5A] flex items-center justify-center">
                         <Check className="w-5 h-5 text-white" />
@@ -242,8 +242,8 @@ export default function PackageDetailPage() {
                 </div>
               </div>
 
-              <div className="mt-8 bg-gradient-to-br from-blue-50 to-white border-2 border-blue-100 rounded-3xl p-8">
-                <h3 className="text-xl font-bold text-[#1A3C63] mb-4">
+              <div className="mt-8 bg-gradient-to-br from-blue-50 to-white border-2 border-[#333333]100 rounded-3xl p-8">
+                <h3 className="text-xl font-bold text-[#0f0f1a] mb-4">
                   Why Choose This Package?
                 </h3>
                 <p className="text-gray-600 leading-relaxed mb-4">

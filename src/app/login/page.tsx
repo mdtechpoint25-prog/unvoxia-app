@@ -45,19 +45,19 @@ export default function LoginPage() {
       >
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-3 group">
-            <div className="w-14 h-14 rounded-2xl bg-[#1A3C63] flex items-center justify-center shadow-lg shadow-blue-900/20 group-hover:shadow-xl group-hover:shadow-blue-900/30 group-hover:scale-105 transition-all duration-300">
+            <div className="w-14 h-14 rounded-2xl bg-[#0f0f1a] flex items-center justify-center shadow-lg shadow-blue-900/20 group-hover:shadow-xl group-hover:shadow-blue-900/30 group-hover:scale-105 transition-all duration-300">
               <MaskLogo className="w-8 h-8" />
             </div>
-            <span className="text-3xl font-black tracking-tight text-[#1A3C63]">NOMA</span>
+            <span className="text-3xl font-black tracking-tight text-[#0f0f1a]">NOMA</span>
           </Link>
         </div>
 
-        <Card className="border-2 border-blue-100 rounded-3xl shadow-xl">
+        <Card className="border-2 border-[#333333]100 rounded-3xl shadow-xl">
           <CardHeader className="text-center pb-4">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#1A3C63] to-[#0d2238] flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#0f0f1a] to-[#0d2238] flex items-center justify-center mx-auto mb-4">
               <LogIn className="w-8 h-8 text-white" />
             </div>
-            <CardTitle className="text-3xl font-bold text-[#1A3C63]">Welcome Back</CardTitle>
+            <CardTitle className="text-3xl font-bold text-[#0f0f1a]">Welcome Back</CardTitle>
             <p className="text-gray-600 mt-2">Sign in to access your dashboard</p>
           </CardHeader>
 
@@ -81,7 +81,7 @@ export default function LoginPage() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-12 h-12 rounded-xl border-2 border-gray-200 focus:border-[#1A3C63]"
+                    className="pl-12 h-12 rounded-xl border-2 border-gray-200 focus:border-[#0f0f1a]"
                     placeholder="you@example.com"
                     required
                   />
@@ -99,7 +99,7 @@ export default function LoginPage() {
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-12 h-12 rounded-xl border-2 border-gray-200 focus:border-[#1A3C63]"
+                    className="pl-12 h-12 rounded-xl border-2 border-gray-200 focus:border-[#0f0f1a]"
                     placeholder="••••••••"
                     required
                   />
@@ -109,7 +109,7 @@ export default function LoginPage() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full h-12 bg-[#1A3C63] hover:bg-[#0d2238] text-white font-semibold rounded-xl"
+                className="w-full h-12 bg-[#0f0f1a] hover:bg-[#0d2238] text-white font-semibold rounded-xl"
               >
                 {loading ? "Signing in..." : "Sign In"}
               </Button>
@@ -120,7 +120,7 @@ export default function LoginPage() {
                 Don't have an account?{" "}
                 <Link
                   href="/signup"
-                  className="text-[#1A3C63] font-semibold hover:text-[#0d2238] transition-colors"
+                  className="text-[#0f0f1a] font-semibold hover:text-[#0d2238] transition-colors"
                 >
                   Sign Up
                 </Link>
@@ -132,7 +132,7 @@ export default function LoginPage() {
         <div className="text-center mt-6">
           <Link
             href="/"
-            className="text-gray-600 hover:text-[#1A3C63] transition-colors font-medium"
+            className="text-gray-600 hover:text-[#0f0f1a] transition-colors font-medium"
           >
             ← Back to Home
           </Link>

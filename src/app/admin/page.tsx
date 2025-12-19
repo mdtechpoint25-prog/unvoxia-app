@@ -35,7 +35,7 @@ export default function AdminDashboard() {
       title: "Packages",
       value: stats.activePackages,
       icon: Package,
-      color: "bg-blue-500",
+      color: "bg-[#1a1a2e]500",
       href: "/admin/packages",
       description: "Manage pricing & packages"
     },
@@ -83,10 +83,10 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-[#1A3C63] text-white py-8 px-6">
+      <div className="bg-[#0f0f1a] text-white py-8 px-6">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-4xl font-bold mb-2">NOMA Admin Dashboard</h1>
-          <p className="text-blue-200">Manage your platform efficiently</p>
+          <p className="text-[#ffbe0b]200">Manage your platform efficiently</p>
         </div>
       </div>
 
@@ -94,7 +94,7 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {cards.map((card) => (
             <Link key={card.title} href={card.href}>
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer border-2 hover:border-blue-400">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer border-2 hover:border-[#333333]400">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium text-gray-600">
                     {card.title}

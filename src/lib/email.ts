@@ -80,14 +80,14 @@ export async function sendRegistrationEmail(email: string, confirmationUrl: stri
           <td align="center">
             <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
               <tr>
-                <td style="background: linear-gradient(135deg, #1A3C63 0%, #2B5A8E 100%); padding: 40px; text-align: center;">
+                <td style="background: linear-gradient(135deg, #ffbe0b 0%, #2B5A8E 100%); padding: 40px; text-align: center;">
                   <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 800;">NOMA</h1>
                   <p style="margin: 10px 0 0; color: #E8F4FF; font-size: 14px; font-weight: 500;">No Mask Relationships</p>
                 </td>
               </tr>
               <tr>
                 <td style="padding: 50px 40px;">
-                  <h2 style="margin: 0 0 20px; color: #1A3C63; font-size: 24px; font-weight: 700;">Welcome to NOMA!</h2>
+                  <h2 style="margin: 0 0 20px; color: #ffbe0b; font-size: 24px; font-weight: 700;">Welcome to NOMA!</h2>
                   <p style="margin: 0 0 20px; color: #4A5568; font-size: 16px; line-height: 1.6;">
                     Thank you for creating your account. We're excited to help you on your journey toward honest clarity in your relationships.
                   </p>
@@ -108,7 +108,7 @@ export async function sendRegistrationEmail(email: string, confirmationUrl: stri
                   </p>
                   <p style="margin: 20px 0 0; color: #718096; font-size: 13px; line-height: 1.6;">
                     If the button doesn't work, copy and paste this link into your browser:<br/>
-                    <a href="${confirmationUrl}" style="color: #1A3C63; word-break: break-all;">${confirmationUrl}</a>
+                    <a href="${confirmationUrl}" style="color: #ffbe0b; word-break: break-all;">${confirmationUrl}</a>
                   </p>
                 </td>
               </tr>
@@ -116,13 +116,13 @@ export async function sendRegistrationEmail(email: string, confirmationUrl: stri
                 <td style="background-color: #F7FAFC; padding: 30px 40px; border-top: 1px solid #E2E8F0;">
                   <p style="margin: 0 0 10px; color: #4A5568; font-size: 14px; font-weight: 600;">Need Help?</p>
                   <p style="margin: 0; color: #718096; font-size: 13px; line-height: 1.6;">
-                    Contact us at <a href="mailto:support@nomaworld.co.ke" style="color: #1A3C63; text-decoration: none;">support@nomaworld.co.ke</a><br/>
+                    Contact us at <a href="mailto:support@nomaworld.co.ke" style="color: #ffbe0b; text-decoration: none;">support@nomaworld.co.ke</a><br/>
                     📞 0701066845 | 0702794172
                   </p>
                 </td>
               </tr>
               <tr>
-                <td style="padding: 20px; text-align: center; background-color: #1A3C63;">
+                <td style="padding: 20px; text-align: center; background-color: #ffbe0b;">
                   <p style="margin: 0; color: #94C5E8; font-size: 12px;">
                     © 2025 NOMA - No Mask Relationships. All rights reserved.
                   </p>
@@ -158,33 +158,33 @@ export async function sendPackagePurchaseEmail(email: string, packageName: strin
           <td align="center">
             <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
               <tr>
-                <td style="background: linear-gradient(135deg, #1A3C63 0%, #2B5A8E 100%); padding: 40px; text-align: center;">
+                <td style="background: linear-gradient(135deg, #ffbe0b 0%, #2B5A8E 100%); padding: 40px; text-align: center;">
                   <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 800;">NOMA</h1>
                 </td>
               </tr>
               <tr>
                 <td style="padding: 50px 40px;">
-                  <h2 style="margin: 0 0 20px; color: #1A3C63; font-size: 24px; font-weight: 700;">Package Information</h2>
+                  <h2 style="margin: 0 0 20px; color: #ffbe0b; font-size: 24px; font-weight: 700;">Package Information</h2>
                   <p style="margin: 0 0 20px; color: #4A5568; font-size: 16px; line-height: 1.6;">
                     Thank you for your interest in <strong>${packageName}</strong>.
                   </p>
                   <table width="100%" cellpadding="12" style="background-color: #F7FAFC; border-radius: 8px; margin: 30px 0;">
                     <tr>
                       <td style="color: #718096; font-size: 14px;">Package:</td>
-                      <td style="color: #1A3C63; font-size: 14px; font-weight: 600; text-align: right;">${packageName}</td>
+                      <td style="color: #ffbe0b; font-size: 14px; font-weight: 600; text-align: right;">${packageName}</td>
                     </tr>
                     <tr>
                       <td style="color: #718096; font-size: 14px;">Amount:</td>
-                      <td style="color: #1A3C63; font-size: 14px; font-weight: 600; text-align: right;">KES ${amount.toLocaleString()}</td>
+                      <td style="color: #ffbe0b; font-size: 14px; font-weight: 600; text-align: right;">KES ${amount.toLocaleString()}</td>
                     </tr>
                   </table>
                   <p style="margin: 30px 0 0; color: #4A5568; font-size: 14px; line-height: 1.6;">
-                    For questions about this package, contact us at <a href="mailto:support@nomaworld.co.ke" style="color: #1A3C63;">support@nomaworld.co.ke</a>
+                    For questions about this package, contact us at <a href="mailto:support@nomaworld.co.ke" style="color: #ffbe0b;">support@nomaworld.co.ke</a>
                   </p>
                 </td>
               </tr>
               <tr>
-                <td style="padding: 20px; text-align: center; background-color: #1A3C63;">
+                <td style="padding: 20px; text-align: center; background-color: #ffbe0b;">
                   <p style="margin: 0; color: #94C5E8; font-size: 12px;">© 2025 NOMA. All rights reserved.</p>
                 </td>
               </tr>
@@ -233,11 +233,11 @@ export async function sendPaymentSuccessEmail(email: string, orderDetails: { pac
                   <table width="100%" cellpadding="12" style="background-color: #F7FAFC; border-radius: 8px; margin: 30px 0;">
                     <tr>
                       <td style="color: #718096; font-size: 14px;">Order ID:</td>
-                      <td style="color: #1A3C63; font-size: 14px; font-weight: 600; text-align: right;">${orderDetails.orderId}</td>
+                      <td style="color: #ffbe0b; font-size: 14px; font-weight: 600; text-align: right;">${orderDetails.orderId}</td>
                     </tr>
                     <tr>
                       <td style="color: #718096; font-size: 14px;">Package:</td>
-                      <td style="color: #1A3C63; font-size: 14px; font-weight: 600; text-align: right;">${orderDetails.packageName}</td>
+                      <td style="color: #ffbe0b; font-size: 14px; font-weight: 600; text-align: right;">${orderDetails.packageName}</td>
                     </tr>
                     <tr>
                       <td style="color: #718096; font-size: 14px;">Amount Paid:</td>
@@ -247,7 +247,7 @@ export async function sendPaymentSuccessEmail(email: string, orderDetails: { pac
                   <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 30px;">
                     <tr>
                       <td align="center">
-                        <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard" style="display: inline-block; background: linear-gradient(135deg, #1A3C63 0%, #2B5A8E 100%); color: #ffffff; text-decoration: none; padding: 16px 48px; border-radius: 50px; font-weight: 700; font-size: 16px;">
+                        <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard" style="display: inline-block; background: linear-gradient(135deg, #ffbe0b 0%, #2B5A8E 100%); color: #ffffff; text-decoration: none; padding: 16px 48px; border-radius: 50px; font-weight: 700; font-size: 16px;">
                           Go to Dashboard
                         </a>
                       </td>
@@ -256,7 +256,7 @@ export async function sendPaymentSuccessEmail(email: string, orderDetails: { pac
                 </td>
               </tr>
               <tr>
-                <td style="padding: 20px; text-align: center; background-color: #1A3C63;">
+                <td style="padding: 20px; text-align: center; background-color: #ffbe0b;">
                   <p style="margin: 0; color: #94C5E8; font-size: 12px;">© 2025 NOMA. All rights reserved.</p>
                 </td>
               </tr>
@@ -290,14 +290,14 @@ export async function sendAssessmentResultsEmail(email: string, resultUrl: strin
           <td align="center">
             <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
               <tr>
-                <td style="background: linear-gradient(135deg, #1A3C63 0%, #2B5A8E 100%); padding: 40px; text-align: center;">
+                <td style="background: linear-gradient(135deg, #ffbe0b 0%, #2B5A8E 100%); padding: 40px; text-align: center;">
                   <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 800;">NOMA</h1>
                   <p style="margin: 10px 0 0; color: #E8F4FF; font-size: 14px;">Your Assessment Results Are Ready</p>
                 </td>
               </tr>
               <tr>
                 <td style="padding: 50px 40px;">
-                  <h2 style="margin: 0 0 20px; color: #1A3C63; font-size: 24px; font-weight: 700;">Your Results Are Ready</h2>
+                  <h2 style="margin: 0 0 20px; color: #ffbe0b; font-size: 24px; font-weight: 700;">Your Results Are Ready</h2>
                   <p style="margin: 0 0 20px; color: #4A5568; font-size: 16px; line-height: 1.6;">
                     Thank you for completing your NOMA assessment. Your personalized results and recommendations are now available.
                   </p>
@@ -316,7 +316,7 @@ export async function sendAssessmentResultsEmail(email: string, resultUrl: strin
                 </td>
               </tr>
               <tr>
-                <td style="padding: 20px; text-align: center; background-color: #1A3C63;">
+                <td style="padding: 20px; text-align: center; background-color: #ffbe0b;">
                   <p style="margin: 0; color: #94C5E8; font-size: 12px;">© 2025 NOMA. All rights reserved.</p>
                 </td>
               </tr>

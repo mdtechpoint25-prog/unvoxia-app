@@ -56,7 +56,7 @@ function ConfirmEmailContent() {
       <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-12 text-center">
         {status === "loading" && (
           <>
-            <Loader2 className="w-16 h-16 text-blue-600 animate-spin mx-auto mb-6" />
+            <Loader2 className="w-16 h-16 text-[#ffbe0b]600 animate-spin mx-auto mb-6" />
             <h1 className="text-2xl font-bold text-gray-900 mb-3">
               Confirming Your Email...
             </h1>
@@ -89,7 +89,7 @@ function ConfirmEmailContent() {
             </h1>
             <p className="text-gray-600 mb-8">{message}</p>
             <div className="flex flex-col gap-3">
-              <Button asChild className="w-full bg-blue-600 hover:bg-blue-700">
+              <Button asChild className="w-full bg-[#1a1a2e]600 hover:bg-[#1a1a2e]700">
                 <Link href="/signup">Try Signing Up Again</Link>
               </Button>
               <Button asChild variant="outline" className="w-full">
@@ -108,7 +108,7 @@ export default function ConfirmEmail() {
     <Suspense fallback={
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center px-6">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-12 text-center">
-          <Loader2 className="w-16 h-16 text-blue-600 animate-spin mx-auto mb-6" />
+          <Loader2 className="w-16 h-16 text-[#ffbe0b]600 animate-spin mx-auto mb-6" />
           <h1 className="text-2xl font-bold text-gray-900 mb-3">
             Loading...
           </h1>

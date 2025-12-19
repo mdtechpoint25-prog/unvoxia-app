@@ -119,7 +119,7 @@ export default function AdminBlog() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-[#1A3C63] text-white py-8 px-6">
+      <div className="bg-[#0f0f1a] text-white py-8 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-4 mb-2">
             <Link href="/admin">
@@ -130,7 +130,7 @@ export default function AdminBlog() {
             </Link>
             <h1 className="text-4xl font-bold">Blog Management</h1>
           </div>
-          <p className="text-blue-200">Create and manage blog posts</p>
+          <p className="text-[#ffbe0b]200">Create and manage blog posts</p>
         </div>
       </div>
 
@@ -226,7 +226,7 @@ export default function AdminBlog() {
                   </div>
 
                   <div className="flex gap-2">
-                    <Button type="submit" className="flex-1 bg-[#1A3C63] hover:bg-[#0d2238]">
+                    <Button type="submit" className="flex-1 bg-[#0f0f1a] hover:bg-[#0d2238]">
                       <Save className="w-4 h-4 mr-2" />
                       {isEditing ? 'Update Post' : 'Create Post'}
                     </Button>

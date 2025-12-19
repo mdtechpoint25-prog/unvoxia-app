@@ -85,7 +85,7 @@ export default function AdminPayments() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-[#1A3C63] text-white py-8 px-6">
+      <div className="bg-[#0f0f1a] text-white py-8 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-4 mb-2">
             <Link href="/admin">
@@ -96,7 +96,7 @@ export default function AdminPayments() {
             </Link>
             <h1 className="text-4xl font-bold">Payment Monitoring</h1>
           </div>
-          <p className="text-blue-200">Track all orders and payments</p>
+          <p className="text-[#ffbe0b]200">Track all orders and payments</p>
         </div>
       </div>
 
@@ -107,10 +107,10 @@ export default function AdminPayments() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Total Revenue</p>
-                  <p className="text-2xl font-bold text-[#1A3C63]">KES {stats.total.toLocaleString()}</p>
+                  <p className="text-2xl font-bold text-[#0f0f1a]">KES {stats.total.toLocaleString()}</p>
                 </div>
-                <div className="bg-blue-100 p-3 rounded-lg">
-                  <DollarSign className="w-6 h-6 text-blue-600" />
+                <div className="bg-[#1a1a2e]100 p-3 rounded-lg">
+                  <DollarSign className="w-6 h-6 text-[#ffbe0b]600" />
                 </div>
               </div>
             </CardContent>
@@ -208,7 +208,7 @@ export default function AdminPayments() {
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="text-2xl font-bold text-[#1A3C63]">KES {parseFloat(order.total_amount.toString()).toLocaleString()}</p>
+                      <p className="text-2xl font-bold text-[#0f0f1a]">KES {parseFloat(order.total_amount.toString()).toLocaleString()}</p>
                       <p className="text-xs text-gray-500">{order.payment_method}</p>
                     </div>
                   </div>

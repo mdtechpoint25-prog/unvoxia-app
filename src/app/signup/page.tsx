@@ -100,19 +100,19 @@ export default function SignupPage() {
       >
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-3 group">
-            <div className="w-14 h-14 rounded-2xl bg-[#1A3C63] flex items-center justify-center shadow-lg shadow-blue-900/20 group-hover:shadow-xl group-hover:shadow-blue-900/30 group-hover:scale-105 transition-all duration-300">
+            <div className="w-14 h-14 rounded-2xl bg-[#0f0f1a] flex items-center justify-center shadow-lg shadow-blue-900/20 group-hover:shadow-xl group-hover:shadow-blue-900/30 group-hover:scale-105 transition-all duration-300">
               <MaskLogo className="w-8 h-8" />
             </div>
-            <span className="text-3xl font-black tracking-tight text-[#1A3C63]">NOMA</span>
+            <span className="text-3xl font-black tracking-tight text-[#0f0f1a]">NOMA</span>
           </Link>
         </div>
 
-        <Card className="border-2 border-blue-100 rounded-3xl shadow-xl">
+        <Card className="border-2 border-[#333333]100 rounded-3xl shadow-xl">
           <CardHeader className="text-center pb-4">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#1A3C63] to-[#0d2238] flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#0f0f1a] to-[#0d2238] flex items-center justify-center mx-auto mb-4">
               <UserPlus className="w-8 h-8 text-white" />
             </div>
-            <CardTitle className="text-3xl font-bold text-[#1A3C63]">Create Account</CardTitle>
+            <CardTitle className="text-3xl font-bold text-[#0f0f1a]">Create Account</CardTitle>
             <p className="text-gray-600 mt-2">Join NOMA and start your journey</p>
           </CardHeader>
 
@@ -126,9 +126,9 @@ export default function SignupPage() {
               )}
 
               {resendMessage && (
-                <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-blue-700">{resendMessage}</p>
+                <div className="bg-[#1a1a2e]50 border border-[#333333]200 rounded-2xl p-4 flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-[#ffbe0b]600 flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-[#ffbe0b]700">{resendMessage}</p>
                 </div>
               )}
 
@@ -186,7 +186,7 @@ export default function SignupPage() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-12 h-12 rounded-xl border-2 border-gray-200 focus:border-[#1A3C63]"
+                    className="pl-12 h-12 rounded-xl border-2 border-gray-200 focus:border-[#0f0f1a]"
                     placeholder="you@example.com"
                     required
                     disabled={loading || success}
@@ -205,7 +205,7 @@ export default function SignupPage() {
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-12 h-12 rounded-xl border-2 border-gray-200 focus:border-[#1A3C63]"
+                    className="pl-12 h-12 rounded-xl border-2 border-gray-200 focus:border-[#0f0f1a]"
                     placeholder="••••••••"
                     required
                     disabled={loading || success}
@@ -224,7 +224,7 @@ export default function SignupPage() {
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="pl-12 h-12 rounded-xl border-2 border-gray-200 focus:border-[#1A3C63]"
+                    className="pl-12 h-12 rounded-xl border-2 border-gray-200 focus:border-[#0f0f1a]"
                     placeholder="••••••••"
                     required
                     disabled={loading || success}
@@ -235,7 +235,7 @@ export default function SignupPage() {
               <Button
                 type="submit"
                 disabled={loading || success}
-                className="w-full h-12 bg-[#1A3C63] hover:bg-[#0d2238] text-white font-semibold rounded-xl"
+                className="w-full h-12 bg-[#0f0f1a] hover:bg-[#0d2238] text-white font-semibold rounded-xl"
               >
                 {loading ? "Creating account..." : success ? "Success!" : "Create Account"}
               </Button>
@@ -246,7 +246,7 @@ export default function SignupPage() {
                 Already have an account?{" "}
                 <Link
                   href="/login"
-                  className="text-[#1A3C63] font-semibold hover:text-[#0d2238] transition-colors"
+                  className="text-[#0f0f1a] font-semibold hover:text-[#0d2238] transition-colors"
                 >
                   Sign In
                 </Link>
@@ -258,7 +258,7 @@ export default function SignupPage() {
         <div className="text-center mt-6">
           <Link
             href="/"
-            className="text-gray-600 hover:text-[#1A3C63] transition-colors font-medium"
+            className="text-gray-600 hover:text-[#0f0f1a] transition-colors font-medium"
           >
             ← Back to Home
           </Link>

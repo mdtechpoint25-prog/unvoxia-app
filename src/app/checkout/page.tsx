@@ -145,7 +145,7 @@ export default function CheckoutPage() {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#1A3C63]"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#0f0f1a]"></div>
           <p className="mt-4 text-gray-600">Loading checkout...</p>
         </div>
       </div>
@@ -156,7 +156,7 @@ export default function CheckoutPage() {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center px-6">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-[#1A3C63] mb-6">Your basket is empty</h1>
+          <h1 className="text-4xl font-bold text-[#0f0f1a] mb-6">Your basket is empty</h1>
           <Button asChild className="bg-[#FF6B6B] hover:bg-[#E55A5A] rounded-full px-8">
             <Link href="/packages">Browse Packages</Link>
           </Button>
@@ -177,12 +177,12 @@ export default function CheckoutPage() {
           <div className="w-24 h-24 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center mx-auto mb-8 shadow-2xl">
             <CheckCircle2 className="w-12 h-12 text-white" />
           </div>
-          <h1 className="text-5xl font-bold text-[#1A3C63] mb-6">Payment Successful!</h1>
+          <h1 className="text-5xl font-bold text-[#0f0f1a] mb-6">Payment Successful!</h1>
           <p className="text-xl text-gray-600 mb-8">
             Your order has been confirmed. You'll receive an email with access details shortly.
           </p>
           <div className="flex gap-4 justify-center">
-            <Button asChild className="bg-[#1A3C63] hover:bg-[#0d2238] rounded-full px-8">
+            <Button asChild className="bg-[#0f0f1a] hover:bg-[#0d2238] rounded-full px-8">
               <Link href="/dashboard">Go to Dashboard</Link>
             </Button>
             <Button asChild variant="outline" className="rounded-full px-8 border-2">
@@ -199,10 +199,10 @@ export default function CheckoutPage() {
       <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3.5 group">
-            <div className="w-14 h-14 rounded-2xl bg-[#1A3C63] flex items-center justify-center shadow-lg shadow-blue-900/20">
+            <div className="w-14 h-14 rounded-2xl bg-[#0f0f1a] flex items-center justify-center shadow-lg shadow-blue-900/20">
               <MaskLogo className="w-8 h-8" />
             </div>
-            <span className="text-2xl font-black tracking-tight text-[#1A3C63]">NOMA</span>
+            <span className="text-2xl font-black tracking-tight text-[#0f0f1a]">NOMA</span>
           </Link>
         </div>
       </nav>
@@ -212,7 +212,7 @@ export default function CheckoutPage() {
           <Button
             asChild
             variant="ghost"
-            className="mb-8 hover:bg-blue-50 rounded-full"
+            className="mb-8 hover:bg-[#1a1a2e]50 rounded-full"
           >
             <Link href="/basket">
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -226,7 +226,7 @@ export default function CheckoutPage() {
             transition={{ duration: 0.6 }}
             className="mb-12"
           >
-            <h1 className="text-5xl font-bold text-[#1A3C63] mb-4">Checkout</h1>
+            <h1 className="text-5xl font-bold text-[#0f0f1a] mb-4">Checkout</h1>
             <p className="text-gray-600">Complete your purchase securely</p>
           </motion.div>
 
@@ -237,9 +237,9 @@ export default function CheckoutPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
               >
-                <Card className="border-2 border-blue-100 rounded-3xl">
+                <Card className="border-2 border-[#333333]100 rounded-3xl">
                   <CardHeader>
-                    <CardTitle className="text-2xl text-[#1A3C63]">Contact Information</CardTitle>
+                    <CardTitle className="text-2xl text-[#0f0f1a]">Contact Information</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div>
@@ -273,9 +273,9 @@ export default function CheckoutPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                <Card className="border-2 border-blue-100 rounded-3xl">
+                <Card className="border-2 border-[#333333]100 rounded-3xl">
                   <CardHeader>
-                    <CardTitle className="text-2xl text-[#1A3C63]">Payment Method</CardTitle>
+                    <CardTitle className="text-2xl text-[#0f0f1a]">Payment Method</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod}>
@@ -283,8 +283,8 @@ export default function CheckoutPage() {
                         <div
                           className={`flex items-center space-x-4 p-6 rounded-2xl border-2 cursor-pointer transition-all ${
                             paymentMethod === "mpesa"
-                              ? "border-[#1A3C63] bg-blue-50"
-                              : "border-blue-100 hover:border-blue-200"
+                              ? "border-[#0f0f1a] bg-[#1a1a2e]50"
+                              : "border-[#333333]100 hover:border-[#333333]200"
                           }`}
                           onClick={() => setPaymentMethod("mpesa")}
                         >
@@ -305,15 +305,15 @@ export default function CheckoutPage() {
                         <div
                           className={`flex items-center space-x-4 p-6 rounded-2xl border-2 cursor-pointer transition-all ${
                             paymentMethod === "card"
-                              ? "border-[#1A3C63] bg-blue-50"
-                              : "border-blue-100 hover:border-blue-200"
+                              ? "border-[#0f0f1a] bg-[#1a1a2e]50"
+                              : "border-[#333333]100 hover:border-[#333333]200"
                           }`}
                           onClick={() => setPaymentMethod("card")}
                         >
                           <RadioGroupItem value="card" id="card" />
                           <div className="flex items-center gap-4 flex-1">
-                            <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
-                              <CreditCard className="w-6 h-6 text-[#1A3C63]" />
+                            <div className="w-12 h-12 rounded-xl bg-[#1a1a2e]100 flex items-center justify-center">
+                              <CreditCard className="w-6 h-6 text-[#0f0f1a]" />
                             </div>
                             <div>
                               <Label htmlFor="card" className="text-lg font-bold cursor-pointer">
@@ -388,9 +388,9 @@ export default function CheckoutPage() {
                 transition={{ delay: 0.3 }}
                 className="sticky top-32"
               >
-                <Card className="border-2 border-blue-100 rounded-3xl">
+                <Card className="border-2 border-[#333333]100 rounded-3xl">
                   <CardHeader>
-                    <CardTitle className="text-2xl text-[#1A3C63]">Order Summary</CardTitle>
+                    <CardTitle className="text-2xl text-[#0f0f1a]">Order Summary</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <div className="space-y-4">
@@ -401,7 +401,7 @@ export default function CheckoutPage() {
                         </div>
                       ))}
                     </div>
-                    <div className="border-t-2 border-blue-100 pt-4 space-y-3">
+                    <div className="border-t-2 border-[#333333]100 pt-4 space-y-3">
                       <div className="flex justify-between text-gray-600">
                         <span>Subtotal</span>
                         <span className="font-semibold">KES {subtotal.toLocaleString()}</span>
@@ -410,8 +410,8 @@ export default function CheckoutPage() {
                         <span>Tax (16%)</span>
                         <span className="font-semibold">KES {tax.toLocaleString()}</span>
                       </div>
-                      <div className="border-t-2 border-blue-100 pt-3">
-                        <div className="flex justify-between text-xl font-bold text-[#1A3C63]">
+                      <div className="border-t-2 border-[#333333]100 pt-3">
+                        <div className="flex justify-between text-xl font-bold text-[#0f0f1a]">
                           <span>Total</span>
                           <span>KES {total.toLocaleString()}</span>
                         </div>
