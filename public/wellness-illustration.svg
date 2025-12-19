@@ -1,0 +1,32 @@
+<svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FDFBF7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F8F4EF;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="600" height="400" fill="url(#bg2)"/>
+  
+  <!-- Meditation/wellness figure -->
+  <g transform="translate(300, 200)">
+    <!-- Head -->
+    <circle cx="0" cy="-60" r="35" fill="#D4A373" opacity="0.7"/>
+    
+    <!-- Body in meditation pose -->
+    <ellipse cx="0" cy="0" rx="60" ry="40" fill="#9FA89E" opacity="0.6"/>
+    
+    <!-- Arms -->
+    <path d="M -60 0 Q -80 -20 -90 0" fill="none" stroke="#9FA89E" stroke-width="8" opacity="0.6"/>
+    <path d="M 60 0 Q 80 -20 90 0" fill="none" stroke="#9FA89E" stroke-width="8" opacity="0.6"/>
+    
+    <!-- Calm aura circles -->
+    <circle cx="0" cy="-30" r="100" fill="none" stroke="#D4A373" stroke-width="1" opacity="0.3"/>
+    <circle cx="0" cy="-30" r="120" fill="none" stroke="#D4A373" stroke-width="1" opacity="0.2"/>
+    <circle cx="0" cy="-30" r="140" fill="none" stroke="#D4A373" stroke-width="1" opacity="0.1"/>
+  </g>
+  
+  <text x="300" y="360" font-family="Arial, sans-serif" font-size="20" fill="#6B7469" text-anchor="middle" opacity="0.6">
+    Find Your Peace
+  </text>
+</svg>
